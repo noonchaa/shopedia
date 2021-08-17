@@ -3,23 +3,17 @@
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Dependencies
 
-First, run the development server:
+* Next JS _11.1.0_
+* React _17.0.2_
+* React-Dom _17.0.2_
+* Supabase _1.21.3_
+* Tailwindcss _2.2.7_
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Markup Design
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
-
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+To check out the markup design, take a look at [markup design folder](/markup)
 
 ## Learn More
 
