@@ -1,15 +1,14 @@
-import Head from 'next/head'
-import Image from 'next/image'
 import Layout from '../components/Layout'
-import {MdShoppingBasket} from 'react-icons/md'
+import Jumbotron from '../components/Jumbotron'
+import Product from '../components/Product'
 
 export default function Home() {
   return (
     <Layout>
-      <h1>
-        Shopedia
-      </h1>
-      <MdShoppingBasket/>
+      <Jumbotron/>
+      <Product/>
+      <Product/>
+      <Product/>
     </Layout>
   )
 }
