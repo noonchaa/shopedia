@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import Navbar from './Navbar'
 import NavLink from './NavLink'
+import Link from 'next/link'
 
 const Layout = ({children}) => {
     return(
@@ -23,25 +24,47 @@ const Layout = ({children}) => {
             <div className='grid grid-cols-1 md:grid-cols-3 my-4 md:px-8 gap-8'>
                 <div>
                     <h3 className='text-gray-800 text-xl font-light mb-2'>Product</h3>
-                    <p className='text-lg mb-1 font-medium'>Apple</p>
-                    <p className='text-lg mb-1 font-medium'>Lenovo</p>
-                    <p className='text-lg mb-1 font-medium'>Asus</p>
-                    <p className='text-lg mb-1 font-medium'>Acer</p>
-                    <p className='text-lg mb-1 font-medium'>Dell</p>
-                    <p className='text-lg mb-1 font-medium'>Toshiba</p>
+                    <Link href='/brand'>
+                        <a className='text-lg mb-1 font-medium'>Apple</a>
+                    </Link><br/>
+                    <Link href='/brand'>
+                        <a className='text-lg mb-1 font-medium'>Lenovo</a>
+                    </Link><br/>
+                    <Link href='/brand'>
+                        <a className='text-lg mb-1 font-medium'>Asus</a>
+                    </Link><br/>
+                    <Link href='/brand'>
+                        <a className='text-lg mb-1 font-medium'>Acer</a>
+                    </Link><br/>
+                    <Link href='/brand'>
+                        <a className='text-lg mb-1 font-medium'>Dell</a>
+                    </Link><br/>
+                    <Link href='/brand'>
+                        <a className='text-lg mb-1 font-medium'>Toshiba</a>
+                    </Link><br/>
                 </div>
                 <div>
                     <h3 className='text-gray-800 text-xl font-light mb-2'>Misc</h3>
-                    <p className='text-lg mb-1 font-medium'>Order</p>
-                    <p className='text-lg mb-1 font-medium'>Tracking</p>
-                    <p className='text-lg mb-1 font-medium'>FAQ</p>
-                    <p className='text-lg mb-1 font-medium'>Privacy Policy</p>
-                    <p className='text-lg mb-1 font-medium'>Term of Service</p>
+                    <Link href='/help'>
+                        <a className='text-lg mb-1 font-medium'>Order</a>
+                    </Link><br/>
+                    <Link href='/help'>
+                        <a className='text-lg mb-1 font-medium'>Tracking</a>
+                    </Link><br/>
+                    <Link href='/help'>
+                        <a className='text-lg mb-1 font-medium'>FAQ</a>
+                    </Link><br/>
+                    <Link href='/privacy'>
+                        <a className='text-lg mb-1 font-medium'>Privacy Policy</a>
+                    </Link><br/>
+                    <Link href='/term'>
+                        <a className='text-lg mb-1 font-medium'>Term of Service</a>
+                    </Link><br/>
                 </div>
                 <div>
                     <h3 className='text-gray-800 text-xl font-light mb-2'>Contact</h3>
-                    <p className='text-lg mb-1 font-medium'>yonoraphael@gmail.com</p>
-                    <p className='text-lg mb-1 font-medium'>081219013721</p>
+                    <a href="mailto:yonoraphael@gmail.com" target='_blank' rel='noreferrer' className='text-lg mb-1 font-medium'>yonoraphael@gmail.com</a><br/>
+                    <a href='https://wa.me/6281219013721' target='_blank' rel='noreferrer' className='text-lg mb-1 font-medium'>081219013721</a>
                 </div>
             </div>
             <p className='text-center font-extralight border-t-2 border-gray-800 -mx-4 italic'>Shopedia @ 2021</p>
