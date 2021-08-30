@@ -6,7 +6,7 @@ import Product from "../components/Product"
 const Item = () => {
     return(
         <Layout>
-            <div className='grid grid-cols-1 md:grid-cols-2 md:mb-8'>
+            <div className='grid grid-cols-1 md:grid-cols-2 mb-8 bg-gray-100'>
                 <div className='h-60 relative'>
                     <Image src='/image.jpg' layout='fill' objectFit='cover' priority={true} quality={90} alt='Product'/>
                 </div>
