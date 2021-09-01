@@ -2,13 +2,14 @@ import Layout from "../components/Layout"
 import Image from 'next/image'
 import { AiFillStar,AiOutlineShoppingCart } from 'react-icons/ai'
 import Product from "../components/Product"
+import Base from "../components/Base"
 
 const Item = () => {
     return(
-        <Layout>
-            <div className='grid grid-cols-1 md:grid-cols-2 mb-8 bg-gray-100'>
+        <Base>
+            <div className='grid grid-cols-1 md:grid-cols-2 mb-8 bg-gray-100 rounded-xl'>
                 <div className='h-60 relative'>
-                    <Image src='/image.jpg' layout='fill' objectFit='cover' priority={true} quality={90} alt='Product'/>
+                    <Image src='/image.jpg' layout='fill' objectFit='cover' priority={true} quality={90} alt='Product' className='rounded-t-xl md:rounded-l-xl md:rounded-tr-none'/>
                 </div>
                 <div className='p-4'>
                     <AiFillStar className='w-10 h-10 text-green-500 mb-2'/>
@@ -35,7 +36,7 @@ const Item = () => {
                 </div>
             </div>
             <Product/>
-        </Layout>
+        </Base>
     )
 }
 

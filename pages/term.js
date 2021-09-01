@@ -1,9 +1,9 @@
-import Layout from "../components/Layout"
+import Base from "../components/Base"
 
 const Term = () => {
     return(
-        <Layout>
-            <div className='p-4'>
+        <Base>
+            <div className='mt-11'>
             <h1 className='text-2xl font-semibold mb-2'>Website Terms and Conditions of Use</h1>
 
             <h2 className='text-xl font-semibold my-2'>1. Terms</h2>
@@ -52,7 +52,7 @@ const Term = () => {
 
             <p>Any claim related to Shopedia Website shall be governed by the laws of id without regards to its conflict of law provisions.</p>
             </div>
-        </Layout>
+        </Base>
     )
 }
 

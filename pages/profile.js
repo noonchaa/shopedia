@@ -1,9 +1,10 @@
 import Layout from '../components/Layout'
 import {FaUserEdit} from 'react-icons/fa'
+import Base from '../components/Base'
 
 const Profile = () => {
     return(
-        <Layout>
+        <Base>
             <div className='px-4 my-8'>
                 <h1 className='text-xl font-semibold italic text-green-600 ml-4'>Profile</h1>
                 <div className='bg-gray-100 my-4 rounded-lg px-4 py-3'>
@@ -30,7 +31,7 @@ const Profile = () => {
                     <p className='font-semibold mb-2 text-right'>Dalam Perjalanan</p>
                 </div>
             </div>
-        </Layout>
+        </Base>
     )
 }
 export default Profile
