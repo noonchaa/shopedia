@@ -3,7 +3,7 @@ import Link from 'next/link'
 const Login = () => {
     return(
         <div className='bg-gray-400 h-screen w-full px-2 py-40'>
-            <form className='max-w-screen-sm mx-auto p-4 bg-gray-200 rounded-lg'>
+            <form className='max-w-screen-sm mx-auto p-4 bg-gray-50 bg-opacity-50 shadow-xl rounded-lg'>
                 <h1 className='text-center text-2xl text-green-600 font-semibold mb-8'>Login</h1>
                 <input type='email' placeholder='email@example.com' className='px-4 py-2 w-full mb-4 rounded-lg' required/>
                 <input type='password' placeholder='password' className='px-4 py-2 w-full mb-2 rounded-lg' required/>

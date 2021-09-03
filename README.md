@@ -8,12 +8,8 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 * Next JS _11.1.0_
 * React _17.0.2_
 * React-Dom _17.0.2_
-* Supabase _1.21.3_
+* Firebase _9.0.1_
 * Tailwindcss _2.2.7_
-
-## Markup Design
-
-To check out the markup design, take a look at [markup design folder](/markup)
 
 ## Learn More
 

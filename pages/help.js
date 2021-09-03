@@ -1,5 +1,4 @@
 import Base from "../components/Base"
-import Layout from "../components/Layout"
 
 const Help = () => {
     return(

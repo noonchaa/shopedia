@@ -1,4 +1,3 @@
-import Layout from "../components/Layout"
 import Image from 'next/image'
 import { AiFillStar,AiOutlineShoppingCart } from 'react-icons/ai'
 import Product from "../components/Product"

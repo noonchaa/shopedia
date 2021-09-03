@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import Base from '../components/Base'
+import Product from '../components/Product'
 
 export default function Home() {
   return (
@@ -19,6 +20,8 @@ export default function Home() {
           </form>
         </div>
       </div>
+      <Product/>
+      <Product/>
     </Base>
   )
 }
