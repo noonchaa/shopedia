@@ -1,9 +1,8 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { auth,db } from '../utils/firebaseClient'
-import { createUserWithEmailAndPassword,updateProfile } from 'firebase/auth'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 import {doc,setDoc} from 'firebase/firestore'
-import { async } from '@firebase/util'
 
 const Register = () => {
     const [email, setEmail] = useState('')
