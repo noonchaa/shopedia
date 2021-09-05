@@ -1,40 +1,45 @@
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { auth,db } from '../utils/firebaseClient'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import {doc,setDoc} from 'firebase/firestore'
+import { useRouter } from 'next/router'
+import { UserContext } from '../components/User'
 
 const Register = () => {
+    const user = useContext(UserContext)
     const [email, setEmail] = useState('')
     const [same ,setSame] = useState('')
     const [password, setPassword] = useState('')
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [address, setAddress] = useState('')
-    const [user, setUser] = useState('')
+    const [gagal, setGagal] = useState('')
+    const router = useRouter()
 
     const register = async (e) => {
         e.preventDefault();
         await createUserWithEmailAndPassword(auth,email,password).then((user)=>{
-            setUser(user.user)
+            setDoc(doc(db,'user',user.user.uid),{
+                id : user.user.uid,
+                name : name,
+                email : email,
+                phone : phone,
+                address : address
+            })
+            router.push('/')
         }).catch((error)=>{
-            console.log(error.code,error.message)
-        })
-        await setDoc(doc(db,'user',user.uid),{
-            id : user.uid,
-            name : name,
-            phone : phone,
-            address : address
-        }).catch((error)=>{
-            console.log(error.code,error.message)
+            setGagal(error.code)
         })
     }
-    console.log(user)
+
+    if(user) router.push('/')
 
     return(
         <div className='bg-gray-400 h-screen w-full px-2 py-4'>
             <form className='max-w-screen-sm mx-auto p-4 bg-gray-50 bg-opacity-50 shadow-xl rounded-lg' onSubmit={register}>
                 <h1 className='text-center text-2xl text-green-600 font-semibold mb-8'>Register</h1>
+                <p className='text-center text-red-600 font-semibold mb-4'>{gagal==''?'':'Email sudah terdaftar, silahkan pakai email lain atau silahkan login'}</p>
                 <input type='text' placeholder='John Wick' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setName(e.target.value)} />
                 <input type='email' placeholder='email@example.com' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setEmail(e.target.value)} />
                 <input type='password' placeholder='password' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setSame(e.target.value)} />

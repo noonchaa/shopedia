@@ -1,5 +1,7 @@
 import {FaUserEdit} from 'react-icons/fa'
 import Base from '../components/Base'
+import {auth} from '../utils/firebaseClient'
+import {signOut} from 'firebase/auth'
 
 const Profile = () => {
     return(
@@ -29,6 +31,13 @@ const Profile = () => {
                     <p className='font-semibold mb-2 italic'>Asus Z-73 Ultra</p>
                     <p className='font-semibold mb-2 text-right'>Dalam Perjalanan</p>
                 </div>
+            </div>
+            <div className='text-center mt-8'>
+            <button className='bg-gray-50 bg-opacity-5 backdrop-filter backdrop-blur rounded-md shadow px-2 py-1 h-7' onClick={()=>{
+                signOut(auth)
+            }} >
+                <h1 className='font-bold text-sm text-green-600'>Log Out</h1>
+            </button>
             </div>
         </Base>
     )
