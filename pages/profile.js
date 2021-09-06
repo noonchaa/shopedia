@@ -39,6 +39,7 @@ const Profile = () => {
     };
 
     useEffect(()=>{
+        if(!user) router.push('/login');
         const getProfile = async () => {
             const docSnap = await getDoc(docRef);
             if(docSnap.exists()) {
@@ -53,9 +54,8 @@ const Profile = () => {
             setPhone('')
             setAddress('')
         }
-    },[docRef])
+    },[docRef,router,user])
 
-    if (!user) router.push('/login');
     return(
         <Base>
             <div className='my-8'>
