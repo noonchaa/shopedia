@@ -9,8 +9,8 @@ import { UserContext } from '../components/User'
 const Register = () => {
     const user = useContext(UserContext)
     const [email, setEmail] = useState('')
-    const [same ,setSame] = useState('')
     const [password, setPassword] = useState('')
+    const [same ,setSame] = useState(password)
     const [name, setName] = useState('')
     const [phone, setPhone] = useState('')
     const [address, setAddress] = useState('')
@@ -25,7 +25,8 @@ const Register = () => {
                 name : name,
                 email : email,
                 phone : phone,
-                address : address
+                address : address,
+                pesanan : []
             })
             router.push('/')
         }).catch((error)=>{
@@ -38,12 +39,18 @@ const Register = () => {
     return(
         <div className='bg-gray-400 h-screen w-full px-2 py-4'>
             <form className='max-w-screen-sm mx-auto p-4 bg-gray-50 bg-opacity-50 shadow-xl rounded-lg' onSubmit={register}>
-                <h1 className='text-center text-2xl text-green-600 font-semibold mb-8'>Register</h1>
-                <p className='text-center text-red-600 font-semibold mb-4'>{gagal==''?'':'Email sudah terdaftar, silahkan pakai email lain atau silahkan login'}</p>
+                <h1 className='text-center text-2xl text-green-600 font-semibold mb-8'>
+                    Register
+                </h1>
+                <p className='text-center text-red-600 font-semibold mb-4'>
+                    {gagal==''?'':'Email sudah terdaftar, silahkan pakai email lain atau silahkan login'}
+                </p>
                 <input type='text' placeholder='John Wick' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setName(e.target.value)} />
                 <input type='email' placeholder='email@example.com' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setEmail(e.target.value)} />
                 <input type='password' placeholder='password' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setSame(e.target.value)} />
-                <p className={same!=password?'text-red-600':'hidden'}>Mohon masukan password yang sama</p>
+                <p className={same!=password?'text-red-600':'hidden'}>
+                    Mohon masukan password yang sama
+                </p>
                 <input type='password' placeholder='confirm password' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setPassword(e.target.value)} />
                 <input type='number' placeholder='081234567890' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setPhone(e.target.value)} />
                 <input type='text' placeholder='Address' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setAddress(e.target.value)} />

@@ -10,13 +10,12 @@ const User = ({children}) => {
     useEffect(()=>{
         onAuthStateChanged(auth,(user)=>{
             if (user) {
-                setSignUser(user.email)
+                setSignUser(user)
             } else {
                 setSignUser(null)
             }
         })
     },[])
-    console.log(signUser)
 
     return(
         <UserContext.Provider value={signUser}>
