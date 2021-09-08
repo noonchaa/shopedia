@@ -15,12 +15,12 @@ const Login = () => {
     const Signin = (e) => {
         e.preventDefault()
         signInWithEmailAndPassword(auth,email,password).then(()=>{
-            router.push('/')
+            router.push('/profile')
         }).catch((error)=>{
             setGagal(error.code)
         })
     }
-    if(user) {router.push('/')}
+    if(user) {router.push('/profile')}
 
     return(
         <div className='bg-gray-400 h-screen w-full px-2 py-40'>

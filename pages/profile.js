@@ -6,12 +6,14 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../components/User';
 import { useRouter } from 'next/router';
 import { db } from '../utils/firebaseClient';
-import { doc,getDoc,updateDoc } from 'firebase/firestore'
+import { doc,updateDoc,onSnapshot } from 'firebase/firestore'
 
 const Profile = () => {
     const user = useContext(UserContext);
     const router = useRouter();
-    const [edit, setEdit] = useState(false)
+    const [nama, setNama] = useState('');
+    const [phone, setPhone] = useState('');
+    const [address, setAddress] = useState('');
     const [userProfile, setUserProfile] = useState(
         {
             name : '',
@@ -20,14 +22,11 @@ const Profile = () => {
             pesanan : []
         }
     );
-    const [nama, setNama] = useState('');
-    const [phone, setPhone] = useState('');
-    const [address, setAddress] = useState('');
-    const docRef = doc(db, 'user', user?user.uid:'user');
+    const [edit, setEdit] = useState(false)
 
     const submitUpdate = async (e) => {
         e.preventDefault()
-        await updateDoc(docRef,{
+        await updateDoc(doc(db, 'user', user?user.uid:'user'),{
             name : nama,
             phone : phone,
             address : address
@@ -39,22 +38,11 @@ const Profile = () => {
     };
 
     useEffect(()=>{
-        if(!user) router.push('/login');
-        const getProfile = async () => {
-            const docSnap = await getDoc(docRef);
-            if(docSnap.exists()) {
-                setUserProfile(docSnap.data())
-            } else {
-                console.log('Please update profile')
-            }
-        }
-        getProfile()
-        return () => {
-            setNama('')
-            setPhone('')
-            setAddress('')
-        }
-    },[docRef,router,user])
+        !user?router.push('/login'):
+        onSnapshot(doc(db,'user',user.uid),(data)=>{
+            setUserProfile(data.data())
+        })
+    },[user,router])
 
     return(
         <Base>
@@ -104,6 +92,7 @@ const Profile = () => {
             <div className='text-center mt-8'>
             <button className='bg-gray-50 bg-opacity-5 backdrop-filter backdrop-blur rounded-md shadow px-2 py-1 h-7' onClick={()=>{
                 signOut(auth)
+                router.push('/')
             }} >
                 <h1 className='font-bold text-sm text-green-600'>Log Out</h1>
             </button>
