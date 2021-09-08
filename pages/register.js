@@ -45,15 +45,15 @@ const Register = () => {
                 <p className='text-center text-red-600 font-semibold mb-4'>
                     {gagal==''?'':'Email sudah terdaftar, silahkan pakai email lain atau silahkan login'}
                 </p>
-                <input type='text' placeholder='John Wick' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setName(e.target.value)} />
-                <input type='email' placeholder='email@example.com' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setEmail(e.target.value)} />
-                <input type='password' placeholder='password' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setSame(e.target.value)} />
+                <input type='text' placeholder='John Wick' className='px-4 py-2 w-full mb-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600' required onChange={(e)=>setName(e.target.value)} />
+                <input type='email' placeholder='email@example.com' className='px-4 py-2 w-full mb-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600' required onChange={(e)=>setEmail(e.target.value)} />
+                <input type='password' placeholder='password' className='px-4 py-2 w-full mb-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600' required onChange={(e)=>setSame(e.target.value)} />
                 <p className={same!=password?'text-red-600':'hidden'}>
                     Mohon masukan password yang sama
                 </p>
-                <input type='password' placeholder='confirm password' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setPassword(e.target.value)} />
-                <input type='number' placeholder='081234567890' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setPhone(e.target.value)} />
-                <input type='text' placeholder='Address' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setAddress(e.target.value)} />
+                <input type='password' placeholder='confirm password' className='px-4 py-2 w-full mb-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600' required onChange={(e)=>setPassword(e.target.value)} />
+                <input type='number' placeholder='081234567890' className='px-4 py-2 w-full mb-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600' required onChange={(e)=>setPhone(e.target.value)} />
+                <input type='text' placeholder='Address' className='px-4 py-2 w-full mb-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600' required onChange={(e)=>setAddress(e.target.value)} />
                 <p className='mb-4 px-4 text-black font-medium'>Or Click here to <span className='text-green-600'>
                     <Link href='/login'>
                         <a>login</a>

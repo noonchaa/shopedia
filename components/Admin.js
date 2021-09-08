@@ -1,10 +1,11 @@
 import Head from 'next/head'
-import {HiMenu,HiX,HiShoppingCart} from 'react-icons/hi'
+import {HiMenu,HiX} from 'react-icons/hi'
 import Link from 'next/link'
 import { useState } from 'react'
-import Cart from './Cart'
+import { useRouter } from 'next/router'
 
 const Admin = ({children}) => {
+    const router = useRouter()
     const [show,setShow] = useState(false)
     return(
         <div className='text-black max-w-screen-2xl mx-auto'>
@@ -25,34 +26,34 @@ const Admin = ({children}) => {
                     <Link href='/'>
                         <a className='font-bold tracking-wider mb-2'>Home</a>
                     </Link>
-                    <Link href='/brand'>
-                        <a className='font-semibold tracking-wider capitalize mb-2'>Stock</a>
+                    <Link href='/dashboard'>
+                        <a className={router.asPath=='/dashboard'?'font-bold tracking-wider capitalize mb-2':'font-semibold tracking-wider capitalize mb-2'}>Stock</a>
                     </Link>
-                    <Link href='/brand'>
+                    <Link href='/dashboard/order'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Order</a>
                     </Link>
-                    <Link href='/profile'>
+                    <Link href='/dashboard/packing'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Packing</a>
                     </Link>
-                    <Link href='/help'>
+                    <Link href='/dashboard/delivery'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Delivery</a>
                     </Link>
-                    <Link href='/term'>
+                    <Link href='/dashboard/delivered'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Delivered</a>
                     </Link>
-                    <Link href='/term'>
+                    <Link href='/dashboard/finished'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Finished</a>
                     </Link>
-                    <Link href='/term'>
+                    <Link href='/dashboard/incoming'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Incoming</a>
                     </Link>
-                    <Link href='/term'>
+                    <Link href='/dashboard/new'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>New Product</a>
                     </Link>
-                    <Link href='/term'>
+                    <Link href='/dashboard/add'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Add Admin</a>
                     </Link>
-                    <Link href='/term'>
+                    <Link href='/dashboard/rem'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Remove Admin</a>
                     </Link>
                 </div>

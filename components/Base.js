@@ -49,9 +49,14 @@ const Base = ({children}) => {
                     <Link href='/brand'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Lenovo</a>
                     </Link>
-                    <Link href='/profile'>
-                        <a className='font-semibold tracking-wider capitalize mb-2'>Profile</a>
-                    </Link>
+                    {user?user.email=='shopadmin@shopedia.com'?
+                        <Link href='/dashboard'>
+                            <a className='font-semibold tracking-wider capitalize mb-2'>Dashboard</a>
+                        </Link>:
+                        <Link href='/profile'>
+                            <a className='font-semibold tracking-wider capitalize mb-2'>Profile</a>
+                        </Link>:
+                        ''}
                     <Link href='/help'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>FAQ</a>
                     </Link>

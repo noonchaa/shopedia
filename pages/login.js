@@ -14,21 +14,25 @@ const Login = () => {
 
     const Signin = (e) => {
         e.preventDefault()
-        signInWithEmailAndPassword(auth,email,password).then(()=>{
+        signInWithEmailAndPassword(auth,email,password).then((data)=>{
             router.push('/profile')
+            console.log(data.user.email)
         }).catch((error)=>{
             setGagal(error.code)
         })
     }
-    if(user) {router.push('/profile')}
+
+    if(user){
+        user.email=='shopadmin@shopedia.com'?router.push('/dashboard'):router.push('/profile')
+    }
 
     return(
         <div className='bg-gray-400 h-screen w-full px-2 py-40'>
             <form className='max-w-screen-sm mx-auto p-4 bg-gray-50 bg-opacity-50 shadow-xl rounded-lg' onSubmit={Signin}>
                 <h1 className='text-center text-2xl text-green-600 font-semibold mb-8'>Login</h1>
                 <p className='text-center text-red-600 font-semibold mb-4'>{gagal==''?'':'Email atau password salah'}</p>
-                <input type='email' placeholder='email@example.com' className='px-4 py-2 w-full mb-4 rounded-lg' required onChange={(e)=>setEmail(e.target.value)} />
-                <input type='password' placeholder='password' className='px-4 py-2 w-full mb-2 rounded-lg' required onChange={(e)=>setPassword(e.target.value)} />
+                <input type='email' placeholder='email@example.com' className='px-4 py-2 w-full mb-4 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600' required onChange={(e)=>setEmail(e.target.value)} />
+                <input type='password' placeholder='password' className='px-4 py-2 w-full mb-2 rounded-lg focus:outline-none focus:ring-1 focus:ring-green-600' required onChange={(e)=>setPassword(e.target.value)} />
                 <p className='mb-4 px-4 text-black font-medium'>Or Click here to <span className='text-green-600'>
                     <Link href='/register'>
                         <a>register</a>
