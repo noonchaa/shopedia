@@ -14,45 +14,23 @@ const Profile = () => {
     const [nama, setNama] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
-    const [userProfile, setUserProfile] = useState(
-        {
-            name : '',
-            phone : '',
-            address : '',
-            pesanan : []
-        }
-    );
+    const [userProfile, setUserProfile] = useState('');
     const [edit, setEdit] = useState(false)
 
     const submitUpdate = async (e) => {
         e.preventDefault()
-        await updateDoc(doc(db, 'user', user?user.uid:'user'),{
-            name : nama,
-            phone : phone,
-            address : address
-        })
         setEdit(!edit)
-        setNama('')
-        setPhone('')
-        setAddress('')
     };
-
-    useEffect(()=>{
-        !user?router.push('/login'):
-        onSnapshot(doc(db,'user',user.uid),(data)=>{
-            setUserProfile(data.data())
-        })
-    },[user,router])
 
     return(
         <Base>
             <div className='my-8'>
                 <h1 className='text-xl font-semibold italic text-green-600 ml-4'>Profile</h1>
                 <div className={edit==false?'bg-gray-50 bg-opacity-5 shadow-xl my-4 rounded-lg px-4 py-3 border border-gray-100 max-w-lg':'hidden'}>
-                    <HiPencilAlt className='w-8 h-8 text-green-500 ml-auto mb-4' onClick={()=>setEdit(!edit)}/>
-                    <p className='font-semibold mb-2'>Nama : <span className='italic'>{userProfile.name}</span></p>
-                    <p className='font-semibold mb-2'>Telepon : <span className='italic'>{userProfile.phone}</span></p>
-                    <p className='font-semibold mb-2'>Alamat : <span className='italic'>{userProfile.address}</span></p>
+                    <HiPencilAlt className='w-8 h-8 text-green-500 ml-auto mb-4 cursor-pointer' onClick={()=>setEdit(!edit)}/>
+                    <p className='font-semibold mb-2'>Nama : <span className='italic'>Nama</span></p>
+                    <p className='font-semibold mb-2'>Telepon : <span className='italic'>Telepon</span></p>
+                    <p className='font-semibold mb-2'>Alamat : <span className='italic'>Alamat</span></p>
                 </div>
                 <form className={edit==false?'hidden':'bg-gray-50 bg-opacity-5 shadow-xl my-4 rounded-lg px-4 py-3 border border-gray-100 max-w-lg'} onSubmit={submitUpdate} >
                     <div className='text-right mb-4'>
@@ -63,14 +41,14 @@ const Profile = () => {
                             <HiCheck className='w-8 h-8 text-green-600'/>
                         </button>
                     </div>
-                    <input type='text' placeholder={userProfile.name} className='p-2 bg-gray-100 mb-4 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-green-600 text-sm' onChange={(e)=>setNama(e.target.value)} required />
-                    <input type='text' placeholder={userProfile.phone} className='p-2 bg-gray-100 mb-4 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-green-600 text-sm' onChange={(e)=>setPhone(e.target.value)} required />
-                    <input type='text' placeholder={userProfile.address} className='p-2 bg-gray-100 mb-4 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-green-600 text-sm' onChange={(e)=>setAddress(e.target.value)} required />
+                    <input type='text' placeholder='nama' className='p-2 bg-gray-100 mb-4 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-green-600 text-sm' onChange={(e)=>setNama(e.target.value)} required />
+                    <input type='text' placeholder='telepon' className='p-2 bg-gray-100 mb-4 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-green-600 text-sm' onChange={(e)=>setPhone(e.target.value)} required />
+                    <input type='text' placeholder='alamat' className='p-2 bg-gray-100 mb-4 rounded-md w-full focus:outline-none focus:ring-1 focus:ring-green-600 text-sm' onChange={(e)=>setAddress(e.target.value)} required />
                 </form>
             </div>
 
-            <h1 className='text-xl font-semibold italic text-green-600 ml-4 mb-4'>Pesanan {userProfile.pesanan.length}</h1>
-            {!userProfile.pesanan.length?'':
+            <h1 className='text-xl font-semibold italic text-green-600 ml-4 mb-4'>Pesanan {userProfile}</h1>
+            {!userProfile?'':
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
                 <div className='bg-gray-50 bg-opacity-5 shadow-xl rounded-lg px-4 py-3 border border-gray-100'>
                     <p className='font-semibold mb-2'>ID : <span className='italic'>458751</span></p>

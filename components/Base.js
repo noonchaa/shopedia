@@ -49,7 +49,7 @@ const Base = ({children}) => {
                     <Link href='/brand'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Lenovo</a>
                     </Link>
-                    {user?user.email=='shopadmin@shopedia.com'?
+                    {user?user.displayName=='admin'?
                         <Link href='/dashboard'>
                             <a className='font-semibold tracking-wider capitalize mb-2'>Dashboard</a>
                         </Link>:

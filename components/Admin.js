@@ -3,6 +3,8 @@ import {HiMenu,HiX} from 'react-icons/hi'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import { auth } from '../utils/firebaseClient'
+import {signOut} from 'firebase/auth'
 
 const Admin = ({children}) => {
     const router = useRouter()
@@ -45,17 +47,25 @@ const Admin = ({children}) => {
                         <a className='font-semibold tracking-wider capitalize mb-2'>Finished</a>
                     </Link>
                     <Link href='/dashboard/incoming'>
-                        <a className='font-semibold tracking-wider capitalize mb-2'>Incoming</a>
+                        <a className={router.asPath=='/dashboard/incoming'?'font-bold tracking-wider capitalize mb-2':'font-semibold tracking-wider capitalize mb-2'}>Incoming</a>
                     </Link>
                     <Link href='/dashboard/new'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>New Product</a>
                     </Link>
-                    <Link href='/dashboard/add'>
+                    <Link href='/dashboard/addAdmin'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Add Admin</a>
                     </Link>
-                    <Link href='/dashboard/rem'>
+                    <Link href='/dashboard/deleteAdmin'>
                         <a className='font-semibold tracking-wider capitalize mb-2'>Remove Admin</a>
                     </Link>
+                    <h1 className='font-semibold tracking-wider capitalize mb-2 cursor-pointer'
+                        onClick={()=>{
+                            signOut(auth)
+                            router.push('/')
+                        }}
+                    >
+                        Log Out
+                    </h1>
                 </div>
                 <p className='text-sm font-semibold text-center w-full absolute bottom-0'>shopedia @2021</p>
             </aside>
