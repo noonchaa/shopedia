@@ -6,11 +6,15 @@ import { db } from '../../utils/firebaseClient'
 import { collection, onSnapshot,query } from '@firebase/firestore'
 
 const Dashboard = () => {
+    //retrieve currently signin user
     const user = useContext(UserContext)
+    //next/router for redirecting to another page
     const router = useRouter()
+    //set initial state
     const [stock, setStock] = useState([])
 
     useEffect(()=>{
+        //get list of products stocks onMount
         onSnapshot(query(collection(db,'brand')),(snap)=>{
             const data = []
             snap.forEach((doc)=>{

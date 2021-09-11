@@ -8,8 +8,11 @@ import Button from "../../components/part/Button"
 import Input from "../../components/part/Input"
 
 const Incoming = () => {
+    //retrieve currently signin user
     const user = useContext(UserContext)
+    //next/router for redirecting to another page
     const router = useRouter()
+    //set initial state
     const [opsi, setOpsi] = useState([])
     const [serie, setSerie] = useState([])
     const [series, setSeries] = useState('')
@@ -18,6 +21,7 @@ const Incoming = () => {
     const [loading, setLoading] = useState(false)
 
     useEffect(()=>{
+        //get list of products stocks onMount
         async function getBrands() {
             const res = await getDocs(collection(db, "brand"));
             const data = []
@@ -33,7 +37,11 @@ const Incoming = () => {
     },[])
 
     const UpdateStock = async (e) => {
+        //prevent default behavior of form submit
         e.preventDefault()
+        //change loading state
+        setLoading(true)
+        //add conditions error handling
         if(brand==''){
             alert('Mohon pilih merk laptop')
         }
@@ -48,6 +56,7 @@ const Incoming = () => {
                 stock: stock
             })
         })
+        //reset loading state
         setLoading(false)
     }
     }

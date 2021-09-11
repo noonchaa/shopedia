@@ -11,8 +11,11 @@ import {doc, setDoc, updateDoc, arrayUnion, getDoc} from 'firebase/firestore'
 import { db } from "../../utils/firebaseClient"
 
 const NewProduct = () => {
+    //retrieve currently signin user
     const user = useContext(UserContext)
+    //next/router for redirecting to another page
     const router = useRouter()
+    //set initial state
     const [brand, setBrand] = useState('')
     const [name, setName] = useState('')
     const [price, setPrice] = useState('')
@@ -30,12 +33,16 @@ const NewProduct = () => {
     const [fail, setFail] = useState('')
     const [loading, setLoading] = useState(false)
 
+    //get image url to be added to database
     const getImgUrl = () => {
         setFail('')
+        //set conditions error handling
         if(brand==''||img==''){
             setFail('Mohon isi Brand kemudian pilih file')
         } else {
+            //upload image to storage
             uploadBytes(ref(storage, `${brand.toLowerCase()}/${img.name}`),img).then((doc)=>{
+                //get image url
                 getDownloadURL(ref(storage, doc.ref.fullPath)).then((url)=>{
                     setImgUrl(url)
                 })
@@ -43,6 +50,7 @@ const NewProduct = () => {
         }
     }
 
+    //reset initial state
     const reset = () => {
         setBrand('')
         setName('')
@@ -60,6 +68,7 @@ const NewProduct = () => {
         setDesc('')
     }
 
+    //set detail to be added to products database
     const productDetail = {
         name: name.toLowerCase(),
         price: price,
@@ -74,36 +83,52 @@ const NewProduct = () => {
         descriptions: desc,
         added: new Date()
     }
+
+    //set detail to be added to stocks database
     const productStock = {
         name: name.toLowerCase(),
         stock: total
     }
 
     const addProduct = async (e) => {
+        //prevent default behavior form submit
         e.preventDefault()
+        //change loading state
         setLoading(true)
+        //reset fail message
         setFail('')
+        //check if document already exists
         const res = await getDoc(doc(db,'products',brand.toLowerCase()))
         const resStock = await getDoc(doc(db,'stocks',brand.toLowerCase()))
         if(res.exists()&&resStock.exists()){
+            //if exists
+            //update products records in database
             updateDoc(doc(db,'products',brand.toLowerCase()),{
                 series: arrayUnion(productDetail)
             }).catch((err)=>setFail(err.code))
+            //update stocks records in database
             updateDoc(doc(db,'stocks',brand.toLowerCase()),{
                 stock: arrayUnion(productStock)
             }).catch((err)=>setFail(err.code))
+            //reset loading state
             setLoading(false)
+            //run reset function to reset initial state
             reset()
         } else {
+            //if not-found
+            //create products records in database
             setDoc(doc(db,'products',brand.toLowerCase()),{
                 id: brand.toLowerCase(),
                 series:[productDetail]
             }).catch((err)=>setFail(err.code))
+            //create stocks records in database
             setDoc(doc(db,'stocks',brand.toLowerCase()),{
                 id: brand.toLowerCase(),
                 stock:[productStock]
             }).catch((err)=>setFail(err.code))
+            //reset loading state
             setLoading(false)
+            //run reset function to reset initial state
             reset()
         }
     }

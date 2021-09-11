@@ -8,19 +8,28 @@ import Input from "../../components/part/Input"
 import Button from "../../components/part/Button"
 
 const DeleteAdmin = () => {
+    //retrieve currently signin user
     const user = useContext(UserContext)
+    //set initial state
     const [loading, setLoading] = useState(false)
     const [fail, setFail] = useState('')
     const [email, setEmail] = useState('')
     const [pass, setPass] = useState('')
 
     const deleteAdmin = (e) => {
+        //prevent default behavior of form submit
         e.preventDefault()
+        //change loading state
         setLoading(true)
+        //reset the fail message
         setFail('')
+        //reauthenticate admin before deleting
         reauthenticateWithCredential(auth.currentUser,EmailAuthProvider.credential(email,pass)).then(()=>{
+            //delete admin from database
             deleteUser(auth.currentUser).then(()=>{
+                //delete admins records from database
                 deleteDoc(doc(db,'admins',user.email))
+                //reset initial state
                 setEmail('')
                 setPass('')
             }).catch((err)=>{
@@ -29,6 +38,7 @@ const DeleteAdmin = () => {
         }).catch((err)=>{
             setFail(err.code)
         })
+        //reset loading state
         setLoading(false)
     }
 

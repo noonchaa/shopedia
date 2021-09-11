@@ -5,8 +5,10 @@ import {onAuthStateChanged} from 'firebase/auth'
 export const UserContext = React.createContext(null)
 
 const User = ({children}) => {
+    //set state for signin user
     const [signUser, setSignUser] = useState(null)
 
+    //listen to signin user and persist on reload
     useEffect(()=>{
         onAuthStateChanged(auth,(user)=>{
             if (user) {

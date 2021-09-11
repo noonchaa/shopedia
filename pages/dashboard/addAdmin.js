@@ -7,6 +7,7 @@ import {auth, db} from '../../utils/firebaseClient'
 import { doc, setDoc } from "@firebase/firestore"
 
 const AddAdmin = () => {
+    //set initial state
     const [name, setName] = useState('')
     const [pass, setPass] = useState('')
     const [email, setEmail] = useState('')
@@ -14,15 +15,21 @@ const AddAdmin = () => {
     const [loading, setLoading] = useState(false)
 
     const addAdmin = (e) => {
+        //prevent default behavior of form submit
         e.preventDefault()
+        //change loading state
         setLoading(true)
+        //reset the fail message
         setFail('')
+        //create user in database
         createUserWithEmailAndPassword(auth,email,pass).then(()=>{
+            //update user displayName for admin role
             updateProfile(auth.currentUser,{
                 displayName:'admin'
             }).catch((err)=>{
                 setFail(err.code)
             })
+            //add admins records to database
             setDoc(doc(db,'admins',email.toLowerCase()),{
                 name: name,
                 email: email.toLowerCase()
@@ -30,7 +37,9 @@ const AddAdmin = () => {
         }).catch((err)=>{
             setFail(err.code)
         })
+        //reset loading state
         setLoading(false)
+        //reset initial state
         setName('')
         setPass('')
         setEmail('')
