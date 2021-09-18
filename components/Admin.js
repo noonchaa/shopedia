@@ -17,7 +17,7 @@ const Admin = ({children}) => {
 
             {/* set meta tag title and descriptions */}
             <Head>
-                <title>Admin@shopedia</title>
+                <title>Dashboard Admin</title>
                 <meta name="description" content='Ecommerce Web App Admin'/>
                 <link rel="icon" href="/favicon.ico" />
             </Head>

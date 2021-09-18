@@ -70,6 +70,7 @@ const NewProduct = () => {
 
     //set detail to be added to products database
     const productDetail = {
+        brand: brand,
         name: name.toLowerCase(),
         price: price,
         imgUrl: imgUrl,
@@ -86,6 +87,7 @@ const NewProduct = () => {
 
     //set detail to be added to stocks database
     const productStock = {
+        brand: brand,
         name: name.toLowerCase(),
         stock: total
     }
@@ -98,18 +100,14 @@ const NewProduct = () => {
         //reset fail message
         setFail('')
         //check if document already exists
-        const res = await getDoc(doc(db,'products',brand.toLowerCase()))
-        const resStock = await getDoc(doc(db,'stocks',brand.toLowerCase()))
+        const res = await getDoc(doc(db,'products',name.toLowerCase()))
+        const resStock = await getDoc(doc(db,'stocks',name.toLowerCase()))
         if(res.exists()&&resStock.exists()){
             //if exists
             //update products records in database
-            updateDoc(doc(db,'products',brand.toLowerCase()),{
-                series: arrayUnion(productDetail)
-            }).catch((err)=>setFail(err.code))
+            updateDoc(doc(db,'products',name.toLowerCase()),productDetail).catch((err)=>setFail(err.code))
             //update stocks records in database
-            updateDoc(doc(db,'stocks',brand.toLowerCase()),{
-                stock: arrayUnion(productStock)
-            }).catch((err)=>setFail(err.code))
+            updateDoc(doc(db,'stocks',name.toLowerCase()),productStock).catch((err)=>setFail(err.code))
             //reset loading state
             setLoading(false)
             //run reset function to reset initial state
@@ -117,15 +115,9 @@ const NewProduct = () => {
         } else {
             //if not-found
             //create products records in database
-            setDoc(doc(db,'products',brand.toLowerCase()),{
-                id: brand.toLowerCase(),
-                series:[productDetail]
-            }).catch((err)=>setFail(err.code))
+            setDoc(doc(db,'products',name.toLowerCase()),productDetail).catch((err)=>setFail(err.code))
             //create stocks records in database
-            setDoc(doc(db,'stocks',brand.toLowerCase()),{
-                id: brand.toLowerCase(),
-                stock:[productStock]
-            }).catch((err)=>setFail(err.code))
+            setDoc(doc(db,'stocks',name.toLowerCase()),productStock).catch((err)=>setFail(err.code))
             //reset loading state
             setLoading(false)
             //run reset function to reset initial state
