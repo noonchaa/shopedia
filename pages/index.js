@@ -2,21 +2,25 @@ import { collection, getDocs, orderBy, query } from '@firebase/firestore'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import Base from '../components/Base'
-import Product from '../components/Product'
 import { db } from '../utils/firebaseClient'
+import Link from 'next/link'
+import {HiStar,HiShoppingCart} from 'react-icons/hi'
 
 export default function Home() {
   const [products, setProducts] = useState([])
-  const [imgUrl, setImgUrl] = useState(['/logo.png'])
+  const [imgUrl, setImgUrl] = useState('')
 
   useEffect(()=>{
     const getProducts = async () => {
       const res = await getDocs(query(collection(db,'products'),orderBy('added','desc')))
       const data = []
+      const url = []
       res.forEach((doc)=>{
         data.push(doc.data())
+        url.push(doc.data().imgUrl)
       })
       setProducts(data)
+      setImgUrl(url[0])
     }
     getProducts()
   },[])
@@ -25,7 +29,7 @@ export default function Home() {
     <Base>
       <div className='flex flex-col md:flex-row'>
         <div className='relative w-full h-96 md:w-1/2'>
-          <Image src='https://firebasestorage.googleapis.com/v0/b/shopedia-c22d1.appspot.com/o/lenovo%2Flegiony7000se.webp?alt=media&token=e0a21e7b-60b7-4612-a435-bbef7c188c4e' layout='fill' objectFit='cover' priority={true} alt='jumbotron' className='rounded-xl'/>
+          <Image src={!imgUrl?'/image.jpg':imgUrl} layout='fill' objectFit='cover' priority={true} alt='jumbotron' className='rounded-xl'/>
         </div>
         <div className='text-center pt-16 w-full md:w-1/2 md:pl-4'>
           <h1 className='text-2xl font-bold text-green-600 tracking-widest mb-8'>Shopedia</h1>
@@ -38,8 +42,25 @@ export default function Home() {
           </form>
         </div>
       </div>
-      <Product/>
-      <Product/>
+      <div className='grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4'>
+        {products.map((item,index)=>(
+          <Link href={`/${item.brand}/${item.name}`} key={index}>
+            <a className='bg-gray-100 rounded-lg'>
+              <div className='relative h-40 mb-2'>
+                  <Image src={item.imgUrl} layout='fill' objectFit='cover' quality={80} alt='Laptop' className='rounded-t-lg' />
+              </div>
+              <div className='px-2 pb-2 flex justify-between items-center'>
+                  <div>
+                      <HiStar className='text-green-600 w-8 h-8' />
+                      <h1 className='text-2xl capitalize font-semibold'>{item.name}</h1>
+                      <h1 className='text-lg font-light'>Rp. {Number(item.price).toLocaleString('ID',{'currency':'IDR'})}</h1>
+                  </div>
+                  <HiShoppingCart className='w-12 h-12 cursor-pointer text-green-600'/>
+              </div>
+            </a>
+          </Link>
+        ))}
+      </div>
     </Base>
   )
 }
