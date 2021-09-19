@@ -44,7 +44,7 @@ export default function Home() {
       </div>
       <div className='grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4'>
         {products.map((item,index)=>(
-          <Link href={`/${item.brand}/${item.name}`} key={index}>
+          <Link href={`/${item.name.replace(/[ ]/g,'_')}`} key={index}>
             <a className='bg-gray-100 rounded-lg'>
               <div className='relative h-40 mb-2'>
                   <Image src={item.imgUrl} layout='fill' objectFit='cover' quality={80} alt='Laptop' className='rounded-t-lg' />
