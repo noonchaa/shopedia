@@ -1,5 +1,4 @@
 import {HiPencilAlt,HiCheck,HiX} from 'react-icons/hi';
-import Base from '../components/Base';
 import {auth} from '../utils/firebaseClient';
 import {signOut} from 'firebase/auth';
 import { useContext, useEffect, useState } from 'react';
@@ -7,6 +6,7 @@ import { UserContext } from '../components/User';
 import { useRouter } from 'next/router';
 import { db } from '../utils/firebaseClient';
 import { doc,updateDoc,onSnapshot } from 'firebase/firestore'
+import Layout from '../components/Layout';
 
 const Profile = () => {
     const user = useContext(UserContext);
@@ -23,7 +23,7 @@ const Profile = () => {
     };
 
     return(
-        <Base>
+        <Layout>
             <div className='my-8'>
                 <h1 className='text-xl font-semibold italic text-green-600 ml-4'>Profile</h1>
                 <div className={edit==false?'bg-gray-50 bg-opacity-5 shadow-xl my-4 rounded-lg px-4 py-3 border border-gray-100 max-w-lg':'hidden'}>
@@ -75,7 +75,7 @@ const Profile = () => {
                 <h1 className='font-bold text-sm text-green-600'>Log Out</h1>
             </button>
             </div>
-        </Base>
+        </Layout>
     );
 };
 export default Profile

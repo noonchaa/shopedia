@@ -9,11 +9,8 @@ import Button from '../components/part/Button'
 import {useRouter} from 'next/router'
 
 const Register = () => {
-    //retrieve currently signin user
     const user = useContext(UserContext)
-    //next/router for redirecting to another page
     const router = useRouter()
-    //set initial state
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirm ,setConfirm] = useState('')
@@ -24,23 +21,16 @@ const Register = () => {
     const [loading, setLoading] = useState(false)
 
     const register = (e) => {
-        //prevent default behavior form submit
         e.preventDefault()
-        //change loading state
         setLoading(true)
-        //reset fail message
         setFail('')
-        //conditions if password is not same
         if(password!=confirm){
             setFail('Mohon masukan password yang sama')
         } else {
-            //create user records in database
             createUserWithEmailAndPassword(auth,email,password).then(()=>{
-                //update user displayname to user name
                 updateProfile(auth.currentUser,{
                     displayName: name
                 }).catch((err)=>setFail(err.code))
-                //create users records indatabase
                 setDoc(doc(db,'users',name.toLowerCase()),{
                     name: name.toLowerCase(),
                     email: email.toLowerCase(),
@@ -49,11 +39,9 @@ const Register = () => {
                     added: new Date(),
                     updated: new Date()
                 })
-                //redirect user to profile page
                 router.push('/profile')
             }).catch((err)=>setFail(err.code))
         }
-        //reset loading state
         setLoading(false)
     }
 

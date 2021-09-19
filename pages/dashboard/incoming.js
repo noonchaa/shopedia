@@ -1,18 +1,11 @@
-import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
-import Admin from '../../components/Admin'
-import { UserContext } from '../../components/User'
+import { useEffect, useState } from 'react'
 import { db } from '../../utils/firebaseClient'
 import { collection, getDocs, doc, updateDoc } from '@firebase/firestore'
 import Button from "../../components/part/Button"
 import Input from "../../components/part/Input"
+import Layout from '../../components/Layout'
 
 const Incoming = () => {
-    //retrieve currently signin user
-    const user = useContext(UserContext)
-    //next/router for redirecting to another page
-    const router = useRouter()
-    //set initial state
     const [products, setProducts] = useState([])
     const [brand, setBrand] = useState('')
     const [series, setSeries] = useState('')
@@ -20,7 +13,6 @@ const Incoming = () => {
     const [loading, setLoading] = useState(false)
 
     useEffect(()=>{
-        //get list of products stocks onMount
         const getStocks = async () => {
             const res = await getDocs(collection(db, 'stocks'))
             const data = []
@@ -33,11 +25,8 @@ const Incoming = () => {
     },[])
 
     const UpdateStock = async (e) => {
-        //prevent default behavior of form submit
         e.preventDefault()
-        //change loading state
         setLoading(true)
-        //add conditions error handling
         if(brand==''){
             alert('Mohon pilih merk laptop')
         }
@@ -48,23 +37,21 @@ const Incoming = () => {
         await updateDoc(doc(db,'stocks',series),{
             stock: Number(stock) + Number(products.filter(item=>item.brand==brand).map(item=>item.stock))
         })
-        //reset loading state
         setLoading(false)
         setBrand('')
         setSeries('')
         setStock('')
     }
     }
-    console.log()
 
     return(
-        <Admin>
+        <Layout>
             <h1 className='text-center font-semibold text-xl mt-8'>Stock Product Datang</h1>
             <form className='max-w-2xl mx-auto' onSubmit={UpdateStock}>
                 <select className='pl-4 my-2 py-1 focus:outline-none focus:ring-1 focus:ring-green-600 bg-gray-100 capitalize' onChange={(e)=>setBrand(e.target.value)}>
                     <option className='text-xs' value=''>Products</option>
-                {products.map((item,index)=>(
-                    <option className='text-xs' key={index} value={item.brand}>{item.brand}</option>
+                {products.map(item=>item.brand).filter((item,index,self)=>self.indexOf(item)===index).map((item,index)=>(
+                    <option className='text-xs' key={index} value={item}>{item}</option>
                 ))}
                 </select><br/>
                 {brand==''?
@@ -84,7 +71,7 @@ const Incoming = () => {
                     <Button type='submit'>{loading==false?'Submit':'......'}</Button>
                 </div>
             </form>
-        </Admin>
+        </Layout>
     )
 }
 export default Incoming

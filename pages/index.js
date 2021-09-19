@@ -1,9 +1,9 @@
 import { collection, getDocs, orderBy, query } from '@firebase/firestore'
 import Image from 'next/image'
-import Base from '../components/Base'
 import { db } from '../utils/firebaseClient'
 import Link from 'next/link'
 import {HiStar,HiShoppingCart} from 'react-icons/hi'
+import Layout from '../components/Layout'
 
 export const getStaticProps = async () => {
   const res = await getDocs(query(collection(db,'products'),orderBy('added','desc')))
@@ -24,7 +24,7 @@ export const getStaticProps = async () => {
 export default function Home({url,data}) {
 
   return (
-    <Base>
+    <Layout>
       <div className='flex flex-col md:flex-row'>
         <div className='relative w-full h-96 md:w-1/2'>
           <Image src={url.imgUrl} layout='fill' objectFit='cover' priority={true} alt='jumbotron' className='rounded-xl'/>
@@ -59,6 +59,6 @@ export default function Home({url,data}) {
           </Link>
         ))}
       </div>
-    </Base>
+    </Layout>
   )
 }

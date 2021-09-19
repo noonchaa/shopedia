@@ -1,8 +1,8 @@
-import Base from "../components/Base"
+import Layout from "../components/Layout"
 
 const Help = () => {
     return(
-        <Base>
+        <Layout>
             <div className='mt-11'>
                 <h1 className='text-green-500 text-2xl font-semibold mb-2 mt-4'>
                     ## Order
@@ -56,7 +56,7 @@ const Help = () => {
                     - OVO<br/>
                 </p>
             </div>
-        </Base>
+        </Layout>
     )
 }
 export default Help

@@ -1,10 +1,10 @@
 import { collection, doc, getDoc, getDocs, query, orderBy } from "@firebase/firestore"
-import Base from "../components/Base"
 import { db } from "../utils/firebaseClient"
 import Image from 'next/image'
 import {HiStar,HiShoppingCart} from 'react-icons/hi'
 import { useRouter } from "next/router"
 import Link from 'next/link'
+import Layout from "../components/Layout"
 
 export const getStaticPaths = async () => {
     const res = await getDocs(collection(db,'products'))
@@ -42,16 +42,16 @@ const Prod = ({data,dataProd}) => {
 
     if(router.isFallback) {
         return(
-            <Base>
+            <Layout>
                 <div className='max-w-3xl mx-auto mt-8 flex justify-center items-center'>
                     <h1 className='text-2xl capitalize font-semibold'>... Loading ...</h1>
                 </div>
-            </Base>
+            </Layout>
         )
     }
 
     return(
-        <Base>
+        <Layout>
         <div className='grid grid-cols-1 md:grid-cols-2 mb-8 bg-gray-100 rounded-xl'>
             <div className='h-60 relative'>
                 <Image src={data.imgUrl} layout='fill' objectFit='cover' priority={true} quality={90} alt='Product' className='rounded-t-xl md:rounded-l-xl md:rounded-tr-none'/>
@@ -99,7 +99,7 @@ const Prod = ({data,dataProd}) => {
           </Link>
         ))}
         </div>
-        </Base>
+        </Layout>
     )
 }
 export default Prod

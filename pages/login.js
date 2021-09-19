@@ -8,27 +8,19 @@ import Input from '../components/part/Input'
 import Button from '../components/part/Button'
 
 const Login = () => {
-    //retrieve currently signin user
     const user = useContext(UserContext)
-    //next/router for redirecting to another page
     const router = useRouter()
-    //set initial state
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [fail, setFail] = useState('')
     const [loading, setLoading] = useState(false)
 
     const Signin = (e) => {
-        //prevent default behavior form submit
         e.preventDefault()
-        //change loading state
         setLoading(true)
-        //reset fail message
         setFail('')
-        //signing in user
         signInWithEmailAndPassword(auth,email,password).then((userCredential)=>{
             const user = userCredential.user
-            //routing conditions based on signed in user/admin
             if(user.displayName=='admin'){
                 router.push('/dashboard')
             } else {
@@ -37,9 +29,7 @@ const Login = () => {
         }).catch((err)=>{
             setFail(err.code)
         })
-        //reset loading state
         setLoading(false)
-        //reset to initial state
         setEmail('')
         setPassword('')
     }

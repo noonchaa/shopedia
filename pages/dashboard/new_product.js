@@ -1,21 +1,14 @@
-import { useContext, useState } from "react"
-import Admin from "../../components/Admin"
+import { useState } from "react"
 import Input from "../../components/part/Input"
 import Button from "../../components/part/Button"
 import { storage } from "../../utils/firebaseClient"
 import { ref, uploadBytes,getDownloadURL } from 'firebase/storage'
-import { UserContext } from "../../components/User"
-import { useRouter } from "next/router"
 import {HiCheck} from 'react-icons/hi'
 import {doc, setDoc, updateDoc, arrayUnion, getDoc} from 'firebase/firestore'
 import { db } from "../../utils/firebaseClient"
+import Layout from "../../components/Layout"
 
 const NewProduct = () => {
-    //retrieve currently signin user
-    const user = useContext(UserContext)
-    //next/router for redirecting to another page
-    const router = useRouter()
-    //set initial state
     const [brand, setBrand] = useState('')
     const [name, setName] = useState('')
     const [price, setPrice] = useState('')
@@ -33,16 +26,12 @@ const NewProduct = () => {
     const [fail, setFail] = useState('')
     const [loading, setLoading] = useState(false)
 
-    //get image url to be added to database
     const getImgUrl = () => {
         setFail('')
-        //set conditions error handling
         if(brand==''||img==''){
             setFail('Mohon isi Brand kemudian pilih file')
         } else {
-            //upload image to storage
             uploadBytes(ref(storage, `${brand.toLowerCase()}/${img.name}`),img).then((doc)=>{
-                //get image url
                 getDownloadURL(ref(storage, doc.ref.fullPath)).then((url)=>{
                     setImgUrl(url)
                 })
@@ -50,7 +39,6 @@ const NewProduct = () => {
         }
     }
 
-    //reset initial state
     const reset = () => {
         setBrand('')
         setName('')
@@ -68,7 +56,6 @@ const NewProduct = () => {
         setDesc('')
     }
 
-    //set detail to be added to products database
     const productDetail = {
         brand: brand,
         name: name.toLowerCase(),
@@ -85,7 +72,6 @@ const NewProduct = () => {
         added: new Date()
     }
 
-    //set detail to be added to stocks database
     const productStock = {
         brand: brand,
         name: name.toLowerCase(),
@@ -93,40 +79,26 @@ const NewProduct = () => {
     }
 
     const addProduct = async (e) => {
-        //prevent default behavior form submit
         e.preventDefault()
-        //change loading state
         setLoading(true)
-        //reset fail message
         setFail('')
-        //check if document already exists
         const res = await getDoc(doc(db,'products',name.toLowerCase()))
         const resStock = await getDoc(doc(db,'stocks',name.toLowerCase()))
         if(res.exists()&&resStock.exists()){
-            //if exists
-            //update products records in database
             updateDoc(doc(db,'products',name.toLowerCase()),productDetail).catch((err)=>setFail(err.code))
-            //update stocks records in database
             updateDoc(doc(db,'stocks',name.toLowerCase()),productStock).catch((err)=>setFail(err.code))
-            //reset loading state
             setLoading(false)
-            //run reset function to reset initial state
             reset()
         } else {
-            //if not-found
-            //create products records in database
             setDoc(doc(db,'products',name.toLowerCase()),productDetail).catch((err)=>setFail(err.code))
-            //create stocks records in database
             setDoc(doc(db,'stocks',name.toLowerCase()),productStock).catch((err)=>setFail(err.code))
-            //reset loading state
             setLoading(false)
-            //run reset function to reset initial state
             reset()
         }
     }
 
     return(
-        <Admin>
+        <Layout>
             <h1 className='text-center font-semibold text-xl mt-8 mb-4'>Product Baru</h1>
             <p className='text-center text-red-600 font-semibold mb-4'>{fail}</p>
             <form className='max-w-2xl mx-auto' onSubmit={addProduct}>
@@ -157,7 +129,7 @@ const NewProduct = () => {
                     <Button type='submit'>{loading==false?'Submit':'Loading'}</Button>
                 </div>
             </form>
-        </Admin>
+        </Layout>
     )
 }
 export default NewProduct
