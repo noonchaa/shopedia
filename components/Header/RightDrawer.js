@@ -3,9 +3,9 @@ import Link from 'next/link'
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../User"
-import { collection, getDocs } from "@firebase/firestore"
-import { auth, db } from "../../utils/firebaseClient"
+import { auth } from "../../utils/firebaseClient"
 import { signOut } from "@firebase/auth"
+import { allDocs } from "../../utils/firebaseHandler"
 
 const RightDrawer = ({show,click}) => {
     const router = useRouter()
@@ -15,11 +15,8 @@ const RightDrawer = ({show,click}) => {
 
     useEffect(()=>{
         const getStocks = async () => {
-            const res = await getDocs(collection(db, 'stocks'))
             const data = []
-            res.forEach((doc)=>{
-                data.push(doc.data())
-            })
+            await allDocs('stocks',data)
             setBrand(data.map(item=>item.brand).filter((item,index,self)=>self.indexOf(item)===index))
         }
         getStocks()
