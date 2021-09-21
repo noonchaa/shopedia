@@ -1,14 +1,12 @@
 import { HiX } from "react-icons/hi"
-import Link from 'next/link'
-import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../User"
 import { auth } from "../../utils/firebaseClient"
 import { signOut } from "@firebase/auth"
-import { allDocs } from "../../utils/firebaseHandler"
+import { allDocs, LogOut } from "../../utils/firebaseHandler"
+import Route from "./Route"
 
 const RightDrawer = ({show,click}) => {
-    const router = useRouter()
     const user = useContext(UserContext)
     const adminLink = ['stock','order','packing','delivery','delivered','finished','incoming','new_product','add_admin','remove_admin']
     const [brand, setBrand] = useState([])
@@ -25,48 +23,33 @@ const RightDrawer = ({show,click}) => {
     return(
         <aside className={show==false?'hidden':'fixed top-0 p-4 z-50 w-full h-screen max-w-xs bg-gray-50 bg-opacity-20 backdrop-filter backdrop-blur'}>
             <HiX className='text-green-600 h-5 w-5 ml-auto mb-4 cursor-pointer' onClick={click}/>
-            <div className='pl-4 flex flex-col tracking-wider capitalize'>
-                <Link href='/'>
-                    <a className={router.asPath=='/'?'font-bold mb-2':'font-semibold mb-2 text-green-600'}>Home</a>
-                </Link>
+            <h1 className='text-2xl font-bold text-green-600 tracking-widest mb-4 pl-4'>Shopedia</h1>
+            <div className='pl-4 flex flex-col'>
+                <Route path='/' name='home'/>
                 {!user?
-                brand.map((item,index)=>(
-                    <Link href={'/brand/'+item} key={index}>
-                        <a className={router.asPath==('/brand'+item)?'font-bold mb-2':'font-semibold mb-2 text-green-600'}>
-                            {item}
-                        </a>
-                    </Link>
-                ))
-                :user.displayName=='admin'?
-                adminLink.map((item,index)=>(
-                    <Link href={'/dashboard/'+item} key={index}>
-                        <a className={router.asPath==('/dashboard/'+item)?'font-bold mb-2':'font-semibold mb-2 text-green-600'}>
-                            {item.replace(/[_]/g,' ')}
-                        </a>
-                    </Link>
-                ))
-                :
-                <>
-                {brand.map((item,index)=>(
-                    <Link href={'/brand/'+item} key={index}>
-                        <a className={router.asPath==('/brand'+item)?'font-bold mb-2':'font-semibold mb-2 text-green-600'}>
-                            {item}
-                        </a>
-                    </Link>
-                ))}
-                <Link href='/profile'>
-                    <a className={router.asPath=='/profile'?'font-bold mb-2':'font-semibold mb-2 text-green-600'}>Profile</a>
-                </Link>
-                </>
+                    brand.map((item,index)=>(
+                        <Route path={'/brand/'+item} name={item} key={index}/>
+                    ))
+                    :user.displayName=='admin'?
+                    adminLink.map((item,index)=>(
+                        <Route path={'/dashboard/'+item} name={item.replace(/[_]/g,' ')} key={index}/>
+                    ))
+                    :
+                    <>
+                    {brand.map((item,index)=>(
+                        <Route path={'/brand/'+item} name={item} key={index}/>
+                    ))}
+                    <Route path='user/profile' name='profile'/>
+                    </>
                 }
-                <Link href='/help'>
-                    <a className={router.asPath=='/help'?'font-bold mb-2':'font-semibold mb-2 text-green-600'}>FAQ</a>
-                </Link>
-                <Link href='/term'>
-                    <a className={router.asPath=='/term'?'font-bold mb-2':'font-semibold mb-2 text-green-600'}>TOS</a>
-                </Link>
+                <Route path='/help' name='FAQ'/>
+                <Route path='/term' name='TOS'/>
                 <a href='mailto:yonoraphael@gmail.com' className='font-semibold mb-2 text-green-600'>Contact</a>
-                <h1 className='text-green-600 font-semibold mb-2 cursor-pointer' onClick={()=>signOut(auth)}>Log Out</h1>
+                {!user?
+                    ''
+                    :
+                    <h1 className='text-green-600 font-semibold mb-2 cursor-pointer' onClick={()=>LogOut()}>Log Out</h1>
+                }
                 <p className='text-sm font-semibold text-center w-full absolute bottom-0 text-green-600'>shopedia @2021</p>
             </div>
         </aside>

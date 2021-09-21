@@ -14,7 +14,7 @@ const Navbar = ({click}) => {
             </Menu>
             {!user?
             <Menu>
-                <Link href='/login'>
+                <Link href='/user/login'>
                     <a>Log In . SignUp</a>
                 </Link>
             </Menu>

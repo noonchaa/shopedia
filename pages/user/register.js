@@ -1,11 +1,11 @@
 import Link from 'next/link'
 import { useState, useContext } from 'react'
-import { auth,db } from '../utils/firebaseClient'
+import { auth,db } from '../../utils/firebaseClient'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth'
 import {doc,setDoc} from 'firebase/firestore'
-import { UserContext } from '../components/User'
-import Input from '../components/part/Input'
-import Button from '../components/part/Button'
+import { UserContext } from '../../components/User'
+import Input from '../../components/part/Input'
+import Button from '../../components/part/Button'
 import {useRouter} from 'next/router'
 
 const Register = () => {
@@ -39,13 +39,16 @@ const Register = () => {
                     added: new Date(),
                     updated: new Date()
                 })
-                router.push('/profile')
             }).catch((err)=>setFail(err.code))
         }
         setLoading(false)
     }
 
-    if(user) router.push('/')
+    if(user){
+        setTimeout(()=>{
+            user.displayName=='admin'?router.push('/dashboard/stock'):router.push('/user/profile')
+        },1000)
+    }
 
     return(
         <div className='bg-gray-400 h-screen w-full px-2 py-4'>
@@ -64,7 +67,7 @@ const Register = () => {
 
                 <p className='mb-4 px-2 text-black font-medium'>Atau klik disini untuk
                     <span className='text-green-600'>
-                        <Link href='/login'>
+                        <Link href='/user/login'>
                             <a> login</a>
                         </Link>
                     </span>
