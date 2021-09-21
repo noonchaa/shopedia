@@ -1,6 +1,8 @@
+import { useRouter } from "next/router"
 import Layout from "../../components/Layout"
 import ProductGrid from "../../components/Main/ProductGrid"
 import ProductHero from "../../components/Main/ProductHero"
+import Skeleton from "../../components/Skeleton"
 import { allDocs, allDocsByBrand, allDocsByDate } from "../../utils/firebaseHandler"
 
 export const getStaticPaths = async () => {
@@ -19,7 +21,7 @@ export const getStaticProps = async ({params}) => {
     const {slug} = params
     await allDocsByBrand('products',slug,data)
     await allDocsByDate('products',products)
-    if(!data.length || data.filter(item=>item==undefined)) {
+    if(!data.length) {
         return {
             redirect: {
                 destination: '/404',
@@ -30,18 +32,20 @@ export const getStaticProps = async ({params}) => {
     return{
         props: {
             data: data,
-            products: products
+            products: products.slice(0,4)
         },
         revalidate: 1
     }
 }
 
 const Brand = ({data,products}) => {
+    const router = useRouter()
+    if(router.isFallback) return <Skeleton/>
     return(
         <Layout>
             <ProductHero data={data[0]} />
             <ProductGrid data={data}/>
-            <ProductGrid data={products.slice(0,4)}/>
+            <ProductGrid data={products}/>
         </Layout>
     )
 }
