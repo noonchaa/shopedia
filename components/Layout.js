@@ -1,8 +1,4 @@
-import { useContext, useState } from "react"
-import { HiBell, HiMenu, HiShoppingCart } from "react-icons/hi"
-import Menu from "./Header/Menu"
-import { UserContext } from "./User"
-import Link from 'next/link'
+import {  useState } from "react"
 import RightDrawer from "./Header/RightDrawer"
 import Navbar from "./Header/Navbar"
 

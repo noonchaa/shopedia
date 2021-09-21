@@ -35,13 +35,13 @@ const Incoming = () => {
         } else {
         setLoading(true)
         await updateDoc(doc(db,'stocks',series),{
-            stock: Number(stock) + Number(products.filter(item=>item.brand==brand).map(item=>item.stock))
+            stock: Number(stock) + Number(products.filter(item=>item.name==series).map(item=>item.stock))
         })
         setLoading(false)
         setBrand('')
         setSeries('')
         setStock('')
-    }
+        }
     }
 
     return(
@@ -66,7 +66,7 @@ const Incoming = () => {
                 ))}
                 </select>
                 }
-                <Input placeholder='total datang' type='text' change={(e)=>setStock(e.target.value)} value={stock}/>
+                <Input placeholder='total datang' type='number' change={(e)=>setStock(e.target.value)} value={stock}/>
                 <div className='flex justify-end'>
                     <Button type='submit'>{loading==false?'Submit':'......'}</Button>
                 </div>

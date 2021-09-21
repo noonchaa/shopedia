@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import {HiStar, HiShoppingCart} from 'react-icons/hi'
+import {HiStar} from 'react-icons/hi'
+import Troley from '../part/Troley'
 
 const ProductGrid = ({data}) => {
     if(!data){
@@ -14,21 +15,23 @@ const ProductGrid = ({data}) => {
     return(
         <div className='grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4'>
           {data.map((item,index)=>(
-            <Link href={`/product/${item.name.replace(/[ ]/g,'_')}`} key={index}>
-              <a className='bg-gray-100 rounded-lg'>
-                <div className='relative h-40 mb-2'>
-                    <Image src={item.imgUrl} layout='fill' objectFit='cover' quality={80} alt='Laptop' className='rounded-t-lg' />
-                </div>
-                <div className='px-2 pb-2 flex justify-between items-center'>
-                    <div>
-                        <HiStar className='text-green-600 w-8 h-8' />
-                        <h1 className='text-2xl capitalize font-semibold'>{item.name}</h1>
-                        <h1 className='text-lg font-light'>Rp. {Number(item.price).toLocaleString('ID',{'currency':'IDR'})}</h1>
-                    </div>
-                    <HiShoppingCart className='w-12 h-12 cursor-pointer text-green-600'/>
-                </div>
-              </a>
-            </Link>
+            <div key={index} className='rounded-lg h-80 relative'>
+              <Image src={item.imgUrl} layout='fill' objectFit='cover' alt='Laptop' className='rounded-lg'/>
+              <div className='absolute bottom-0 left-0 z-10 p-2 w-full rounded-b-lg'>
+                <Link href={`/product/${item.name.replace(/[ ]/g,'_')}`} key={index}>
+                  <a>
+                    <HiStar className='text-green-600 w-7 h-7 rounded-md bg-gray-50 bg-opacity-25 mb-2 backdrop-filter backdrop-blur'/>
+                    <h1 className='text-xl capitalize font-semibold rounded-md w-max bg-gray-50 bg-opacity-25 backdrop-filter backdrop-blur px-2 py-1 mb-2'>
+                      {item.name}
+                    </h1>
+                    <p className='text-lg font-light rounded-md w-max bg-gray-50 bg-opacity-25 px-2 py-1 mb-2 backdrop-filter backdrop-blur'>
+                      Rp. {Number(item.price).toLocaleString('ID',{'currency':'IDR'})}
+                    </p>
+                  </a>
+                </Link>
+                <Troley namaProduct={item.name} harga={item.price} />
+              </div>
+            </div>
           ))}
         </div>
     )

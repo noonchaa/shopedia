@@ -20,7 +20,7 @@ const RightDrawer = ({show,click}) => {
 
     return(
         <aside className={show==false?'hidden':'fixed top-0 p-4 z-50 w-full h-screen max-w-xs bg-gray-50 bg-opacity-20 backdrop-filter backdrop-blur'}>
-            <HiX className='text-green-600 h-5 w-5 ml-auto mb-4 cursor-pointer' onClick={click}/>
+            <HiX className='text-red-600 h-5 w-5 ml-auto mb-4 cursor-pointer' onClick={click}/>
             <h1 className='text-2xl font-bold text-green-600 tracking-widest mb-4 pl-4'>Shopedia</h1>
             <div className='pl-4 flex flex-col'>
                 <Route path='/' name='home'/>

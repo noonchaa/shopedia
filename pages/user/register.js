@@ -37,7 +37,8 @@ const Register = () => {
                     phone: phone,
                     address: address,
                     added: new Date(),
-                    updated: new Date()
+                    updated: new Date(),
+                    cart:[]
                 })
             }).catch((err)=>setFail(err.code))
         }
