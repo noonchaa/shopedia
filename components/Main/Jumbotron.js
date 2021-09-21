@@ -8,7 +8,7 @@ const Jumbotron = ({imgUrl}) => {
 
     const searchHandler = (e) => {
         e.preventDefault()
-        router.push('/product/'+search)
+        router.push('/product/'+search.replace(/[ ]/g,'_'))
     }
     
     return(

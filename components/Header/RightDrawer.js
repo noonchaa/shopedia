@@ -1,8 +1,6 @@
 import { HiX } from "react-icons/hi"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../User"
-import { auth } from "../../utils/firebaseClient"
-import { signOut } from "@firebase/auth"
 import { allDocs, LogOut } from "../../utils/firebaseHandler"
 import Route from "./Route"
 
