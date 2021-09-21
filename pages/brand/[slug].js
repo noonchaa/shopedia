@@ -19,7 +19,7 @@ export const getStaticProps = async ({params}) => {
     const {slug} = params
     await allDocsByBrand('products',slug,data)
     await allDocsByDate('products',products)
-    if(!data.length) {
+    if(!data.length || data.filter(item=>item==undefined)) {
         return {
             redirect: {
                 destination: '/404',
@@ -39,6 +39,7 @@ export const getStaticProps = async ({params}) => {
 const Brand = ({data,products}) => {
     return(
         <Layout>
+            <ProductHero data={data[0]} />
             <ProductGrid data={data}/>
             <ProductGrid data={products.slice(0,4)}/>
         </Layout>
