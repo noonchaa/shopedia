@@ -39,7 +39,6 @@ export const getStaticProps = async ({params}) => {
 const Brand = ({data,products}) => {
     return(
         <Layout>
-            <ProductHero data={data[0]} />
             <ProductGrid data={data}/>
             <ProductGrid data={products.slice(0,4)}/>
         </Layout>

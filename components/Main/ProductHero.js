@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import {HiStar,HiShoppingCart} from 'react-icons/hi'
 
 const ProductHero = ({data}) => {
     if(!data){
