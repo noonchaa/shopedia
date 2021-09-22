@@ -6,6 +6,7 @@ import {useRouter} from 'next/router'
 import { UserContext } from '../../components/User'
 import Input from '../../components/part/Input'
 import Button from '../../components/part/Button'
+import Seo from '../../components/Seo'
 
 const Login = () => {
     const user = useContext(UserContext)
@@ -39,6 +40,7 @@ const Login = () => {
 
     return(
         <div className='bg-gray-400 h-screen w-full px-2 py-40'>
+            <Seo title='Login'/>
             <form className='max-w-screen-sm mx-auto p-4 bg-gray-300 shadow-xl rounded-lg' onSubmit={Signin}>
                 <h1 className='text-center text-2xl text-green-600 font-semibold mb-8'>Login</h1>
                 <p className='text-center text-red-600 font-semibold mb-4'>{fail==''?'':'Email atau password salah'}</p>

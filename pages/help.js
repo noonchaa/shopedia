@@ -1,8 +1,10 @@
 import Layout from "../components/Layout"
+import Seo from "../components/Seo"
 
 const Help = () => {
     return(
         <Layout>
+            <Seo title='Frequently Asked Queations'/>
             <div className='mt-11'>
                 <h1 className='text-green-500 text-2xl font-semibold mb-2 mt-4'>
                     ## Order

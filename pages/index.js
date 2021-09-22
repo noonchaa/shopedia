@@ -2,6 +2,7 @@ import Layout from '../components/Layout'
 import Jumbotron from '../components/Main/Jumbotron'
 import ProductGrid from '../components/Main/ProductGrid'
 import {allDocsByDate} from '../utils/firebaseHandler'
+import Seo from '../components/Seo'
 
 export const getStaticProps = async () => {
   const data = []
@@ -16,6 +17,7 @@ export default function Home({data}) {
 
   return (
     <Layout>
+      <Seo/>
       <Jumbotron imgUrl={data[0].imgUrl}/>
       <ProductGrid data={data}/>
     </Layout>

@@ -1,8 +1,10 @@
 import Layout from "../components/Layout"
+import Seo from "../components/Seo"
 
 const Term = () => {
     return(
         <Layout>
+            <Seo title='Term of Service'/>
             <div className='mt-11'>
             <h1 className='text-2xl font-semibold mb-2'>Website Terms and Conditions of Use</h1>
 

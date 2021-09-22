@@ -7,6 +7,7 @@ import { UserContext } from '../../components/User'
 import Input from '../../components/part/Input'
 import Button from '../../components/part/Button'
 import {useRouter} from 'next/router'
+import Seo from '../../components/Seo'
 
 const Register = () => {
     const user = useContext(UserContext)
@@ -53,6 +54,7 @@ const Register = () => {
 
     return(
         <div className='bg-gray-400 h-screen w-full px-2 py-4'>
+            <Seo title='Daftar'/>
             <form className='max-w-screen-sm mx-auto p-4 bg-gray-300 shadow-xl rounded-lg' onSubmit={register}>
                 <h1 className='text-center text-2xl text-green-600 font-semibold mb-8'>Daftar</h1>
                 <p className='text-center text-red-600 font-semibold mb-4'>{fail}</p>

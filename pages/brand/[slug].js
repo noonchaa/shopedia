@@ -2,6 +2,7 @@ import { useRouter } from "next/router"
 import Layout from "../../components/Layout"
 import ProductGrid from "../../components/Main/ProductGrid"
 import ProductHero from "../../components/Main/ProductHero"
+import Seo from "../../components/Seo"
 import Skeleton from "../../components/Skeleton"
 import { allDocs, allDocsByBrand, allDocsByDate } from "../../utils/firebaseHandler"
 
@@ -43,6 +44,7 @@ const Brand = ({data,products}) => {
     if(router.isFallback) return <Skeleton/>
     return(
         <Layout>
+            <Seo title={data[0].brand}/>
             <ProductHero data={data[0]} />
             <ProductGrid data={data}/>
             <ProductGrid data={products}/>

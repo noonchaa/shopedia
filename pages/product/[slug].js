@@ -2,6 +2,7 @@ import { useRouter } from "next/router"
 import Layout from "../../components/Layout"
 import ProductDetail from "../../components/Main/ProductDetail"
 import ProductGrid from "../../components/Main/ProductGrid"
+import Seo from "../../components/Seo"
 import Skeleton from "../../components/Skeleton"
 import { allDocs, allDocsByDate, oneDoc } from "../../utils/firebaseHandler"
 
@@ -46,6 +47,7 @@ const Product = ({data,products}) => {
 
     return(
         <Layout>
+            <Seo title={data.name.charAt(0).toUpperCase()+data.name.slice(1)} desc={data.descriptions}/>
             <ProductDetail data={data}/>
             <ProductGrid data={products}/>
         </Layout>

@@ -4,6 +4,7 @@ import { UserContext } from '../../components/User';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { oneDoc, upDoc } from '../../utils/firebaseHandler';
+import Seo from '../../components/Seo';
 
 const Profile = () => {
     const user = useContext(UserContext);
@@ -44,6 +45,7 @@ const Profile = () => {
 
     return(
         <Layout>
+            <Seo title='Profile'/>
             <div className='my-8'>
                 <h1 className='text-xl font-semibold italic text-green-600 ml-4'>Profile</h1>
                 {userData.map((item,index)=>(
