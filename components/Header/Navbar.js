@@ -18,6 +18,9 @@ const Navbar = ({click}) => {
                 setCartData(doc.data().cart)
             })
         }
+        return () => {
+            setCartData([])
+        }
     },[user])
 
     return(

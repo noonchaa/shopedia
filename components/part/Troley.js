@@ -1,6 +1,5 @@
-import { arrayUnion } from "@firebase/firestore"
 import { useContext, useState } from "react"
-import { upDoc } from "../../utils/firebaseHandler"
+import { oneDoc, upDoc } from "../../utils/firebaseHandler"
 import { UserContext } from "../User"
 
 const Troley = ({namaProduct,harga}) => {
@@ -17,7 +16,26 @@ const Troley = ({namaProduct,harga}) => {
             setTimeout(()=>{setText('Tambah ke keranjang')},3000)
         } else {
             const getCart = async () => {
-                await upDoc('users',user.displayName.toLowerCase(),{cart:arrayUnion({name:namaProduct,price:harga})})
+                const data = []
+                await oneDoc('users',user.displayName.toLowerCase(),data)
+                const cartArray = data[0].cart
+                const findProduct = cartArray.findIndex((item)=>item.name==namaProduct)
+                if(findProduct==-1){
+                    cartArray.push({
+                        name:namaProduct,
+                        price: harga,
+                        sum: 1
+                    })
+                    await upDoc('users',user.displayName.toLowerCase(),{cart:cartArray})
+                } else {
+                    const oldSum = cartArray[findProduct].sum
+                    cartArray.splice(findProduct,1,{
+                        name: namaProduct,
+                        price: harga,
+                        sum: oldSum+1
+                    })
+                    await upDoc('users',user.displayName.toLowerCase(),{cart:cartArray})
+                }
                 setTimeout(()=>{setText('Tambah ke keranjang')},1000)
             }
             getCart()

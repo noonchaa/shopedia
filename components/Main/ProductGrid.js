@@ -17,14 +17,14 @@ const ProductGrid = ({data}) => {
           {data.map((item,index)=>(
             <div key={index} className='rounded-lg h-80 relative'>
               <Image src={item.imgUrl} layout='fill' objectFit='cover' alt='Laptop' className='rounded-lg'/>
-              <div className='absolute bottom-0 left-0 z-10 p-2 w-full rounded-b-lg'>
+              <div className='absolute bottom-0 left-0 z-10 p-2 w-full rounded-b-lg bg-gray-50 bg-opacity-50'>
                 <Link href={`/product/${item.name.replace(/[ ]/g,'_')}`} key={index}>
                   <a>
-                    <HiStar className='text-green-600 w-7 h-7 rounded-md bg-gray-50 bg-opacity-25 mb-2 backdrop-filter backdrop-blur'/>
-                    <h1 className='text-xl capitalize font-semibold rounded-md w-max bg-gray-50 bg-opacity-25 backdrop-filter backdrop-blur px-2 py-1 mb-2'>
+                    <HiStar className='text-green-600 w-6 h-6'/>
+                    <h1 className='text-xl capitalize font-semibold'>
                       {item.name}
                     </h1>
-                    <p className='text-lg font-light rounded-md w-max bg-gray-50 bg-opacity-25 px-2 py-1 mb-2 backdrop-filter backdrop-blur'>
+                    <p className='text-lg font-light mb-2'>
                       Rp. {Number(item.price).toLocaleString('ID',{'currency':'IDR'})}
                     </p>
                   </a>

@@ -37,7 +37,7 @@ const RightDrawer = ({show,click}) => {
                     {brand.map((item,index)=>(
                         <Route path={'/brand/'+item} name={item} key={index}/>
                     ))}
-                    <Route path='user/profile' name='profile'/>
+                    <Route path='/user/profile' name='profile'/>
                     </>
                 }
                 <Route path='/help' name='FAQ'/>

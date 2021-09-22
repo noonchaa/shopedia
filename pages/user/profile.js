@@ -15,13 +15,18 @@ const Profile = () => {
     const [userData, setUserData] = useState([])
 
     useEffect(()=>{
-        const getProfile = async () => {
-            const data = []
-            await oneDoc('users',user.displayName.toLowerCase(),data)
-            setUserData(data)
+        if(user){
+            const getProfile = async () => {
+                const data = []
+                await oneDoc('users',user.displayName.toLowerCase(),data)
+                setUserData(data)
+            }
+            getProfile()
         }
-        getProfile()
-    },[user,userData])
+        return () => {
+            setUserData([])
+        }
+    },[user])
 
     const submitUpdate = async (e) => {
         e.preventDefault()
