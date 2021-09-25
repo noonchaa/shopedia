@@ -1,0 +1,22 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1216 1214" width="1216" height="1214">
+	<title>Layer 2</title>
+	<style>
+		tspan { white-space:pre }
+		.shp0 { fill: #000000 } 
+		.shp1 { fill: #059669 } 
+		.shp2 { mix-blend-mode: multiply;fill: #000000 } 
+	</style>
+	<g id="Layer 2">
+		<g id="&lt;Group&gt;">
+			<g id="&lt;Group&gt;" style="mix-blend-mode: multiply">
+				<path id="&lt;Path&gt;" class="shp0" d="M608.5 376.02L608.5 315.09C447.56 315.09 317.09 445.56 317.09 606.5L378.02 606.5C378.02 479.21 481.21 376.02 608.5 376.02Z" />
+				<path id="&lt;Path&gt;" class="shp1" d="M608.5 836.98L608.5 897.91C769.44 897.91 899.91 767.45 899.91 606.5L838.98 606.5C838.98 733.79 735.79 836.98 608.5 836.98Z" />
+			</g>
+			<path id="&lt;Compound Path&gt;" fill-rule="evenodd" class="shp2" d="M185.42 607C185.42 373.62 374.61 184.42 608 184.42C841.38 184.42 1030.58 373.62 1030.58 607C1030.58 840.39 841.38 1029.58 608 1029.58C374.61 1029.58 185.42 840.39 185.42 607ZM273.78 607C273.78 791.59 423.41 941.22 608 941.22C792.59 941.22 942.22 791.59 942.22 607C942.22 422.41 792.59 272.78 608 272.78C423.41 272.78 273.78 422.41 273.78 607Z" />
+			<g id="&lt;Group&gt;" style="mix-blend-mode: multiply">
+				<path id="&lt;Path&gt;" class="shp1" d="M127.89 607L0.96 607C0.96 942.26 272.74 1214.04 608 1214.04L608 1087.11C342.84 1087.11 127.89 872.16 127.89 607Z" />
+				<path id="&lt;Path&gt;" class="shp1" d="M1088.11 607L1215.04 607C1215.04 271.74 943.26 -0.04 608 -0.04L608 126.89C873.16 126.89 1088.11 341.84 1088.11 607Z" />
+			</g>
+		</g>
+	</g>
+</svg>
