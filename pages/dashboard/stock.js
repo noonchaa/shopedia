@@ -1,6 +1,4 @@
-import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
-import { UserContext } from '../../components/User'
+import { useEffect, useState } from 'react'
 import { db } from '../../utils/firebaseClient'
 import { collection,getDocs } from '@firebase/firestore'
 import Layout from '../../components/Layout'

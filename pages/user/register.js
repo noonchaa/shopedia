@@ -20,6 +20,7 @@ const Register = () => {
     const [address, setAddress] = useState('')
     const [fail, setFail] = useState('')
     const [loading, setLoading] = useState(false)
+    const [succes, setSucces] = useState('')
 
     const register = (e) => {
         e.preventDefault()
@@ -39,8 +40,9 @@ const Register = () => {
                     address: address,
                     added: new Date(),
                     updated: new Date(),
-                    cart:[]
+                    orders:[]
                 })
+                setSucces('Daftar Succes')
             }).catch((err)=>setFail(err.code))
         }
         setLoading(false)
@@ -48,8 +50,8 @@ const Register = () => {
 
     if(user){
         setTimeout(()=>{
-            user.displayName=='admin'?router.push('/dashboard/stock'):router.push('/user/profile')
-        },1000)
+            user.displayName=='admin'?router.push('/dashboard/stock'):router.push('/')
+        },2000)
     }
 
     return(
@@ -58,6 +60,7 @@ const Register = () => {
             <form className='max-w-screen-sm mx-auto p-4 bg-gray-300 shadow-xl rounded-lg' onSubmit={register}>
                 <h1 className='text-center text-2xl text-green-600 font-semibold mb-8'>Daftar</h1>
                 <p className='text-center text-red-600 font-semibold mb-4'>{fail}</p>
+                <p className='text-center text-green-600 font-semibold mb-4'>{succes}</p>
                 <Input type='text' placeholder='Nama' value={name} change={(e)=>setName(e.target.value)}/>
                 <Input type='email' placeholder='Email' value={email} change={(e)=>setEmail(e.target.value)}/>
                 <Input type='password' placeholder='Password' value={password} change={(e)=>setPassword(e.target.value)}/>

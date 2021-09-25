@@ -1,4 +1,4 @@
-const Input = ({type,placeholder,change,value}) => {
+const Input = ({type,placeholder,change,value,min,max}) => {
     return(
         <input
             //set input type
@@ -12,6 +12,8 @@ const Input = ({type,placeholder,change,value}) => {
             //set input value for capture
             value={value}
             //make sure input field not empty before submiting
+            min={min}
+            max={max}
             required/>
     )
 }

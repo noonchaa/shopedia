@@ -1,5 +1,5 @@
 import { signOut } from "@firebase/auth"
-import { collection, doc, getDoc, getDocs, orderBy, query, updateDoc, where } from "@firebase/firestore"
+import { collection, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from "@firebase/firestore"
 import { auth, db } from "./firebaseClient"
 
 const colHandler = (item, result=[]) => {
@@ -37,8 +37,10 @@ const allDocsByBrand = async (col='',brand='',result=[]) => {
 const upDoc = async (col='',docId='',data={}) => {
     await updateDoc(doc(db,col,docId),data)
 }
-
+const adDoc = async (col='',docId='',result) => {
+    await setDoc(doc(db,col,docId),result)
+}
 
 const LogOut = () => signOut(auth)
 
-export {allDocsByDate,allDocs,oneDoc,allDocsByBrand,LogOut,upDoc}
+export {allDocsByDate,allDocs,oneDoc,allDocsByBrand,LogOut,upDoc,adDoc}

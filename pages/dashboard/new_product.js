@@ -4,7 +4,7 @@ import Button from "../../components/part/Button"
 import { storage } from "../../utils/firebaseClient"
 import { ref, uploadBytes,getDownloadURL } from 'firebase/storage'
 import {HiCheck} from 'react-icons/hi'
-import {doc, setDoc, updateDoc, arrayUnion, getDoc} from 'firebase/firestore'
+import {doc, setDoc, updateDoc, getDoc} from 'firebase/firestore'
 import { db } from "../../utils/firebaseClient"
 import Layout from "../../components/Layout"
 

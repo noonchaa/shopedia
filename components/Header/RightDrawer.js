@@ -1,8 +1,10 @@
 import { HiX } from "react-icons/hi"
 import { useContext, useEffect, useState } from "react"
 import { UserContext } from "../User"
-import { allDocs, LogOut } from "../../utils/firebaseHandler"
 import Route from "./Route"
+import { collection, getDocs } from "@firebase/firestore"
+import { auth, db } from "../../utils/firebaseClient"
+import { signOut } from "@firebase/auth"
 
 const RightDrawer = ({show,click}) => {
     const user = useContext(UserContext)
@@ -11,15 +13,18 @@ const RightDrawer = ({show,click}) => {
 
     useEffect(()=>{
         const getStocks = async () => {
-            const data = []
-            await allDocs('stocks',data)
-            setBrand(data.map(item=>item.brand).filter((item,index,self)=>self.indexOf(item)===index))
+            const link = []
+            const res = await getDocs(collection(db,'products'))
+            res.forEach((doc)=>{
+                link.push(doc.data())
+            })
+            setBrand(link.map(item=>item.brand).filter((item,index,self)=>self.indexOf(item)===index))
         }
         getStocks()
     },[])
 
     return(
-        <aside className={show==false?'hidden':'fixed top-0 p-4 z-50 w-full h-screen max-w-xs bg-gray-50 bg-opacity-20 backdrop-filter backdrop-blur'}>
+        <aside className={show==false?'hidden':'fixed top-0 p-4 z-50 w-full h-screen max-w-xs bg-gray-50 bg-opacity-30 backdrop-filter backdrop-blur-lg -ml-4'}>
             <HiX className='text-red-600 h-5 w-5 ml-auto mb-4 cursor-pointer' onClick={click}/>
             <h1 className='text-2xl font-bold text-green-600 tracking-widest mb-4 pl-4'>Shopedia</h1>
             <div className='pl-4 flex flex-col'>
@@ -46,7 +51,7 @@ const RightDrawer = ({show,click}) => {
                 {!user?
                     ''
                     :
-                    <h1 className='text-green-600 font-semibold mb-2 cursor-pointer' onClick={()=>LogOut()}>Log Out</h1>
+                    <h1 className='text-green-600 font-semibold mb-2 cursor-pointer' onClick={()=>signOut(auth)}>Log Out</h1>
                 }
                 <p className='text-sm font-semibold text-center w-full absolute bottom-0 text-green-600'>shopedia @2021</p>
             </div>
