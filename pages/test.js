@@ -1,11 +1,11 @@
-import Cust from "../components/Layout/Cust"
+import Layout from "../components/Layout/Layout"
 import Hero from "../components/Layout/Main/Hero"
 
 const Test = () => {
     return(
-        <Cust>
+        <Layout>
             <Hero imgUrl='/image.jpg'/>
-        </Cust>
+        </Layout>
     )
 }
 export default Test

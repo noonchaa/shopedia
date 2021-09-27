@@ -1,5 +1,5 @@
 import 'tailwindcss/tailwind.css'
-import User from '../components/User'
+import {User} from '../components/User'
 import Head from 'next/head'
 
 function MyApp({ Component, pageProps }) {

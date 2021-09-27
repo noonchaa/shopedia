@@ -1,15 +1,15 @@
 import Menu from "./Menu"
 import Link from 'next/link'
 import {HiMenu, HiBell, HiShoppingCart} from 'react-icons/hi'
-import { useContext, useEffect, useState } from "react"
-import { UserContext } from "../User"
+import { useEffect, useState } from "react"
+import { AuthUser} from "../User"
 import LeftDrawer from "./LeftDrawer"
 import { collection, onSnapshot } from "@firebase/firestore"
 import { db } from "../../utils/firebaseClient"
 import RightDrawer from "./RightDrawer"
 
 const Navbar = () => {
-    const user = useContext(UserContext)
+    const user = AuthUser()
     const [right, setRight] = useState(false)
     const [left, setLeft] = useState(false)
     const [cart, setCart] = useState([])
@@ -35,7 +35,7 @@ const Navbar = () => {
                 <HiMenu className='w-5 h-5'/>
                 <h1>Menu</h1>
             </Menu>
-            <RightDrawer show={right} click={()=>setRight(!right)}/>
+            <RightDrawer show={right} click={()=>setRight(!right)} user={user}/>
             {!user?
             <Menu>
                 <Link href='/user/login'>

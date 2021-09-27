@@ -1,31 +1,33 @@
 import {HiPencilAlt,HiCheck,HiX} from 'react-icons/hi';
-import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../components/User';
+import { useEffect, useState } from 'react';
+import { AuthUser } from '../../components/User';
 import { useRouter } from 'next/router';
 import Layout from '../../components/Layout';
 import { oneDoc, upDoc } from '../../utils/firebaseHandler';
 import Seo from '../../components/Seo';
+import { doc, getDoc } from '@firebase/firestore';
+import { db } from '../../utils/firebaseClient';
 
 const Profile = () => {
-    const user = useContext(UserContext);
+    const user = AuthUser()
     const router = useRouter();
     const [nama, setNama] = useState('');
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [edit, setEdit] = useState(false)
-    const [userData, setUserData] = useState([])
+    const [userData, setUserData] = useState()
 
     useEffect(()=>{
         if(user){
             const getProfile = async () => {
-                const data = []
-                await oneDoc('users',user.displayName.toLowerCase(),data)
-                setUserData(data)
+                const getData = await getDoc(doc(db,'users',user.displayName.toLowerCase()))
+                if(getData.exists()){
+                    setUserData(getData.data())
+                } else {
+                    console.log('No User')
+                }
             }
-            getProfile()
-        }
-        return () => {
-            setUserData([])
+            return getProfile()
         }
     },[user])
 
@@ -48,14 +50,16 @@ const Profile = () => {
             <Seo title='Profile'/>
             <div className='my-8'>
                 <h1 className='text-xl font-semibold italic text-green-600 ml-4'>Profile</h1>
-                {userData.map((item,index)=>(
-                    <div key={index} className={edit==false?'bg-gray-50 bg-opacity-5 shadow-xl my-4 rounded-lg px-4 py-3 border border-gray-100 max-w-lg':'hidden'}>
-                        <HiPencilAlt className='w-8 h-8 text-green-500 ml-auto mb-4 cursor-pointer' onClick={()=>setEdit(!edit)}/>
-                        <p className='font-semibold mb-2'>Nama : <span className='italic'>{item.name}</span></p>
-                        <p className='font-semibold mb-2'>Telepon : <span className='italic'>{item.phone}</span></p>
-                        <p className='font-semibold mb-2'>Alamat : <span className='italic'>{item.address}</span></p>
-                    </div>
-                ))}
+                {!userData?
+                ''
+                :
+                <div className={edit==false?'bg-gray-50 bg-opacity-5 shadow-xl my-4 rounded-lg px-4 py-3 border border-gray-100 max-w-lg':'hidden'}>
+                    <HiPencilAlt className='w-8 h-8 text-green-500 ml-auto mb-4 cursor-pointer' onClick={()=>setEdit(!edit)}/>
+                    <p className='font-semibold mb-2'>Nama : <span className='italic'>{userData.name}</span></p>
+                    <p className='font-semibold mb-2'>Telepon : <span className='italic'>{userData.phone}</span></p>
+                    <p className='font-semibold mb-2'>Alamat : <span className='italic'>{userData.address}</span></p>
+                </div>
+                }
                 <form className={edit==false?'hidden':'bg-gray-50 bg-opacity-5 shadow-xl my-4 rounded-lg px-4 py-3 border border-gray-100 max-w-lg'} onSubmit={submitUpdate} >
                     <div className='text-right mb-4'>
                         <button type='reset' className='mr-4' onClick={()=>setEdit(!edit)} >

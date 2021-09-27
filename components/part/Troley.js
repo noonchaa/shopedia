@@ -1,10 +1,10 @@
 import { doc, getDoc, setDoc, updateDoc } from "@firebase/firestore"
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { db } from "../../utils/firebaseClient"
-import { UserContext } from "../User"
+import { AuthUser } from "../User"
 
 const Troley = ({namaProduct,harga}) => {
-    const user = useContext(UserContext)
+    const user = AuthUser()
     const [text, setText] = useState('Tambah ke keranjang')
 
     const addToCart = async () => {

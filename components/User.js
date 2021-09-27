@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react"
+import React, { useContext, useEffect, useState } from "react"
 import {auth} from '../utils/firebaseClient'
 import {onAuthStateChanged} from 'firebase/auth'
 
 export const UserContext = React.createContext(null)
 
-const User = ({children}) => {
+export const User = ({children}) => {
     const [signUser, setSignUser] = useState(null)
 
     useEffect(()=>{
@@ -15,6 +15,9 @@ const User = ({children}) => {
                 setSignUser(null)
             }
         })
+        return () => {
+            setSignUser(null)
+        }
     },[])
 
     return(
@@ -23,4 +26,5 @@ const User = ({children}) => {
         </UserContext.Provider>
     )
 }
-export default User
+
+export const AuthUser = () => useContext(UserContext)

@@ -17,7 +17,7 @@ const ProductGrid = ({data}) => {
           {data.map((item,index)=>(
             <div key={index} className='rounded-lg h-80 relative'>
               <Image src={item.imgUrl} layout='fill' objectFit='cover' alt='Laptop' className='rounded-lg'/>
-              <div className='absolute bottom-0 left-0 z-10 p-2 w-full rounded-b-lg bg-gray-50 bg-opacity-50'>
+              <div className='absolute bottom-0 left-0 z-10 p-2 w-full rounded-b-lg bg-gray-50 bg-opacity-90'>
                 <Link href={`/product/${item.name.replace(/[ ]/g,'_')}`} key={index}>
                   <a>
                     <HiStar className='text-green-600 w-6 h-6'/>

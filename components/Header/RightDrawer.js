@@ -1,13 +1,11 @@
 import { HiX } from "react-icons/hi"
-import { useContext, useEffect, useState } from "react"
-import { UserContext } from "../User"
+import { useEffect, useState } from "react"
 import Route from "./Route"
 import { collection, getDocs } from "@firebase/firestore"
 import { auth, db } from "../../utils/firebaseClient"
 import { signOut } from "@firebase/auth"
 
-const RightDrawer = ({show,click}) => {
-    const user = useContext(UserContext)
+const RightDrawer = ({show,click,user}) => {
     const adminLink = ['stock','order','packing','delivery','delivered','finished','incoming','new_product','add_admin','remove_admin']
     const [brand, setBrand] = useState([])
 
@@ -47,11 +45,11 @@ const RightDrawer = ({show,click}) => {
                 }
                 <Route path='/help' name='FAQ'/>
                 <Route path='/term' name='TOS'/>
-                <a href='mailto:yonoraphael@gmail.com' className='font-semibold mb-2 text-green-600'>Contact</a>
+                <a href='mailto:yonoraphael@gmail.com' className='font-semibold mb-2'>Contact</a>
                 {!user?
                     ''
                     :
-                    <h1 className='text-green-600 font-semibold mb-2 cursor-pointer' onClick={()=>signOut(auth)}>Log Out</h1>
+                    <h1 className='font-semibold mb-2 cursor-pointer' onClick={()=>signOut(auth)}>Log Out</h1>
                 }
                 <p className='text-sm font-semibold text-center w-full absolute bottom-0 text-green-600'>shopedia @2021</p>
             </div>
