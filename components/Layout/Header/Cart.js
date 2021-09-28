@@ -8,13 +8,15 @@ const Cart = ({show,user,click}) => {
     const [cart, setCart] = useState([])
 
     useEffect(()=>{
-        onSnapshot(collection(db,!user?'no user':user.uid),(doc)=>{
-            const data = []
-            doc.forEach((item)=>{
-                data.push(item.data())
+        if(user){
+            onSnapshot(collection(db,user.uid),(doc)=>{
+                const data = []
+                doc.forEach((item)=>{
+                    data.push(item.data())
+                })
+                setCart(data)
             })
-            setCart(data)
-        })
+        }
         return () => {
             setCart([])
         }
