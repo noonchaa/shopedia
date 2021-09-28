@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { db } from '../../utils/firebaseClient'
 import { collection, getDocs, doc, updateDoc } from '@firebase/firestore'
-import Button from "../../components/part/Button"
 import Input from "../../components/Layout/Form/Input"
 import Layout from '../../components/Layout/Layout'
 
@@ -29,9 +28,13 @@ const Incoming = () => {
         setLoading(true)
         if(brand==''){
             alert('Mohon pilih merk laptop')
+            setLoading(false)
+            return
         }
         if(series==''){
             alert('Mohon pilih serie laptop')
+            setLoading(false)
+            return
         } else {
         setLoading(true)
         await updateDoc(doc(db,'stocks',series),{
@@ -46,19 +49,19 @@ const Incoming = () => {
 
     return(
         <Layout>
-            <h1 className='text-center font-semibold text-xl mt-8'>Stock Product Datang</h1>
+            <h1 className='text-center font-bold text-2xl mt-12 mb-4'>Stock Product Datang</h1>
             <form className='max-w-2xl mx-auto' onSubmit={UpdateStock}>
-                <select className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200' onChange={(e)=>setBrand(e.target.value)}>
+                <select className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200' onChange={(e)=>setBrand(e.target.value)} >
+                    <option className='text-xs' value='' defaultValue>Brand</option>
                 {products.map(item=>item.brand).filter((item,index,self)=>self.indexOf(item)===index).map((item,index)=>(
                     <option className='text-xs' key={index} value={item}>{item}</option>
                 ))}
                 </select><br/>
                 {brand==''?
-                <select className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200'>
-                    <option className='text-xs' value=''>Series</option>
-                </select>
+                ''
                 :
                 <select className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200' onChange={(e)=>setSeries(e.target.value)}>
+                    <option className='text-xs' value='' defaultValue>Series</option>
                 {products.filter(item=>item.brand==brand).map((item,index)=>(
                     <option className='text-xs' value={item.name} key={index}>{item.name}</option>
                 ))}

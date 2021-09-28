@@ -1,4 +1,4 @@
-import { doc, getDoc, setDoc, updateDoc } from "@firebase/firestore"
+import { arrayUnion, doc, getDoc, updateDoc } from "@firebase/firestore"
 import { useState } from "react"
 import { db } from "../../utils/firebaseClient"
 import { AuthUser } from "../User"
@@ -25,19 +25,40 @@ const Troley = ({namaProduct,harga}) => {
                 setText('Stock Habis')
                 setTimeout(()=>{setText('Tambah ke keranjang')},3000)
             } else {
-                const cekCart = await getDoc(doc(db,user.uid,namaProduct))
-                if(cekCart.exists()){
-                    await updateDoc(doc(db,user.uid,namaProduct),{sum: cekCart.data().sum + 1})
-                    setTimeout(()=>{setText('Tambah ke keranjang')},3000)
+                const userData = await getDoc(doc(db,'user',user.uid))
+                if(userData.exists()){
+                    const cekCart = userData.data().cart.filter(item=>item.name==namaProduct)
+                    if(!cekCart.length){
+                        updateDoc(doc(db,'user',user.uid),{
+                            cart: arrayUnion({
+                                name: namaProduct,
+                                price: harga,
+                                sum: 1
+                            })
+                        })
+                        setTimeout(()=>{setText('Tambah ke keranjang')},3000)
+                    } else {
+                        const cart = userData.data().cart
+                        const indexItem = cart.findIndex((item)=>item.name==namaProduct)
+                        const oldSum = cekCart[0].sum
+                        cart.splice(indexItem,1,{
+                            name: namaProduct,
+                            price: harga,
+                            sum: oldSum+1
+                        })
+                        updateDoc(doc(db,'user',user.uid),{
+                            cart: cart
+                        })
+                        setTimeout(()=>{setText('Tambah ke keranjang')},3000)
+                    }
                 } else {
-                    setDoc(doc(db,user.uid,namaProduct),{
-                        name: namaProduct,
-                        price: harga,
-                        sum: 1
-                    })
+                    setText('Stock Habis')
                     setTimeout(()=>{setText('Tambah ke keranjang')},3000)
                 }
             }
+        } else {
+            setText('Stock Habis')
+            setTimeout(()=>{setText('Tambah ke keranjang')},3000)
         }
     }
 

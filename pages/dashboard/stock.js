@@ -21,8 +21,10 @@ const Dashboard = () => {
 
     return(
         <Layout>
-            <div className='max-w-3xl mx-auto text-center grid grid-cols-3 border border-black mt-16 font-bold tracking-wider capitalize p-2'>
+            <h1 className='text-center font-bold text-2xl mt-12 mb-4'>Stock Product</h1>
+            <div className='max-w-3xl mx-auto text-center grid grid-cols-3 border border-black font-bold tracking-wider capitalize p-2'>
                 <select className='pl-4 py-1 focus:outline-none capitalize bg-gray-100' onChange={(e)=>setBrand(e.target.value)}>
+                    <option className='text-xs' value=''>All</option>
                     {products.map(item=>item.brand).filter((item,index,self)=>self.indexOf(item)===index).map((item,index)=>(
                     <option className='text-xs' key={index} value={item}>{item}</option>
                     ))}
@@ -45,6 +47,9 @@ const Dashboard = () => {
                     <p className='font-semibold tracking-wide capitalize'>{item.stock}</p>
                 </div>
             ))}
+            <div className='max-w-3xl mx-auto text-right px-4 mt-8'>
+                <button type='button' className='py-2 px-4 bg-black text-white rounded-xl font-medium tracking-wider' onClick={()=>window.print()}>Print</button>
+            </div>
         </Layout>
     )
 }

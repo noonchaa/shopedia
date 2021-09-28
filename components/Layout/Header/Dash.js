@@ -18,7 +18,7 @@ const Dash = ({left,click,user}) => {
             </div>
             {!user?'':
             <div className='flex mb-4 border-t border-black pt-4 items-end'>
-                <Image src={user.photoURL} width={32} height={32} alt='Logo' className='rounded-full'/>
+                <Image src={user.photoURL} width={32} height={32} alt='Logo' className='rounded-full' unoptimized={true}/>
                 <h1 className='text-xl ml-2 font-medium'>Admin</h1>
             </div>
             }

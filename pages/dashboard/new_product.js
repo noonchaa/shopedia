@@ -1,6 +1,5 @@
 import { useState } from "react"
 import Input from "../../components/Layout/Form/Input"
-import Button from "../../components/part/Button"
 import { storage } from "../../utils/firebaseClient"
 import { ref, uploadBytes,getDownloadURL } from 'firebase/storage'
 import {HiCheck} from 'react-icons/hi'
@@ -75,7 +74,7 @@ const NewProduct = () => {
     const productStock = {
         brand: brand,
         name: name.toLowerCase(),
-        stock: total
+        stock: Number(total)
     }
 
     const addProduct = async (e) => {
@@ -99,7 +98,7 @@ const NewProduct = () => {
 
     return(
         <Layout>
-            <h1 className='text-center font-semibold text-xl mt-8 mb-4'>Product Baru</h1>
+            <h1 className='text-center font-bold text-2xl mt-12 mb-4'>Product Baru</h1>
             <p className='text-center text-red-600 font-semibold mb-4'>{fail}</p>
             <form className='max-w-2xl mx-auto' onSubmit={addProduct}>
                 <Input type='text' required placeholder='Brand' value={brand} onChange={(e)=>setBrand(e.target.value)}/>

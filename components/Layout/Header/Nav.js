@@ -23,7 +23,7 @@ const Nav = ({left,click,user}) => {
     },[user])
 
     return(
-        <nav className={left==false?'hidden':'fixed top-0 bg-gray-200 shadow-xl w-80 z-50 min-h-screen p-4'}>
+        <nav className={left==false?'hidden':'fixed top-0 bg-gray-50 shadow-xl w-60 z-50 min-h-screen p-4'}>
             <button className='py-1 px-2 bg-black text-white rounded-xl shadow flex items-center absolute right-4 top-4' onClick={click}>
                 <HiX className='h-6 w-6'/>
             </button>
@@ -33,7 +33,7 @@ const Nav = ({left,click,user}) => {
             </div>
             {!user?'':
             <Route path='/user/profil' name={user.displayName}>
-                <Image src={user.photoURL} width={32} height={32} alt='user' className='rounded-full'/>
+                <Image src={user.photoURL} width={32} height={32} alt='user' className='rounded-full' unoptimized={true}/>
             </Route>
             }
             <div className='flex flex-col border-t border-black pt-4'>
@@ -53,12 +53,12 @@ const Nav = ({left,click,user}) => {
                 </Route>
                 <div className='flex items-center mb-2'>
                     <HiAtSymbol/>
-                    <a className='ml-1 font-medium' href='mailto:yonoraphael@gmail.com'>Contact</a>
+                    <a className='ml-1 font-medium text-lg' href='mailto:yonoraphael@gmail.com'>Contact</a>
                 </div>
                 {user && user.displayName!='admin'?
                 <div className='flex items-center mb-2'>
                     <HiLogout/>
-                    <p className='cursor-pointer ml-1 font-medium' onClick={()=>signOut(auth)}>Log Out</p>
+                    <p className='cursor-pointer ml-1 font-medium text-lg' onClick={()=>signOut(auth)}>Log Out</p>
                 </div>
                 :
                 ''}

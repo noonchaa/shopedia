@@ -1,6 +1,6 @@
 import { HiShoppingBag, HiX } from "react-icons/hi"
 import CartItem from "./CartItem"
-import { collection, onSnapshot } from "@firebase/firestore"
+import { doc, onSnapshot } from "@firebase/firestore"
 import { db } from "../../../utils/firebaseClient"
 import { useEffect, useState } from "react"
 
@@ -9,12 +9,8 @@ const Cart = ({show,user,click}) => {
 
     useEffect(()=>{
         if(user){
-            onSnapshot(collection(db,user.uid),(doc)=>{
-                const data = []
-                doc.forEach((item)=>{
-                    data.push(item.data())
-                })
-                setCart(data)
+            onSnapshot(doc(db,'user',user.uid),(doc)=>{
+                setCart(doc.data().cart)
             })
         }
         return () => {
@@ -35,7 +31,7 @@ const Cart = ({show,user,click}) => {
             <h1 className='text-2xl font-medium text-center'>Keranjang</h1>
             <div className='border-t border-b border-black mt-4 pb-4'>
             {cart.map((item,index)=>(
-                <CartItem name={item.name} price={item.price} sum={item.sum} user={!user?'no user':user.displayName.toLowerCase()} key={index}/>
+                <CartItem name={item.name} price={item.price} sum={item.sum} user={user} key={index}/>
             ))}
             </div>
             <div className='my-4 flex justify-between'>

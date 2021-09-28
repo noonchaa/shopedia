@@ -16,8 +16,8 @@ const ProductGrid = ({data}) => {
     return(
         <div className='grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4 mt-4'>
           {data.map((item,index)=>(
-            <div key={index} className='rounded-xl h-80 relative'>
-              <Image src={item.imgUrl} layout='fill' objectFit='cover' alt='Laptop' className='rounded-xl'/>
+            <div key={index} className='rounded-xl h-80 relative bg-white'>
+              <Image src={item.imgUrl} layout='fill' objectFit='cover' alt='Laptop' className='rounded-xl' unoptimized={true}/>
               <div className='absolute bottom-0 left-0 z-10 p-2 w-full rounded-b-xl bg-black bg-opacity-80 text-white'>
                 <Link href={`/product/${item.name.replace(/[ ]/g,'_')}`} key={index}>
                   <a>

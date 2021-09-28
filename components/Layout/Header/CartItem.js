@@ -12,20 +12,49 @@ const CartItem = ({name,price,sum,user}) => {
     const cartHandler = async (name,sum,op) => {
         setFail('')
         const res = await getDoc(doc(db,'stocks',name))
+        const userData = await getDoc(doc(db,'user',user.uid))
+        const cart = userData.data().cart
+        const cekCart = cart.filter(item=>item.name==name)
+        const indexItem = cart.findIndex((item)=>item.name==name)
+        const oldSum = cekCart[0].sum
         if(res.exists()){
             if(sum == 1) {
                 if(op=='add'){
-                    await updateDoc(doc(db,user,name),{sum: sum + 1}).catch(()=>setFail('error'))
+                    cart.splice(indexItem,1,{
+                        name: name,
+                        price: price,
+                        sum: oldSum+1
+                    })
+                    await updateDoc(doc(db,'user',user.uid),{
+                        cart: cart
+                    })
                 } else {
-                    await deleteDoc(doc(db,user,name))
+                    cart.splice(indexItem,1)
+                    await updateDoc(doc(db,'user',user.uid),{
+                        cart: cart
+                    })
                 }
                 return
             }
             if(sum < res.data().stock){
                 if(op=='add'){
-                    await updateDoc(doc(db,user,name),{sum: sum + 1}).catch(()=>setFail('error'))
+                    cart.splice(indexItem,1,{
+                        name: name,
+                        price: price,
+                        sum: oldSum+1
+                    })
+                    await updateDoc(doc(db,'user',user.uid),{
+                        cart: cart
+                    })
                 } else {
-                    await updateDoc(doc(db,user,name),{sum: sum - 1}).catch(()=>setFail('error'))
+                    cart.splice(indexItem,1,{
+                        name: name,
+                        price: price,
+                        sum: oldSum-1
+                    })
+                    await updateDoc(doc(db,'user',user.uid),{
+                        cart: cart
+                    })
                 }
                 return
             }
@@ -33,7 +62,14 @@ const CartItem = ({name,price,sum,user}) => {
                 if(op=='add'){
                     setStat(true)
                 } else {
-                    await updateDoc(doc(db,user,name),{sum: sum - 1}).catch(()=>setFail('error'))
+                    cart.splice(indexItem,1,{
+                        name: name,
+                        price: price,
+                        sum: oldSum-1
+                    })
+                    await updateDoc(doc(db,'user',user.uid),{
+                        cart: cart
+                    })
                     setStat(false)
                 }
             }
@@ -41,7 +77,14 @@ const CartItem = ({name,price,sum,user}) => {
                 if(op=='add'){
                     setStat(true)
                 } else {
-                    await updateDoc(doc(db,user,name),{sum: sum - 1}).catch(()=>setFail('error'))
+                    cart.splice(indexItem,1,{
+                        name: name,
+                        price: price,
+                        sum: oldSum-1
+                    })
+                    await updateDoc(doc(db,'user',user.uid),{
+                        cart: cart
+                    })
                 }
                 return
             }
@@ -63,7 +106,7 @@ const CartItem = ({name,price,sum,user}) => {
                 </button>
                 <p className='mx-1 font-bold'>{sum}</p>
                 <button disabled={stat} onClick={()=>cartHandler(name,sum,'add')}>
-                    <HiPlusCircle className='h-7 w-7'/>
+                    <HiPlusCircle className={stat==true?'h-7 w-7 text-white':'h-7 w-7'}/>
                 </button>
             </div>
         </div>

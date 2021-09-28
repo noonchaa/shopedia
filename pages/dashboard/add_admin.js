@@ -27,7 +27,7 @@ const AddAdmin = () => {
         if(!img){
             setFail('Mohon pilih foto')
         } else {
-            uploadBytes(ref(storage,`user/${img.name}`),img).then((doc)=>{
+            uploadBytes(ref(storage,`admin/${img.name}`),img).then((doc)=>{
                 getDownloadURL(ref(storage, doc.ref.fullPath)).then((url)=>{
                     setImgUrl(url)
                 })
