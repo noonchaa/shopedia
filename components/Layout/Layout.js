@@ -10,11 +10,11 @@ const Layout = ({children}) => {
 
     return(
         <div className='max-w-screen-2xl mx-auto bg-gray-100 text-black tracking-wide'>
-            {/*<Header click={()=>setLeft(!left)} user={user}/>
+            <Header click={()=>setLeft(!left)} user={user}/>
             {user && user.displayName=='admin'?
             <Dash left={left} click={()=>setLeft(!left)} user={user}/>
             :
-    <Nav left={left} click={()=>setLeft(!left)} user={user}/>}*/}
+            <Nav left={left} click={()=>setLeft(!left)} user={user}/>}
             <main className='p-4 min-h-screen'>
                 {children}
             </main>
