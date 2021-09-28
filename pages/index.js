@@ -1,5 +1,5 @@
 import Layout from '../components/Layout/Layout'
-import ProductGrid from '../components/Main/ProductGrid'
+import ProductGrid from '../components/Layout/Main/ProductGrid'
 import Seo from '../components/Seo'
 import { collection, getDocs } from '@firebase/firestore'
 import { db } from '../utils/firebaseClient'
