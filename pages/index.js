@@ -6,7 +6,7 @@ import { db } from '../utils/firebaseClient'
 import ServerError from '../components/serverError'
 import Hero from '../components/Layout/Main/Hero'
 
-export const getStaticProps = async () => {
+/*export const getStaticProps = async () => {
   const data = []
   const res = await getDocs(collection(db,'products'))
   res.forEach((doc)=>{
@@ -20,7 +20,7 @@ export const getStaticProps = async () => {
     },
     revalidate: 1
   }
-}
+}*/
 
 export default function Home({data}) {
 
