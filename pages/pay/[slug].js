@@ -51,12 +51,12 @@ const PayLink = ({data}) => {
         if(user){
             const getProfile = async () => {
                 const cart = []
-                const resCart = await getDocs(collection(db,user.displayName.toLowerCase()))
+                const resCart = await getDocs(collection(db,user.uid))
                 resCart.forEach((doc)=>{
                     cart.push(doc.data())
                 })
                 setCartData(cart)
-                const resUser = await getDoc(doc(db,'users',user.displayName.toLowerCase()))
+                const resUser = await getDoc(doc(db,'user',user.uid))
                 if(resUser.exists()){
                     setUserData(resUser.data())
                 } else {

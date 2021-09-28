@@ -8,6 +8,7 @@ const CartItem = ({name,price,sum,user}) => {
     const [stat, setStat] = useState(false)
     const [fail, setFail] = useState('')
     const router = useRouter()
+    console.log(user)
     
     const cartHandler = async (name,sum,op) => {
         setFail('')

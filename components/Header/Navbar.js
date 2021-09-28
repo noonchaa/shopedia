@@ -16,7 +16,7 @@ const Navbar = () => {
 
     useEffect(()=>{
         if(user){
-            onSnapshot(collection(db,user.displayName.toLowerCase()),(doc)=>{
+            onSnapshot(collection(db,user.uid),(doc)=>{
                 const data = []
                 doc.forEach((isi)=>{
                     data.push(isi.data())
