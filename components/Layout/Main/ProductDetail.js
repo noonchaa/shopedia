@@ -1,12 +1,13 @@
 import Image from 'next/image'
 import {HiStar} from 'react-icons/hi'
-import Troley from '../part/Troley'
+import Troley from '../Troley'
 
 const ProductDetail = ({data}) => {
+    const rating = [1,2,5,8]
     if(!data){
         return(
             <div className='h-60 flex flex-col justify-center items-center'>
-                <h1 className='font-bold text-5xl text-green-600 animate-pulse'>...</h1>
+                <h1 className='font-bold text-5xl animate-pulse'>...</h1>
                 <h1 className='font-semibold tracking-wide'>Loading</h1>
             </div>
         )
@@ -18,7 +19,11 @@ const ProductDetail = ({data}) => {
                 <Image src={data.imgUrl} layout='fill' objectFit='cover' priority={true} quality={90} alt='Product' className='rounded-t-xl md:rounded-l-xl md:rounded-tr-none'/>
             </div>
             <div className='p-4'>
-                <HiStar className='text-green-500 mb-1 w-7 h-7'/>
+                <div className='flex flex-row mb-1'>
+                    {rating.map((item,index)=>(
+                    <HiStar className='w-6 h-6 mr-2' key={index}/>
+                    ))}
+                </div>
                 <h1 className='text-2xl capitalize font-semibold mb-2'>{data.brand} {data.name}</h1>
                 <h1 className='text-lg font-light mb-2'>Rp. {Number(data.price).toLocaleString('ID',{'currency':'IDR'})}</h1>
                 <h2 className='font-medium'>CPU : <span className='font-medium italic'>{data.cpu}</span></h2>

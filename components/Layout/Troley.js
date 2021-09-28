@@ -25,12 +25,12 @@ const Troley = ({namaProduct,harga}) => {
                 setText('Stock Habis')
                 setTimeout(()=>{setText('Tambah ke keranjang')},3000)
             } else {
-                const cekCart = await getDoc(doc(db,user.displayName.toLowerCase(),namaProduct))
+                const cekCart = await getDoc(doc(db,user.uid,namaProduct))
                 if(cekCart.exists()){
-                    await updateDoc(doc(db,user.displayName.toLowerCase(),namaProduct),{sum: cekCart.data().sum + 1})
+                    await updateDoc(doc(db,user.uid,namaProduct),{sum: cekCart.data().sum + 1})
                     setTimeout(()=>{setText('Tambah ke keranjang')},3000)
                 } else {
-                    setDoc(doc(db,user.displayName.toLowerCase(),namaProduct),{
+                    setDoc(doc(db,user.uid,namaProduct),{
                         name: namaProduct,
                         price: harga,
                         sum: 1
@@ -42,8 +42,8 @@ const Troley = ({namaProduct,harga}) => {
     }
 
     return(
-        <button className='p-2 bg-gray-50 bg-opacity-50 rounded-md shadow-md' onClick={addToCart} >
-            <h1 className='font-bold tracking-wider capitalize text-green-600 text-sm'>{text}</h1>
+        <button className='px-4 py-2 bg-black text-white rounded-xl font-bold tracking-wider' onClick={addToCart} >
+            <h1 className='font-bold tracking-wider capitalize text-sm'>{text}</h1>
         </button>
     )
 }

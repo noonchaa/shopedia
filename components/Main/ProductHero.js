@@ -14,7 +14,7 @@ const ProductHero = ({data}) => {
             <div className='h-96 relative'>
                 <Image src={data.imgUrl} layout='fill' objectFit='cover' priority={true} quality={90} alt='Product' className='rounded-t-xl md:rounded-l-xl md:rounded-tr-none'/>
             </div>
-            <div className='p-4'>
+            <div className='p-4 flex flex-col justify-center'>
                 <h1 className='text-2xl capitalize font-semibold mb-2'>{data.brand}</h1>
                 <h1 className='text-2xl capitalize font-semibold mb-2'>{data.name}</h1>
                 <p className='text-lg font-light'>{data.descriptions}</p>

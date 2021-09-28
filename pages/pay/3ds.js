@@ -1,6 +1,6 @@
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
-import Layout from '../../components/Layout'
+import Layout from '../../components/Layout/Layout'
 import Image from 'next/image'
 
 const Finish3ds = () => {

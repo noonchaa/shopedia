@@ -1,14 +1,20 @@
+import { collection, doc, getDoc, getDocs } from "@firebase/firestore"
 import { useRouter } from "next/router"
-import Layout from "../../components/Layout"
-import ProductDetail from "../../components/Main/ProductDetail"
-import ProductGrid from "../../components/Main/ProductGrid"
+import Layout from "../../components/Layout/Layout"
+import ProductDetail from "../../components/Layout/Main/ProductDetail"
+import ProductGrid from "../../components/Layout/Main/ProductGrid"
 import Seo from "../../components/Seo"
 import Skeleton from "../../components/Skeleton"
-import { allDocs, allDocsByDate, oneDoc } from "../../utils/firebaseHandler"
+import { db } from "../../utils/firebaseClient"
 
 export const getStaticPaths = async () => {
     const data = []
-    await allDocs('products',data)
+    const res = await getDocs(collection(db,'products'))
+    res.forEach((doc)=>{
+        const item = doc.data()
+        delete item.added
+        data.push(item)
+    })
     return {
         paths: data.map((item)=>({
             params:{slug:item.name.replace(/[ ]/g,'_')}
@@ -21,8 +27,20 @@ export const getStaticProps = async ({params}) => {
     const data = []
     const products = []
     const {slug} = params
-    await oneDoc('products',slug.replace(/[_]/g,' '),data)
-    await allDocsByDate('products',products)
+    const resData = await getDoc(doc(db,'products',slug.replace(/[_]/g,' ')))
+    if(resData.exists()){
+        const item = resData.data()
+        delete item.added
+        data.push(item)
+    } else {
+        data.push([])
+    }
+    const resProducts = await getDocs(collection(db,'products'))
+    resProducts.forEach((doc)=>{
+        const item = doc.data()
+        delete item.added
+        products.push(item)
+    })
     if(!data.length) {
         return {
             redirect: {

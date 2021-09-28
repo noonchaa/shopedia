@@ -1,10 +1,10 @@
-import Layout from '../components/Layout'
-import Jumbotron from '../components/Main/Jumbotron'
-import ProductGrid from '../components/Main/ProductGrid'
+import Layout from '../components/Layout/Layout'
+import ProductGrid from '../components/Layout/Main/ProductGrid'
 import Seo from '../components/Seo'
 import { collection, getDocs } from '@firebase/firestore'
 import { db } from '../utils/firebaseClient'
 import ServerError from '../components/serverError'
+import Hero from '../components/Layout/Main/Hero'
 
 export const getStaticProps = async () => {
   const data = []
@@ -32,7 +32,7 @@ export default function Home({data}) {
   return (
     <Layout>
       <Seo/>
-      <Jumbotron imgUrl={data[0].imgUrl}/>
+      <Hero imgUrl={data[0].imgUrl}/>
       <ProductGrid data={data}/>
     </Layout>
   )

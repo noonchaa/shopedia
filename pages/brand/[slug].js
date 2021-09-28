@@ -1,14 +1,20 @@
+import { collection, doc, getDoc, getDocs, query, where } from "@firebase/firestore"
 import { useRouter } from "next/router"
-import Layout from "../../components/Layout"
-import ProductGrid from "../../components/Main/ProductGrid"
+import Layout from "../../components/Layout/Layout"
+import ProductGrid from "../../components/Layout/Main/ProductGrid"
 import ProductHero from "../../components/Main/ProductHero"
 import Seo from "../../components/Seo"
 import Skeleton from "../../components/Skeleton"
-import { allDocs, allDocsByBrand, allDocsByDate } from "../../utils/firebaseHandler"
+import { db } from "../../utils/firebaseClient"
 
 export const getStaticPaths = async () => {
     const data = []
-    await allDocs('products',data)
+    const res = await getDocs(collection(db,'products'))
+    res.forEach((doc)=>{
+        const item = doc.data()
+        delete item.added
+        data.push(item)
+    })
     return {
         paths: data.map((item)=>({
             params:{slug:item.brand}
@@ -20,8 +26,19 @@ export const getStaticProps = async ({params}) => {
     const data = []
     const products = []
     const {slug} = params
-    await allDocsByBrand('products',slug,data)
-    await allDocsByDate('products',products)
+    const q = query(collection(db,'products'),where('brand','==',slug))
+    const resData = await getDocs(q)
+    resData.forEach((doc)=>{
+        const item = doc.data()
+        delete item.added
+        data.push(item)
+    })
+    const resProducts = await getDocs(collection(db,'products'))
+    resProducts.forEach((doc)=>{
+        const item = doc.data()
+        delete item.added
+        products.push(item)
+    })
     if(!data.length) {
         return {
             redirect: {
@@ -30,10 +47,10 @@ export const getStaticProps = async ({params}) => {
             }
         }
     }
-    return{
-        props: {
-            data: data,
-            products: products.slice(0,4)
+    return {
+        props : {
+            data:data,
+            products:products.slice(0,4)
         },
         revalidate: 1
     }
@@ -45,7 +62,7 @@ const Brand = ({data,products}) => {
     return(
         <Layout>
             <Seo title={data[0].brand}/>
-            <ProductHero data={data[0]} />
+            <ProductHero data={data[0]}/>
             <ProductGrid data={data}/>
             <ProductGrid data={products}/>
         </Layout>

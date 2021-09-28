@@ -1,5 +1,5 @@
 import { signOut } from '@firebase/auth'
-import { collection, doc, getDoc, getDocs } from '@firebase/firestore'
+import { collection, getDocs } from '@firebase/firestore'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { HiHome, HiX, HiDocumentText, HiClipboardList, HiAtSymbol, HiLogout, HiDesktopComputer } from "react-icons/hi"
@@ -8,7 +8,6 @@ import Route from '../Route'
 
 const Nav = ({left,click,user}) => {
     const [product, setProduct] = useState([])
-    const [profile, setProfile] = useState(null)
 
     useEffect(()=>{
         getDocs(collection(db,'products')).then((doc)=>{
@@ -18,12 +17,8 @@ const Nav = ({left,click,user}) => {
             })
             setProduct(data.filter((item,index,self)=>self.indexOf(item)===index))
         }).catch(()=>setProduct([]))
-        getDoc(doc(db,'users',!user?'user':user.displayName.toLowerCase())).then((doc)=>{
-            setProfile(doc.data())
-        }).catch(()=>setProfile(null))
         return () => {
             setProduct([])
-            setProfile(null)
         }
     },[user])
 
@@ -36,9 +31,9 @@ const Nav = ({left,click,user}) => {
                 <Image src='/logo/logo.svg' width={32} height={32} alt='Logo'/>
                 <h1 className='text-2xl ml-2 font-medium'>Shopedia</h1>
             </div>
-            {!profile?'':
-            <Route path='/user/profile' name={profile.name}>
-                <Image src={profile.photo} width={32} height={32} alt='Logo' className='rounded-full'/>
+            {!user?'':
+            <Route path='/user/profil' name={user.displayName}>
+                <Image src={user.photoURL} width={32} height={32} alt='user' className='rounded-full'/>
             </Route>
             }
             <div className='flex flex-col border-t border-black pt-4'>

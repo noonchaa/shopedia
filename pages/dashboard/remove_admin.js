@@ -1,14 +1,13 @@
-import { useContext, useState } from "react"
+import { useState } from "react"
 import { doc, deleteDoc } from "@firebase/firestore"
 import { auth, db } from "../../utils/firebaseClient"
 import {deleteUser, reauthenticateWithCredential,EmailAuthProvider} from 'firebase/auth'
-import { UserContext } from "../../components/User"
-import Input from "../../components/part/Input"
-import Button from "../../components/part/Button"
-import Layout from "../../components/Layout"
+import { AuthUser } from "../../components/User"
+import Form from "../../components/Layout/Form/Form"
+import Input from "../../components/Layout/Form/Input"
 
 const DeleteAdmin = () => {
-    const user = useContext(UserContext)
+    const user = AuthUser()
     const [loading, setLoading] = useState(false)
     const [fail, setFail] = useState('')
     const [email, setEmail] = useState('')
@@ -20,35 +19,25 @@ const DeleteAdmin = () => {
         setFail('')
         reauthenticateWithCredential(auth.currentUser,EmailAuthProvider.credential(email,pass)).then(()=>{
             deleteUser(auth.currentUser).then(()=>{
-                deleteDoc(doc(db,'admins',user.email))
-                setEmail('')
-                setPass('')
-            }).catch((err)=>{
-                setFail(err.code)
+                deleteDoc(doc(db,'admin',user.uid))
+            }).catch(()=>{
+                setFail('Gagal hapus detail admin')
             })
-        }).catch((err)=>{
-            setFail(err.code)
+        }).catch(()=>{
+            setFail('Email atau password salah')
         })
+        setEmail('')
+        setPass('')
         setLoading(false)
     }
 
     return(
-        <Layout>
-            <h1 className='text-center text-2xl font-semibold italic tracking-wider mb-3 mt-8'>Remove Admin</h1>
-            <p className='text-center font-medium tracking-widest my-4'>{user?user.email:''}</p>
-            <p className='text-center font-medium tracking-widest my-4 text-red-600'>
-                {fail==''?`This action will delete currently signed admin, make sure you signin with admin account you want to delete.`:fail}
-            </p>
-            <form className='max-w-xl mx-auto' onSubmit={deleteAdmin}>
-                <Input type='email' placeholder='Confirm Email' value={email} change={(e)=>setEmail(e.target.value)}/>
-                <Input type='password' placeholder='Confirm Password' value={pass} change={(e)=>setPass(e.target.value)}/>
-                <div className='text-right'>
-                    <Button type='submit'>
-                        {loading==false?'Confirm Deletion':'Loading'}
-                    </Button>
-                </div>
-            </form>
-        </Layout>
+        <Form type='admin' loading={loading} submit={deleteAdmin}>
+            <p className='my-2 font-medium'>{`Tindakan ini akan menghapus admin yang sekarang login ${!user?'':user.email}, pastikan anda login dengan akun admin yang ingin anda hapus`}</p>
+            <p className={fail==''?'hidden':'mb-4 font-medium text-lg text-red-600'}>{fail}</p>
+            <Input type='email' placeholder='Alamat email' value={email} onChange={(e)=>setEmail(e.target.value)}/>
+            <Input type='password' placeholder='Password' value={pass} onChange={(e)=>setPass(e.target.value)}/>
+        </Form>
     )
 }
 export default DeleteAdmin

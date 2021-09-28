@@ -1,4 +1,4 @@
-import Layout from "../components/Layout"
+import Layout from "../components/Layout/Layout"
 import Seo from "../components/Seo"
 
 const Help = () => {
@@ -6,7 +6,7 @@ const Help = () => {
         <Layout>
             <Seo title='Frequently Asked Queations'/>
             <div className='mt-11'>
-                <h1 className='text-green-500 text-2xl font-semibold mb-2 mt-4'>
+                <h1 className='text-2xl font-semibold mb-2 mt-4'>
                     ## Order
                 </h1>
                 <h1 className='pl-8 pr-4 text-xl font-semibold mb-1'>
@@ -15,7 +15,7 @@ const Help = () => {
                 <p className='pl-8 pr-4 mb-1'>
                     Untuk melacak pesanan anda silahkan kunjungi halaman profil kemudian pilih menu pesanan.
                 </p>
-                <h1 className='text-green-500 text-2xl font-semibold mb-2 mt-4'>
+                <h1 className='text-2xl font-semibold mb-2 mt-4'>
                     ## Tracking
                 </h1>
                 <h1 className='pl-8 pr-4 text-xl font-semibold mb-1'>
@@ -24,7 +24,7 @@ const Help = () => {
                 <p className='pl-8 pr-4 mb-1'>
                     Untuk tracking paket yang sedang dalam pengiriman seilahkan kunjungi website resmi partner pengiriman kami, kemudian masukan nomor AWB atau Resi yang anda dapatkan dihalaman pesanan pada profil anda.
                 </p>
-                <h1 className='text-green-500 text-2xl font-semibold mb-2 mt-4'>
+                <h1 className='text-2xl font-semibold mb-2 mt-4'>
                     ## FAQ
                 </h1>
                 <h1 className='pl-8 pr-4 text-xl font-semibold mb-1'>

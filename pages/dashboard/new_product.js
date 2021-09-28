@@ -1,12 +1,12 @@
 import { useState } from "react"
-import Input from "../../components/part/Input"
+import Input from "../../components/Layout/Form/Input"
 import Button from "../../components/part/Button"
 import { storage } from "../../utils/firebaseClient"
 import { ref, uploadBytes,getDownloadURL } from 'firebase/storage'
 import {HiCheck} from 'react-icons/hi'
 import {doc, setDoc, updateDoc, getDoc} from 'firebase/firestore'
 import { db } from "../../utils/firebaseClient"
-import Layout from "../../components/Layout"
+import Layout from "../../components/Layout/Layout"
 
 const NewProduct = () => {
     const [brand, setBrand] = useState('')
@@ -102,32 +102,30 @@ const NewProduct = () => {
             <h1 className='text-center font-semibold text-xl mt-8 mb-4'>Product Baru</h1>
             <p className='text-center text-red-600 font-semibold mb-4'>{fail}</p>
             <form className='max-w-2xl mx-auto' onSubmit={addProduct}>
-                <Input type='text' placeholder='Brand' value={brand} change={(e)=>setBrand(e.target.value)}/>
-                <Input type='text' placeholder='Series' value={name} change={(e)=>setName(e.target.value)}/>
-                <Input type='number' placeholder='Harga' value={price} change={(e)=>setPrice(e.target.value)}/>
-                <Input type='number' placeholder='Jumlah product' value={total} change={(e)=>setTotal(e.target.value)}/>
+                <Input type='text' required placeholder='Brand' value={brand} onChange={(e)=>setBrand(e.target.value)}/>
+                <Input type='text' required placeholder='Series' value={name} onChange={(e)=>setName(e.target.value)}/>
+                <Input type='number' required placeholder='Harga' value={price} onChange={(e)=>setPrice(e.target.value)}/>
+                <Input type='number' required placeholder='Jumlah product' value={total} onChange={(e)=>setTotal(e.target.value)}/>
                 <label className='text-sm text-gray-600'>Foto product</label><br/>
                 {imgUrl==''?
                 <div>
                     <input className='text-sm text-gray-600' type='file' onChange={(e)=>setImg(e.target.files[0])}/><br/>
-                    <button className='bg-green-500 text-white px-4 py-2 rounded-lg font-medium text-sm my-2' type='button' onClick={getImgUrl}>
+                    <button className='bg-black text-white px-4 py-2 rounded-lg font-medium text-sm my-2' type='button' onClick={getImgUrl}>
                         Upload
                     </button>
                 </div>
                 :
-                    <HiCheck className='text-green-600 w-8 h-8'/>
+                    <HiCheck className='w-8 h-8'/>
                 }
-                <Input type='text' placeholder='Cpu' value={cpu} change={(e)=>setCpu(e.target.value)}/>
-                <Input type='number' placeholder='Ram' value={ram} change={(e)=>setRam(e.target.value)}/>
-                <Input type='text' placeholder='Gpu' value={gpu} change={(e)=>setGpu(e.target.value)}/>
-                <Input type='text' placeholder='Penyimpanan' value={disk} change={(e)=>setDisk(e.target.value)}/>
-                <Input type='number' placeholder='Ukuran Layar' value={screen} change={(e)=>setScreen(e.target.value)}/>
-                <Input type='text' placeholder='Baterai' value={bat} change={(e)=>setBat(e.target.value)}/>
-                <Input type='text' placeholder='Sistem Operasi' value={os} change={(e)=>setOs(e.target.value)}/>
-                <textarea placeholder='Deskripsi' className='p-2 bg-gray-50 bg-opacity-20 shadow rounded-md w-full focus:outline-none focus:ring-1 focus:ring-green-600 text-sm mb-3' value={desc} onChange={(e)=>setDesc(e.target.value)} required/>
-                <div className='flex justify-end'>
-                    <Button type='submit'>{loading==false?'Submit':'Loading'}</Button>
-                </div>
+                <Input type='text' required placeholder='Cpu' value={cpu} onChange={(e)=>setCpu(e.target.value)}/>
+                <Input type='number' required placeholder='Ram' value={ram} onChange={(e)=>setRam(e.target.value)}/>
+                <Input type='text' required placeholder='Gpu' value={gpu} onChange={(e)=>setGpu(e.target.value)}/>
+                <Input type='text' required placeholder='Penyimpanan' value={disk} onChange={(e)=>setDisk(e.target.value)}/>
+                <Input type='number' required placeholder='Ukuran Layar' value={screen} onChange={(e)=>setScreen(e.target.value)}/>
+                <Input type='text' required placeholder='Baterai' value={bat} onChange={(e)=>setBat(e.target.value)}/>
+                <Input type='text' required placeholder='Sistem Operasi' value={os} onChange={(e)=>setOs(e.target.value)}/>
+                <textarea placeholder='Deskripsi' className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black bg-gray-200 placeholder-black placeholder-opacity-80' value={desc} onChange={(e)=>setDesc(e.target.value)} required/>
+                <button type='submit' className={loading==false?'px-4 py-2 bg-black text-white rounded-xl font-bold tracking-wider w-60':'px-4 py-2 bg-gray-50 rounded-xl font-bold tracking-wider w-60'}>Input</button>
             </form>
         </Layout>
     )

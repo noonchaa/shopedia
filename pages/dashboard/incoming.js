@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { db } from '../../utils/firebaseClient'
 import { collection, getDocs, doc, updateDoc } from '@firebase/firestore'
 import Button from "../../components/part/Button"
-import Input from "../../components/part/Input"
-import Layout from '../../components/Layout'
+import Input from "../../components/Layout/Form/Input"
+import Layout from '../../components/Layout/Layout'
 
 const Incoming = () => {
     const [products, setProducts] = useState([])
@@ -48,28 +48,24 @@ const Incoming = () => {
         <Layout>
             <h1 className='text-center font-semibold text-xl mt-8'>Stock Product Datang</h1>
             <form className='max-w-2xl mx-auto' onSubmit={UpdateStock}>
-                <select className='pl-4 my-2 py-1 focus:outline-none focus:ring-1 focus:ring-green-600 bg-gray-100 capitalize' onChange={(e)=>setBrand(e.target.value)}>
-                    <option className='text-xs' value=''>Products</option>
+                <select className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200' onChange={(e)=>setBrand(e.target.value)}>
                 {products.map(item=>item.brand).filter((item,index,self)=>self.indexOf(item)===index).map((item,index)=>(
                     <option className='text-xs' key={index} value={item}>{item}</option>
                 ))}
                 </select><br/>
                 {brand==''?
-                <select className='pl-4 my-2 focus:outline-none focus:ring-1 focus:ring-green-600 bg-gray-100 capitalize'>
+                <select className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200'>
                     <option className='text-xs' value=''>Series</option>
                 </select>
                 :
-                <select className='pl-4 my-2 py-1 focus:outline-none focus:ring-1 focus:ring-green-600 bg-gray-100 capitalize' onChange={(e)=>setSeries(e.target.value)}>
-                    <option className='text-xs' value=''>Series</option>
+                <select className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200' onChange={(e)=>setSeries(e.target.value)}>
                 {products.filter(item=>item.brand==brand).map((item,index)=>(
                     <option className='text-xs' value={item.name} key={index}>{item.name}</option>
                 ))}
                 </select>
                 }
-                <Input placeholder='total datang' type='number' change={(e)=>setStock(e.target.value)} value={stock}/>
-                <div className='flex justify-end'>
-                    <Button type='submit'>{loading==false?'Submit':'......'}</Button>
-                </div>
+                <Input placeholder='total datang' required type='number' onChange={(e)=>setStock(e.target.value)} value={stock}/>
+                <button type='submit' className={loading==false?'px-4 py-2 bg-black text-white rounded-xl font-bold tracking-wider w-60':'px-4 py-2 bg-gray-50 rounded-xl font-bold tracking-wider w-60'}>Input</button>
             </form>
         </Layout>
     )
