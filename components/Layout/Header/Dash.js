@@ -5,7 +5,7 @@ import { auth } from '../../../utils/firebaseClient'
 import Route from '../Route'
 
 const Dash = ({left,click,user}) => {
-    const adminLink = ['stock','order','packing','delivery','delivered','finished','incoming','new_product','add_admin','remove_admin']
+    const adminLink = ['stock','order','cancel','packing','delivery','delivered','finished','incoming','new_product','add_admin','remove_admin']
 
     return(
         <nav className={left==false?'hidden':'fixed top-0 bg-gray-200 shadow-xl w-80 z-50 min-h-screen p-4'}>

@@ -17,12 +17,15 @@ const Profile = () => {
         email: '',
         phone: 0,
         address: {
-            prov: '',
-            kab: '',
-            kec: '',
-            desa: '',
-            lengkap: ''
-        }
+            city_id: '',
+            city_name: '',
+            lengkap: '',
+            postal_code: '',
+            province: '',
+            province_id: '',
+            type: ''
+        },
+        orders: []
     })
 
     useEffect(()=>{
@@ -59,10 +62,9 @@ const Profile = () => {
                     <p className='font-semibold mb-2'>Nama : <span className='italic'>{userData.name}</span></p>
                     <p className='font-semibold mb-2'>Telepon : <span className='italic'>{userData.phone}</span></p>
                     <p className='font-semibold mb-2'>Alamat : <span className='italic'>{userData.address.lengkap}</span></p>
-                    <p className='font-semibold mb-2'>Desa : <span className='italic'>{userData.address.desa}</span></p>
-                    <p className='font-semibold mb-2'>Kecamatan : <span className='italic'>{userData.address.kec}</span></p>
-                    <p className='font-semibold mb-2'>Kabupaten : <span className='italic'>{userData.address.kab}</span></p>
-                    <p className='font-semibold mb-2'>Provinsi : <span className='italic'>{userData.address.prov}</span></p>
+                    <p className='font-semibold mb-2'>Kota : <span className='italic'>{userData.address.type} {userData.address.city_name}</span></p>
+                    <p className='font-semibold mb-2'>Provinsi : <span className='italic'>{userData.address.province}</span></p>
+                    <p className='font-semibold mb-2'>Kode POS : <span className='italic'>{userData.address.postal_code}</span></p>
                 </div>
                 }
                 <form className={edit==false?'hidden':'bg-gray-300 shadow-xl my-4 rounded-xl px-4 py-3 max-w-lg'} onSubmit={submitUpdate} >
@@ -77,29 +79,36 @@ const Profile = () => {
                     <Input type='text' placeholder='Nama' value={userData.name} onChange={(e)=>setUserData({...userData,name:e.target.value})}/>
                     <Input type='tel' placeholder='Telepon' value={userData.phone} onChange={(e)=>setUserData({...userData,phone:e.target.value})}/>
                     <Input type='text' placeholder='Alamat' value={userData.address.lengkap} onChange={(e)=>setUserData({...userData,address:{lengkap:e.target.value}})}/>
-                    <Input type='text' placeholder='Desa' value={userData.address.desa} onChange={(e)=>setUserData({...userData,address:{desa:e.target.value}})}/>
-                    <Input type='text' placeholder='Kecamatan' value={userData.address.kec} onChange={(e)=>setUserData({...userData,address:{kec:e.target.value}})}/>
-                    <Input type='text' placeholder='Kabupaten' value={userData.address.kab} onChange={(e)=>setUserData({...userData,address:{kab:e.target.value}})}/>
-                    <Input type='text' placeholder='Provinsi' value={userData.address.prov} onChange={(e)=>setUserData({...userData,address:{prov:e.target.value}})}/>
+                    <Input type='text' placeholder='Kota' value={userData.address.city_name} onChange={(e)=>setUserData({...userData,address:{city_name:e.target.value}})}/>
+                    <Input type='text' placeholder='Provinsi' value={userData.address.province} onChange={(e)=>setUserData({...userData,address:{province:e.target.value}})}/>
+                    <Input type='text' placeholder='Kode POS' value={userData.address.postal_code} onChange={(e)=>setUserData({...userData,address:{postal_code:e.target.value}})}/>
                 </form>
             </div>
 
             <h1 className='text-xl font-semibold italic ml-4 mb-4'>Pesanan</h1>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-                <div className='bg-gray-200 shadow-xl rounded-lg px-4 py-3'>
-                    <p className='font-semibold mb-2'>ID : <span className='italic'>458751</span></p>
-                    <p className='font-semibold mb-2 italic'>Lenovo x-546 pro</p>
-                    <p className='font-semibold mb-2 italic'>MacBook Pro @954</p>
-                    <p className='font-semibold mb-2 italic'>Asus Z-73 Ultra</p>
-                    <p className='font-semibold mb-2 text-right'>Menunggu Pembayaran</p>
-                </div>
-                <div className='bg-gray-200 shadow-xl rounded-lg px-4 py-3'>
-                    <p className='font-semibold mb-2'>ID : <span className='italic'>458751</span></p>
-                    <p className='font-semibold mb-2 italic'>Lenovo x-546 pro</p>
-                    <p className='font-semibold mb-2 italic'>MacBook Pro @954</p>
-                    <p className='font-semibold mb-2 italic'>Asus Z-73 Ultra</p>
-                    <p className='font-semibold mb-2 text-right'>Dalam Perjalanan</p>
-                </div>
+                {userData.orders.map((item,index)=>(
+                    <div className='bg-gray-200 shadow rounded-xl px-4 py-3' key={index}>
+                    <p className='font-medium mb-2'>ID : <span className='italic font-bold text-lg'>{item.order_id}</span></p>
+                    <p className='font-medium mb-2'>Items :</p>
+                    {item.item_details.map((isi,indexItem)=>(
+                        <div key={indexItem} className='ml-4 mb-4 border-b border-gray-400'>
+                            <p className='font-medium mb-2'>Nama : <span className='italic capitalize'>{isi.name}</span></p>
+                            <p className='font-medium mb-2'>Jumlah : <span className='italic capitalize'>{isi.quantity} units</span></p>
+                            <p className='font-medium mb-2'>Harga : <span className='italic capitalize'>Rp. {Number(isi.price).toLocaleString('ID',{'currency':'IDR'})}</span></p>
+                        </div>
+                    ))}
+                    <p className='font-medium mb-2'>Kurir :</p>
+                    <p className='font-medium mb-2 ml-4'>Nama expedisi : <span className='italic uppercase'>{item.ongkir.expedisi}</span> </p>
+                    <p className='font-medium mb-2 ml-4'>Service : <span className='italic uppercase'>{item.ongkir.service}</span> </p>
+                    <p className='font-medium mb-2 ml-4'>Ongkir : <span className='italic uppercase'>Rp. {Number(item.ongkir.biaya).toLocaleString('ID',{'currency':'IDR'})}</span> </p>
+                    <p className='font-medium mb-2 ml-4'>Resi pengiriman : <span className='italic uppercase'>{item.ongkir.resi}</span> </p>
+                    <p className='font-medium mb-2'>Total : <span className='italic font-bold text-lg'>Rp. {Number(item.gross_amount).toLocaleString('ID',{'currency':'IDR'})}</span></p>
+                    <div className='text-right mr-4 my-4'>
+                        <button className='px-4 py-2 rounded-xl bg-black text-white font-bold tracking-wider' onClick={()=>router.push('/cek_order?id='+item.order_id)}>Cek Status</button>
+                    </div>
+                    </div>
+                ))}
             </div>
         </Layout>
     );

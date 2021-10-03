@@ -7,10 +7,7 @@ let coreApi = new midtransClient.CoreApi({
 })
 
 export default async function cekPay(req,res){
-    const {id} = req.query
-    const data = {}
-    await coreApi.transaction.status(id).then((response)=>{
-        Object.assign(data,response)
-    })
+    const {id} = await req.query
+    const data = await coreApi.transaction.status(id)
     res.status(200).json(data)
 }

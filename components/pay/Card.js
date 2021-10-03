@@ -1,11 +1,13 @@
-import Input from "../part/Input"
-import Button from "../part/Button"
+import Input from "../Layout/Form/Input"
 import { useEffect, useState } from "react"
-import Link from 'next/link'
-import { arrayUnion, deleteDoc, doc, getDoc, setDoc, updateDoc } from "@firebase/firestore"
+import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "@firebase/firestore"
 import { db } from "../../utils/firebaseClient"
+import { useRouter } from "next/router"
+import { AuthUser } from "../User"
 
-const Card = ({order,user,nama}) => {
+const Card = ({order,user,nama,total,ongkir,namaKurir,service}) => {
+    const currentUser = AuthUser()
+    const router = useRouter()
     const [cardNumber,setCardNumber] = useState('')
     const [cardMonth, setCardMonth] = useState('')
     const [cardYear, setCardYear] = useState('')
@@ -26,7 +28,7 @@ const Card = ({order,user,nama}) => {
         payment_type:'credit_card',
         transaction_details: {
             order_id: nama + '_' + uniqueNumber.toString(),
-            gross_amount: order.map(item=>Number(item.price*item.sum)).reduce((part_sum,a)=>part_sum+a,0)
+            gross_amount: Number(total)+Number(ongkir)
         },
         credit_card: {
             token_id: '',
@@ -36,7 +38,11 @@ const Card = ({order,user,nama}) => {
             name: item.name,
             price: item.price,
             quantity: item.sum
-        })),
+        })).concat({
+            name: namaKurir.concat(' ').concat(service),
+            price: Number(ongkir),
+            quantity: 1
+        }),
         customer_details: {
             first_name:user.name,
             email:user.email,
@@ -53,12 +59,18 @@ const Card = ({order,user,nama}) => {
     const orderData = {
         payment_type:'credit_card',
         order_id: nama + '_' + uniqueNumber.toString(),
-        gross_amount: order.map(item=>Number(item.price*item.sum)).reduce((part_sum,a)=>part_sum+a,0),
+        gross_amount: Number(total)+Number(ongkir),
         item_details: order.flatMap(item=>({
             name: item.name,
             price: item.price,
             quantity: item.sum
         })),
+        ongkir:{
+            expedisi: namaKurir,
+            service: service,
+            biaya: Number(ongkir),
+            resi: ''
+        },
         shipping_address: {
             first_name:user.name,
             email:user.email,
@@ -93,9 +105,8 @@ const Card = ({order,user,nama}) => {
               if(getStocks.exists()){
                 await updateDoc(doc(db,'stocks',item.name),{stock:getStocks.data().stock - item.quantity})
               }
-              await deleteDoc(doc(db,nama.replace(/[_]/g,' '),item.name))
           })
-          await updateDoc(doc(db,'users',nama.replace(/[_]/g,' ')),{orders:arrayUnion(data.order_id)})
+          await updateDoc(doc(db,'user',currentUser.uid),{orders:arrayUnion(orderData),cart:[]})
           MidtransNew3ds.redirect( data.redirect_url, { callbackUrl : 'http://localhost:3000/pay/3ds?id='+data.order_id })
           setTimeout(()=>{
               setStatus('')
@@ -134,17 +145,17 @@ const Card = ({order,user,nama}) => {
     return(
         <>
         <div className={status==''?'hidden':'text-center'}>
-            <p className='text-green-600 font-medium text-2xl animate-pulse my-16'>... Loading ...</p>
+            <p className='font-medium text-2xl animate-pulse my-16'>... Loading ...</p>
         </div>
         <form onSubmit={cardPay} className={status!=''?'hidden':'block'}>
             <label className='text-xs font-bold ml-2'>Nomor kartu kredit</label>
-            <Input placeholder='Nomor kartu kredit' type='number' value={cardNumber} change={(e)=>setCardNumber(e.target.value)}/>
+            <Input placeholder='Nomor kartu kredit' type='number' value={cardNumber} onChange={(e)=>setCardNumber(e.target.value)}/>
             <label className='text-xs font-bold ml-2'>Bulan expired</label>
-            <Input placeholder='Dua Angka (02)' type='number' value={cardMonth} change={(e)=>setCardMonth(e.target.value)}/>
+            <Input placeholder='Dua Angka (02)' type='number' value={cardMonth} onChange={(e)=>setCardMonth(e.target.value)}/>
             <label className='text-xs font-bold ml-2'>Tahun expired</label>
-            <Input placeholder='Empat Angka (2025)' type='number' value={cardYear} change={(e)=>setCardYear(e.target.value)}/>
+            <Input placeholder='Empat Angka (2025)' type='number' value={cardYear} onChange={(e)=>setCardYear(e.target.value)}/>
             <label className='text-xs font-bold ml-2'>CVV</label>
-            <Input placeholder='CVV' type='password' value={cvv} change={(e)=>setCvv(e.target.value)}/>
+            <Input placeholder='CVV' type='password' value={cvv} onChange={(e)=>setCvv(e.target.value)}/>
             <p className='text-sm font-medium mb-2 text-red-600'>{fail==''?'':'Maaf detail kartu yang anda masukan salah, mohon cek lagi.'}</p>
             <div className='text-xs font-medium text-gray-700 mb-2'>
                 <p>* Ini hanya contoh, pakai kartu dibawah ini</p>
@@ -153,12 +164,8 @@ const Card = ({order,user,nama}) => {
                 <p>Tahun : 2025</p>
                 <p>CVV : 123</p>
             </div>
-            <Button type='submit'>{loading==false?'Bayar':'Loading'}</Button>
-            <Button type='reset'>
-                <Link href='/'>
-                    <a>Batal</a>
-                </Link>
-            </Button>
+            <button className='px-4 py-2 bg-white border-2 border-black rounded-xl font-bold tracking-wider mr-4' onClick={()=>router.back()} type='reset'>Batal</button>
+            <button className='px-4 py-2 bg-black rounded-xl text-white font-medium tracking-wider' type='submit'>{loading==false?'Bayar':'Loading'}</button>
         </form>
         </>
     )

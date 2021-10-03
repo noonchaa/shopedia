@@ -21,51 +21,21 @@ const Daftar = () => {
     const [fail, setFail] = useState('')
     const [loading, setLoading] = useState(false)
     const [phone, setPhone] = useState('')
-    const [prov, setProv] = useState([])
-    const [kab, setKab] = useState([])
-    const [kec, setKec] = useState([])
-    const [desa, setDesa] = useState([])
-    const [address, setAddress] = useState({
-        prov: '',
-        kab: '',
-        kec: '',
-        desa: '',
-        lengkap: ''
-    })
+    const [listCity, setListCity] = useState([])
+    const [provinsi, setProvinsi] = useState('')
 
     useEffect(()=>{
-        const getProv = async () => {
-            const res = await fetch('https://dev.farizdotid.com/api/daerahindonesia/provinsi')
-            const data = await res.json()
-            setProv(data.provinsi)
+        const getCity = async () => {
+            const city = await fetch('/api/city')
+            const cityData = await city.json()
+            setListCity(cityData.rajaongkir.results)
         }
-        getProv()
+        getCity()
+
         return () => {
-            setProv([])
+            setListCity([])
         }
     },[])
-
-    const getKab = async (e) => {
-        const {id,name} = JSON.parse(e.target.value)
-        const kab = await fetch('https://dev.farizdotid.com/api/daerahindonesia/kota?id_provinsi='+id)
-        const dataKab = await kab.json()
-        setKab(dataKab.kota_kabupaten)
-        setAddress({...address,prov:name})
-    }
-    const getKec = async (e) => {
-        const {id,name} = JSON.parse(e.target.value)
-        const kec = await fetch('https://dev.farizdotid.com/api/daerahindonesia/kecamatan?id_kota='+id)
-        const dataKec = await kec.json()
-        setKec(dataKec.kecamatan)
-        setAddress({...address,kab:name})
-    }
-    const getDesa = async (e) => {
-        const {id,name} = JSON.parse(e.target.value)
-        const desa = await fetch('https://dev.farizdotid.com/api/daerahindonesia/kelurahan?id_kecamatan='+id)
-        const dataDesa = await desa.json()
-        setDesa(dataDesa.kelurahan)
-        setAddress({...address,kec:name})
-    }
 
     const getImgUrl = () => {
         setFail('')
@@ -89,26 +59,28 @@ const Daftar = () => {
         setPhone('')
     }
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault()
         setFail('')
         setLoading(true)
+        const kota = JSON.parse(e.target.kota.value)
         if(password!==password1) {
             setFail('Mohon masukan password yang sama')
             setLoading(false)
         } else {
-            createUserWithEmailAndPassword(auth,email,password).then((userCredential)=>{
+            await createUserWithEmailAndPassword(auth,email,password).then( async (userCredential)=>{
                 const user = userCredential.user
-                updateProfile(auth.currentUser,{
+                await updateProfile(auth.currentUser,{
                     displayName:name,
                     photoURL:imgUrl
                 }).catch(()=>setFail('Detail profil gagal disimpan, silahkan lengkapi di halaman profil'))
-                setDoc(doc(db,'user',user.uid),{
+                await setDoc(doc(db,'user',user.uid),{
                     name: name,
                     email: email,
                     phone: Number(phone),
-                    address: address,
-                    order: []
+                    address: {...kota,lengkap:e.target.lengkap.value},
+                    cart:[],
+                    orders: []
                 }).catch(()=>setFail('Detail profil gagal disimpan, silahkan lengkapi di halaman profil'))
                 setLoading(false)
                 reset()
@@ -135,30 +107,19 @@ const Daftar = () => {
             <p className='text-right mb-4 -mt-2 cursor-pointer font-medium mr-4' onClick={()=>setSee(!see)}>Lihat password <span><HiEye className='w-5 h-5 inline' /></span></p>
             <Input type='tel' placeholder='Nomor telepon' required min={6} max={15} value={phone} onChange={(e)=>setPhone(e.target.value)}/>
             <select  className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200 appearance-none'
-             onChange={(e)=>getKab(e)} required>
-                {prov.map((data,index)=>(
-                    <option key={index} value={JSON.stringify({id:data.id,name:data.nama})}>{data.nama}</option>
+                onChange={(e)=>setProvinsi(e.target.value)}>
+                <option value=''>Provinsi</option>
+                {listCity.map(item=>item.province).filter((item,index,self)=>self.indexOf(item)===index).map((item,index)=>(
+                    <option key={index} value={item}>{item}</option>
                 ))}
-            </select><br/>
-            <select  className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200 appearance-none'
-             onChange={(e)=>getKec(e)} required>
-                {kab.map((data,index)=>(
-                    <option key={index} value={JSON.stringify({id:data.id,name:data.nama})}>{data.nama}</option>
+            </select>
+            <select id='kota' className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200 appearance-none'>
+                <option value=''>Kota</option>
+                {listCity.filter(item=>item.province==provinsi).map((item,index)=>(
+                    <option value={JSON.stringify(item)} key={index}>{item.type} {item.city_name}</option>
                 ))}
-            </select><br/>
-            <select  className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200 appearance-none'
-             onChange={(e)=>getDesa(e)}>
-                {kec.map((data,index)=>(
-                    <option key={index} value={JSON.stringify({id:data.id,name:data.nama})}>{data.nama}</option>
-                ))}
-            </select><br/>
-            <select  className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black font-medium capitalize bg-gray-200 appearance-none'
-             onChange={(e)=>setAddress({...address,desa:e.target.value})}>
-                {desa.map((data,index)=>(
-                    <option key={index} value={data.nama}>{data.nama}</option>
-                ))}
-            </select><br/>
-            <textarea className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black bg-gray-200 placeholder-black placeholder-opacity-80' onChange={(e)=>setAddress({...address,lengkap:e.target.value})} value={address.lengkap} placeholder='Mohon lengkapi alamat anda bila provinsi, kota, kecamatan atau desa anda tidak tercantum di pilihan diatas, beserta detail jalan dan nomor rumah untuk memastikan pesanan anda nantinya sampai tujuan.' required rows={6}/>
+            </select>
+            <textarea id='lengkap' className='w-full rounded-xl px-4 py-2 mb-4 focus:outline-none focus:ring-1 focus:ring-black bg-gray-200 placeholder-black placeholder-opacity-80' placeholder='Alamat lengkap' required rows={6}/>
             <p className={fail==''?'hidden':'mb-4 font-medium text-lg capitalize text-red-600'}>{fail}</p>
         </Form>
     )

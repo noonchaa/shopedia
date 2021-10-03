@@ -8,19 +8,20 @@ const Finish3ds = () => {
     const [stat, setStat] = useState()
 
     useEffect(()=>{
+        if(!router.isReady) return;
         const getStatus = async () => {
             const res = await fetch('/api/cekPay?id='+router.query.id)
             const data = await res.json()
             setStat(data)
         }
-        getStatus()
-    },[router.query.id])
+        setTimeout(()=>{getStatus()},3000)
+    },[router])
 
     return(
         <Layout>
             {!stat?
             <div className='text-center mt-16 max-w-3xl mx-auto'>
-                <h1 className='font-medium tracking-wider text-2xl text-green-600 animate-pulse'>... Loading ...</h1>
+                <h1 className='font-medium tracking-wider text-2xl animate-pulse'>... Loading ...</h1>
             </div>
             : stat.transaction_status=='capture' || stat.transaction_status=='settlement' ?
             <div className='text-center mt-16 max-w-3xl mx-auto'>
