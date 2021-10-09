@@ -1,39 +1,50 @@
-import Layout from '../components/Layout/Layout'
-import ProductGrid from '../components/Layout/Main/ProductGrid'
-import Seo from '../components/Seo'
-import { collection, getDocs } from '@firebase/firestore'
-import { db } from '../utils/firebaseClient'
-import ServerError from '../components/serverError'
-import Hero from '../components/Layout/Main/Hero'
+import { collection, doc, getDoc, getDocs } from "@firebase/firestore"
+import Frame from "../components/Frame"
+import Hero from "../components/Hero"
+import Item from "../components/Item"
+import Layout from "../components/Layout"
+import New from "../components/New"
+import Seo from "../components/Seo"
+import { db } from "../utils/firebaseClient"
 
 export const getStaticProps = async () => {
-  const data = []
-  const res = await getDocs(collection(db,'products'))
-  res.forEach((doc)=>{
-    const item = doc.data()
-    delete item.added
-    data.push(item)
-  })
-  return {
-    props: {
-      data: data
-    },
-    revalidate: 1
-  }
+    const res = await getDoc(doc(db,'utils','site'))
+    const data = []
+    const product = await getDocs(collection(db,'product'))
+    product.forEach((doc)=>{
+        data.push(doc.data())
+    })
+    if(res.exists()){
+        return {
+            props: {
+                data: res.data(),
+                produk: data
+            },
+            revalidate: 1
+        }
+    } else {
+        return {
+            props: {
+                data: null,
+                produk: []
+            },
+            revalidate: 1
+        }
+    }
 }
 
-export default function Home({data}) {
+const Home = ({data,produk}) => {
 
-  if(!data.length){
+    if(!data) return <Frame/>
     return(
-      <ServerError/>
+        <Layout tag={data.link} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
+            <Seo title={data.siteTitle} desc={data.tagline}/>
+            <Hero tagline={data.tagline} value={data.value} hero={data.hero} />
+            <New produk={produk.slice(0,3)}/>
+            <Item produk={produk.filter(item=>item.tag=='tas').sort((a,b)=>b.add-a.add).slice(0,4)} tag='tas terbaru'/>
+            <Item produk={produk.filter(item=>item.tag=='sepatu').sort((a,b)=>b.add-a.add).slice(0,4)} tag='sepatu terbaru'/>
+            <Item produk={produk.filter(item=>item.tag=='baju').sort((a,b)=>b.add-a.add).slice(0,4)} tag='baju terbaru'/>
+        </Layout>
     )
-  }
-  return (
-    <Layout>
-      <Seo/>
-      <Hero imgUrl={data[0].imgUrl}/>
-      <ProductGrid data={data}/>
-    </Layout>
-  )
 }
+export default Home

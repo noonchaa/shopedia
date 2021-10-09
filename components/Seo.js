@@ -4,7 +4,7 @@ const Seo = ({title,desc}) => {
     return(
         <Head>
         <title>{!title?'Shopedia':title}</title>
-        <meta name="description" content={!desc?'Your best place to find laptops':desc} />
+        <meta name="description" content={!desc?'Tempat terbaik untuk segala kebutuhan fashion kamu':desc} />
         </Head>
     )
 }

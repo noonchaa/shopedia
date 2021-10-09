@@ -1,11 +1,22 @@
-import Layout from "../components/Layout/Layout"
+import Layout from "../components/Layout"
 import Seo from "../components/Seo"
+import { doc, getDoc } from "@firebase/firestore"
+import { db } from "../utils/firebaseClient"
 
-const Term = () => {
+export const getStaticProps = async () => {
+    const link = await getDoc(doc(db,'utils','site'))
+    return {
+        props: {
+            link: link.data()
+        }
+    }
+}
+
+const Term = ({link}) => {
     return(
-        <Layout>
+        <Layout tag={link.link} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email}>
             <Seo title='Term of Service'/>
-            <div className='mt-11'>
+            <div className='py-12 px-6 bg-white dark:bg-gray-800 dark:text-white'>
             <h1 className='text-2xl font-semibold mb-2'>Website Terms and Conditions of Use</h1>
 
             <h2 className='text-xl font-semibold my-2'>1. Terms</h2>

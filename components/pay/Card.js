@@ -121,7 +121,7 @@ const Card = ({order,user,nama,total,ongkir,namaKurir,service}) => {
 
     useEffect(()=>{
         const midtransScriptUrl = 'https://api.midtrans.com/v2/assets/js/midtrans-new-3ds.min.js'
-        const myMidtransClientKey = 'SB-Mid-client-5AIwEY7xlLNRT_xr'
+        const myMidtransClientKey = process.env.MIDTRANS_CLIENT
         const envType = 'sandbox'
         let scriptTag = document.createElement('script')
         scriptTag.src = midtransScriptUrl

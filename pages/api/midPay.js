@@ -2,8 +2,8 @@ const midtransClient = require('midtrans-client')
 
 let coreApi = new midtransClient.CoreApi({
     isProducton: false,
-    serverKey:'SB-Mid-server-QSRzuv0tLUocvW72lypXPUaO',
-    clientKey:'SB-Mid-client-5AIwEY7xlLNRT_xr'
+    serverKey:process.env.MIDTRANS_SERVER,
+    clientKey:process.env.MIDTRANS_CLIENT
 })
 
 export default async function midtransHandler(req,res){
