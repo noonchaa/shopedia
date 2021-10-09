@@ -36,7 +36,7 @@ const Profile = ({link}) => {
         if(user){getProfile()}
 
         return () => {
-            setUserData({nama:'',email:'',foto:'',alamat:{city_id:'',city_name:'',postal_code:'',province:'',province_id:'',type:''},phone:'',order:[]})
+            setUserData({nama:'',email:'',foto:'',alamat:{city_id:'',city_name:'',postal_code:'',province:'',province_id:'',type:''},phone:'',order:[],cart:[]})
         }
     },[user,router])
 
@@ -44,6 +44,7 @@ const Profile = ({link}) => {
         signOut(auth)
         router.push('/')
     }
+    console.log(user)
 
     return(
         <Layout tag={link.link} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email}>
