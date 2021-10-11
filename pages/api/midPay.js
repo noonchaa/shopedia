@@ -1,7 +1,7 @@
 const midtransClient = require('midtrans-client')
 
 let coreApi = new midtransClient.CoreApi({
-    isProducton: false,
+    isProducton: process.env.MIDTRANS_SERVER_ENV,
     serverKey:process.env.MIDTRANS_SERVER,
     clientKey:process.env.MIDTRANS_CLIENT
 })

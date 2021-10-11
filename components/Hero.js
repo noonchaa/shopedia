@@ -9,9 +9,9 @@ const Hero = ({tagline,value,hero}) => {
                     <div className="lg:max-w-lg">
                         <h1 className="text-2xl font-semibold text-gray-800 uppercase dark:text-white lg:text-3xl">{tagline}</h1>
                         <p className="mt-2 text-gray-600 dark:text-gray-400">{value}</p>
-                        <button className="w-full px-3 py-2 mt-6 text-xs font-medium text-white uppercase transition-colors duration-200 transform bg-indigo-600 rounded-md lg:w-auto hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500">
-                            <a href='#produk'>Mulai Belanja</a>
-                        </button>
+                        <a href='#produk'>
+                            <button className="w-full px-3 py-2 mt-6 text-xs font-medium text-white uppercase transition-colors duration-200 transform bg-indigo-600 rounded-md lg:w-auto hover:bg-indigo-500 focus:outline-none focus:bg-indigo-500">Mulai Belanja</button>
+                        </a>
                     </div>
                 </div>
         

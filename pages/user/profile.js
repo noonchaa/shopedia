@@ -9,6 +9,7 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Seo from "../../components/Seo"
 import { signOut } from "@firebase/auth"
+import Order from "../../components/Order"
 
 export const getStaticProps = async () => {
     const link = await getDoc(doc(db,'utils','site'))
@@ -44,7 +45,6 @@ const Profile = ({link}) => {
         signOut(auth)
         router.push('/')
     }
-    console.log(user)
 
     return(
         <Layout tag={link.link} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email}>
@@ -90,6 +90,7 @@ const Profile = ({link}) => {
             </a>
             </Link>
         </div>
+        <Order order={userData.order}/>
         <div className='text-right mt-12'>
             <button className='text-white bg-gray-700 px-3 py-1 rounded-lg text-xl font-semibold' onClick={()=>out()}>Log Out</button>
         </div>

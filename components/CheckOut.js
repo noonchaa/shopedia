@@ -57,6 +57,8 @@ const CheckOut = () => {
             </button>
 
             <div className={open==false?'hidden':"absolute right-0 z-20 w-72 mt-2 overflow-hidden bg-gray-100 rounded-md shadow-xl dark:bg-gray-800"}>
+                {kurir==true?'':
+                <div>
                 {cart.map((item,index)=>(
                     <div key={index} className='p-3 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white'>
                     <div className="flex items-center">
@@ -91,12 +93,15 @@ const CheckOut = () => {
                     '' 
                     }
                 </div>
+                </div>
+                }
+                {!cart.length?'':
                 <div className="py-3 text-sm text-white capitalize bg-gray-900 text-center cursor-pointer" onClick={()=>bayarCek()}>
                     {kurir==false?'Pilih pengiriman':'Batal'}
-                </div>
+                </div>}
                 {kurir==false?'':
                 <Kurir total={cart.map(item=>Number(item.harga*item.qty)).reduce((part_sum,a)=>part_sum+a,0)} 
-                    berat={cart.map(item=>Number(item.berat*item.qty)).reduce((part_sum,a)=>part_sum+a,0)}/>}
+                    berat={cart.map(item=>Number(item.berat*item.qty)).reduce((part_sum,a)=>part_sum+a,0)} user={user} cart={cart}/>}
             </div>
         </div>
     )
