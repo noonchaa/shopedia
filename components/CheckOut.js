@@ -14,7 +14,7 @@ const CheckOut = () => {
     const [text, setText] = useState([])
 
     useEffect(()=>{
-        if(user){
+        if(user && user.displayName!='admin'){
             onSnapshot(doc(db,'users',user.uid),(doc)=>{
                 setCart(doc.data().cart)
             })

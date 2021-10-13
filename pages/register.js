@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import Seo from '../components/Seo'
 import { auth, db } from '../utils/firebaseClient'
+import {HiX} from 'react-icons/hi'
 
 const Register = () => {
     const router = useRouter()
@@ -38,6 +39,7 @@ const Register = () => {
             <Seo title='Daftar'/>
         <div className="w-full max-w-sm m-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div className="px-6 py-4">
+                <HiX className='w-8 h-8 cursor-pointer' onClick={()=>router.push('/')} />
                 <h2 className="text-3xl font-bold text-center text-gray-700 dark:text-white">Shopedia</h2>
     
                 <h3 className="mt-1 text-xl font-medium text-center text-gray-600 dark:text-gray-200">Selamat datang</h3>

@@ -2,9 +2,14 @@ import { AuthUser } from "./User"
 import Link from 'next/link'
 import CheckOut from "./CheckOut"
 import {GiBallerinaShoes, GiCowled, GiExitDoor, GiHandBag, GiTShirt} from 'react-icons/gi'
+import { useRouter } from "next/router"
 
 const Navbar = ({tag}) => {
     const user = AuthUser()
+    const router = useRouter()
+    if(user && user.displayName=='admin'){
+        router.push('/dashboard')
+    }
     return(
         <nav className="bg-white shadow dark:bg-gray-800">
             <div className="container px-6 py-4 mx-auto flex justify-between items-center">

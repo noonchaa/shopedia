@@ -75,7 +75,6 @@ const Gopay = ({user,alamat,cart,ongkir}) => {
             body: JSON.stringify(params)
         })
         const data = await res.json()
-        orderData.status= await data.transaction_status
         orderData.transaction_time= await data.transaction_time
         orderData.pay_code.bank= data.payment_type
         orderData.pay_code.code= data.actions.filter(item=>item.name=='generate-qr-code')[0].url
@@ -87,7 +86,7 @@ const Gopay = ({user,alamat,cart,ongkir}) => {
               await updateDoc(doc(db,'product',item.id),{stok:getStocks.data().stok - item.quantity})
             }
         })
-        await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData),cart:[]})
+        await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData.order_id),cart:[]})
         setTimeout(()=>{router.push('/status?id='+data.order_id)},4000)
     }
     return(

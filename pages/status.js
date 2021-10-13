@@ -22,52 +22,29 @@ const Status = ({link}) => {
 
     useEffect(()=>{
         if(!router.isReady) return;
+
         if(user){
             const getStatus = async () => {
                 const res = await fetch('/api/cekPay?id='+router.query.id)
                 const data = await res.json()
-                if(data.transaction_status=='capture'||data.transaction_status=='settlement'){
-                    const res = await getDoc(doc(db,'users',user.uid))
-                    if(res.exists()){
-                        const order = res.data().order
-                        const filtered = order.filter(item=>item.order_id==router.query.id)
-                        filtered[0].status='Lunas'
-                        const indexOrder = order.findIndex((item)=>item.order_id==router.query.id)
-                        order.splice(indexOrder,1,...filtered)
-                        await updateDoc(doc(db,'users',user.uid),{order:order})
-                        await updateDoc(doc(db,'order',router.query.id),{status:'Lunas'})
-                        setStat(data)
-                    } else {
-                        router.back()
-                    }
-                } else if(data.transaction_status=='pending'){
-                    const res = await getDoc(doc(db,'users',user.uid))
-                    if(res.exists()){
-                        const order = res.data().order
-                        const filtered = order.filter(item=>item.order_id==router.query.id)
-                        filtered[0].status='Menunggu pembayaran'
-                        const indexOrder = order.findIndex((item)=>item.order_id==router.query.id)
-                        order.splice(indexOrder,1,...filtered)
-                        await updateDoc(doc(db,'users',user.uid),{order:order})
-                        await updateDoc(doc(db,'order',router.query.id),{status:'Menunggu pembayaran'})
-                        setStat(data)
+                const stats = await getDoc(doc(db,'order',router.query.id))
+                if(stats.exists){
+                    if(stats.data().status == ''){
+                        if(data.transaction_status=='capture'||data.transaction_status=='settlement'){
+                            await updateDoc(doc(db,'order',router.query.id),{status:'Lunas'})
+                            setStat(data)
+                        } else if(data.transaction_status=='pending'){
+                            await updateDoc(doc(db,'order',router.query.id),{status:'Menunggu pembayaran'})
+                            setStat(data)
+                        } else {
+                            await updateDoc(doc(db,'order',router.query.id),{status:'Pembayaran gagal'})
+                            setStat(data)
+                        }
                     } else {
                         router.back()
                     }
                 } else {
-                    const res = await getDoc(doc(db,'users',user.uid))
-                    if(res.exists()){
-                        const order = res.data().order
-                        const filtered = order.filter(item=>item.order_id==router.query.id)
-                        filtered[0].status='Pembayaran gagal'
-                        const indexOrder = order.findIndex((item)=>item.order_id==router.query.id)
-                        order.splice(indexOrder,1,...filtered)
-                        await updateDoc(doc(db,'users',user.uid),{order:order})
-                        await updateDoc(doc(db,'order',router.query.id),{status:'Pembayaran gagal'})
-                        setStat(data)
-                    } else {
-                        router.back()
-                    }
+                    router.back()
                 }
             }
             getStatus()

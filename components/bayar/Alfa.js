@@ -76,7 +76,6 @@ const Alfa = ({user,alamat,cart,ongkir}) => {
             body: JSON.stringify(params)
         })
         const data = await res.json()
-        orderData.status= await data.transaction_status
         orderData.transaction_time= await data.transaction_time
         orderData.pay_code.bank= data.store
         orderData.pay_code.code_bayar= data.payment_code
@@ -87,7 +86,7 @@ const Alfa = ({user,alamat,cart,ongkir}) => {
               await updateDoc(doc(db,'product',item.id),{stok:getStocks.data().stok - item.quantity})
             }
         })
-        await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData),cart:[]})
+        await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData.order_id),cart:[]})
         setPay(orderData.pay_code.code_bayar)
         setTimeout(()=>{router.push('/status?id='+data.order_id)},4000)
     }

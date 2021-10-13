@@ -73,7 +73,6 @@ const Shopee = ({user,alamat,cart,ongkir}) => {
             body: JSON.stringify(params)
         })
         const data = await res.json()
-        orderData.status= await data.transaction_status
         orderData.transaction_time= await data.transaction_time
         orderData.pay_code.bank= data.payment_type
         orderData.pay_code.code_bayar= data.actions.filter(item=>item.name=='deeplink-redirect')[0].url
@@ -84,7 +83,7 @@ const Shopee = ({user,alamat,cart,ongkir}) => {
               await updateDoc(doc(db,'product',item.id),{stok:getStocks.data().stok - item.quantity})
             }
         })
-        await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData),cart:[]})
+        await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData.order_id),cart:[]})
         setPay(orderData.pay_code.code_bayar)
     }
     return(

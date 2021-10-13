@@ -24,12 +24,14 @@ const Profile = ({link}) => {
     const router = useRouter()
     const user = AuthUser()
     const [userData, setUserData] = useState({nama:'',email:'',foto:'',alamat:{city_id:'',city_name:'',postal_code:'',province:'',province_id:'',type:'',full:''},phone:'',order:[],cart:[]})
+    const [order, setOrder] = useState([])
 
     useEffect(()=>{
         const getProfile = async () => {
             const res = await getDoc(doc(db,'users',user.uid))
             if(res.exists()){
                 setUserData(res.data())
+                setOrder(res.data().order.reverse())
             } else {
                 setTimeout(()=>{router.back()},2000)
             }
@@ -38,6 +40,7 @@ const Profile = ({link}) => {
 
         return () => {
             setUserData({nama:'',email:'',foto:'',alamat:{city_id:'',city_name:'',postal_code:'',province:'',province_id:'',type:''},phone:'',order:[],cart:[]})
+            setOrder([])
         }
     },[user,router])
 
@@ -90,7 +93,11 @@ const Profile = ({link}) => {
             </a>
             </Link>
         </div>
-        <Order order={userData.order}/>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8'>
+        {order.map((item,index)=>(
+            <Order order={item} key={index}/>
+        ))}
+        </div>
         <div className='text-right mt-12'>
             <button className='text-white bg-gray-700 px-3 py-1 rounded-lg text-xl font-semibold' onClick={()=>out()}>Log Out</button>
         </div>

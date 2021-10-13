@@ -91,7 +91,6 @@ const Card = ({user,alamat,cart,ongkir}) => {
               method:'POST',body:JSON.stringify(params)
           })
           const data = await res.json()
-          orderData.status= await data.transaction_status
           orderData.transaction_time= await data.transaction_time
           await setDoc(doc(db,'order',orderData.order_id),orderData)
           orderData.item_details.forEach( async (item)=>{
@@ -100,7 +99,7 @@ const Card = ({user,alamat,cart,ongkir}) => {
                 await updateDoc(doc(db,'product',item.id),{stok:getStocks.data().stok - item.quantity})
               }
           })
-          await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData),cart:[]})
+          await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData.order_id),cart:[]})
           MidtransNew3ds.redirect( data.redirect_url, { callbackUrl : window.location.origin+'/status?id='+data.order_id })
         },
         onFailure: function(){

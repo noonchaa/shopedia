@@ -100,7 +100,6 @@ const Virtual = ({user,alamat,cart,ongkir}) => {
             if(orderData.pay_code.code_bayar=='error'){
                 setLoading('Server error')
             } else {
-                orderData.status= await data.transaction_status
                 orderData.transaction_time= await data.transaction_time
                 await setDoc(doc(db,'order',orderData.order_id),orderData)
                 orderData.item_details.forEach( async (item)=>{
@@ -109,7 +108,7 @@ const Virtual = ({user,alamat,cart,ongkir}) => {
                       await updateDoc(doc(db,'product',item.id),{stok:getStocks.data().stok - item.quantity})
                     }
                 })
-                await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData),cart:[]})
+                await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData.order_id),cart:[]})
                 setTimeout(()=>{router.push('/status?id='+data.order_id)},4000)
             }
         }

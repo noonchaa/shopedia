@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { sendPasswordResetEmail } from "@firebase/auth"
 import { auth } from "../utils/firebaseClient"
 import Seo from "../components/Seo"
+import {HiX} from 'react-icons/hi'
 
 const Lupa = () => {
     const router = useRouter()
@@ -29,6 +30,7 @@ const Lupa = () => {
             <Seo title='Reset Password'/>
         <div className="w-full max-w-sm m-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
             <div className="px-6 py-4">
+                <HiX className='w-8 h-8 cursor-pointer' onClick={()=>router.push('/')} />
                 <h2 className="text-3xl font-bold text-center text-gray-700 dark:text-white">Shopedia</h2>
     
                 <p className="mt-1 text-center text-gray-500 dark:text-gray-400">Reset Password</p>
