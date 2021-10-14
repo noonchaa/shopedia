@@ -18,57 +18,151 @@ const Report = () => {
     },[])
 
     return(
-        <div>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
             <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <div className="flex items-center justify-center w-12 bg-blue-500">
-                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>new Date(item.transaction_time).toLocaleString('ID',{'year':'2-digit','month':'2-digit','day':'2-digit'}) == new Date().toLocaleString('ID',{'year':'2-digit','month':'2-digit','day':'2-digit'})).length}</p>
-                </div>
-                
-                <div className="px-4 py-2 -mx-3">
-                    <div className="mx-3">
-                        <span className="font-semibold text-blue-500 dark:text-blue-400">Order Hari {new Date().toLocaleString('ID',{'weekday':'long'})}</span>
-                        <p className="text-sm text-gray-600 dark:text-gray-200">Total order hari ini</p>
-                    </div>
-                </div>
-            </div>
-            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <div className="flex items-center justify-center w-12 bg-blue-500">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
                     <p className='text-xl lg:text-2xl font-bold text-white'>{order.length}</p>
                 </div>
                 
                 <div className="px-4 py-2 -mx-3">
                     <div className="mx-3">
-                        <span className="font-semibold text-blue-500 dark:text-blue-400">Total Order</span>
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Total Order</span>
                         <p className="text-sm text-gray-600 dark:text-gray-200">Total semua order</p>
                     </div>
                 </div>
             </div>
             <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <div className="flex items-center justify-center w-12 bg-blue-500">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
                     <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>new Date(item.transaction_time).getFullYear()==new Date().getFullYear()).length}</p>
                 </div>
                 
                 <div className="px-4 py-2 -mx-3">
                     <div className="mx-3">
-                        <span className="font-semibold text-blue-500 dark:text-blue-400">Order Tahun {new Date().getFullYear()}</span>
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Order Tahun {new Date().getFullYear()}</span>
                         <p className="text-sm text-gray-600 dark:text-gray-200">Total order tahun ini</p>
                     </div>
                 </div>
             </div>
             <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
-                <div className="flex items-center justify-center w-12 bg-blue-500">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
                     <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>new Date(item.transaction_time).toLocaleString('ID',{'year':'2-digit','month':'2-digit'}) == new Date().toLocaleString('ID',{'year':'2-digit','month':'2-digit'})).length}</p>
                 </div>
                 
                 <div className="px-4 py-2 -mx-3">
                     <div className="mx-3">
-                        <span className="font-semibold text-blue-500 dark:text-blue-400">Order Bulan {new Date().toLocaleString('ID',{'month':'long'})}</span>
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Order Bulan {new Date().toLocaleString('ID',{'month':'long'})}</span>
                         <p className="text-sm text-gray-600 dark:text-gray-200">Total order bulan ini</p>
                     </div>
                 </div>
             </div>
-        </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>new Date(item.transaction_time).toLocaleString('ID',{'year':'2-digit','month':'2-digit','day':'2-digit'}) == new Date().toLocaleString('ID',{'year':'2-digit','month':'2-digit','day':'2-digit'})).length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Order Hari {new Date().toLocaleString('ID',{'weekday':'long'})}</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Total order hari ini</p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>item.status=='Lunas').length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Lunas</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Lihat detail pesanan</p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>item.status=='Menunggu pembayaran').length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Menunggu Pembayaran</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Cek status</p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>item.status=='Pembayaran gagal').length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Cancel</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Restore stok</p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>item.status=='Packing').length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Packing</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Isi resi pengiriman</p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>item.status=='Delivery').length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Dalam Pengiriman</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Tracking pengiriman</p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>item.status=='Sampai').length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Sampai Tujuan</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Update komplain atau finish</p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>item.status=='Komplain').length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Komplain</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Proses pesanan komplain</p>
+                    </div>
+                </div>
+            </div>
+            <div className="flex w-full max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800">
+                <div className="flex items-center justify-center w-12 bg-indigo-500">
+                    <p className='text-xl lg:text-2xl font-bold text-white'>{order.filter(item=>item.status=='Finish').length}</p>
+                </div>
+                
+                <div className="px-4 py-2 -mx-3">
+                    <div className="mx-3">
+                        <span className="font-semibold text-indigo-500 dark:text-indigo-400">Finish</span>
+                        <p className="text-sm text-gray-600 dark:text-gray-200">Total order selesai</p>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }

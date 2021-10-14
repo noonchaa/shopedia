@@ -26,7 +26,7 @@ const Dashboard = ({produk}) => {
         <div className='bg-white dark:bg-gray-900'>
             <div className="container px-6 py-4">
             <Report/>
-                <div className='flex justify-start py-2'>
+                <div className='flex justify-start py-2 mt-6 dark:text-white'>
                     <div className='flex justify-center items-center mr-6'>
                         <input type='radio' id='tas' name='tipe' value='tas' defaultChecked onChange={(e)=>setTipe(e.target.value)} />
                         <label htmlFor='tas' className='ml-2'>Tas</label>
@@ -46,7 +46,7 @@ const Dashboard = ({produk}) => {
                         <option key={index} value={item.id} />
                     ))}
                 </datalist>
-                <table className='table-auto border-collapse border border-gray-700 my-4 w-full'>
+                <table className='table-auto border-collapse border border-gray-700 my-4 w-full dark:text-white'>
                     <thead>
                         <tr>
                             <th className='border border-gray-600 py-2'>ID Produk</th>

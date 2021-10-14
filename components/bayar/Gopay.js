@@ -7,6 +7,7 @@ const Gopay = ({user,alamat,cart,ongkir}) => {
     const [loading, setLoading] = useState('Konfirmasi')
     const router = useRouter()
     const uniqueNumber = new Date().getTime()
+    const [pay, setPay] = useState({qr:'',code:''})
     
     let params = {
         payment_type:'gopay',
@@ -87,13 +88,30 @@ const Gopay = ({user,alamat,cart,ongkir}) => {
             }
         })
         await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData.order_id),cart:[]})
-        setTimeout(()=>{router.push('/status?id='+data.order_id)},4000)
+        setPay({qr:orderData.pay_code.code,code:orderData.pay_code.code_bayar})
     }
     return(
         <div className='px-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white'>
+            {pay.code==''?'':
+            <>
+            <p className='py-3'>*Lakukan pembayaran sebelum 15 menit</p>
+            <div className="text-sm text-white capitalize bg-gray-900 text-center -mx-3">
+                <a href={pay.qr}>
+                    <button className='py-3 w-full'>Buka Kode QR</button>
+                </a>
+            </div>
+            <div className="text-sm text-white capitalize bg-gray-900 text-center -mx-3">
+                <a href={pay.code}>
+                    <button className='py-3 w-full'>Buka Gojek App</button>
+                </a>
+            </div>
+            </>
+            }
+            {pay.code!=''?'':
             <div className="text-sm text-white capitalize bg-gray-900 text-center -mx-3">
                 <button className='py-3 w-full' onClick={()=>payNow()}>{loading}</button>
             </div>
+            }
         </div>
     )
 }

@@ -15,7 +15,7 @@ const Admin = ({children}) => {
         if(router.isReady){router.push('/')}
     }    
     return(
-        <div>
+        <div className='min-h-screen bg-white dark:bg-gray-900'>
         <nav className="bg-white shadow dark:bg-gray-800">
             <div className="container px-6 py-4 mx-auto">
                 <div className="md:flex md:items-center md:justify-between">
@@ -39,10 +39,9 @@ const Admin = ({children}) => {
                     
                     <div className={open==false?"hidden flex-1 md:flex md:items-center md:justify-between":'flex-1 md:flex md:items-center md:justify-between'}>
                         <div className="flex flex-col -mx-4 md:flex-row md:items-center md:mx-8">
-                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Join Slack</a>
-                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Browse Topics</a>
-                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Random Item</a>
-                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Experts</a>
+                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Upload</a>
+                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Massal</a>
+                            <a href="#" className="px-2 py-1 mx-2 mt-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">Utility</a>
                         </div>
     
                         <div className="flex items-center mt-4 md:mt-0">

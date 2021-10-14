@@ -93,7 +93,7 @@ const Shopee = ({user,alamat,cart,ongkir}) => {
             <p className='py-3'>*Lakukan pembayaran sebelum 5 menit</p>
             <div className="text-sm text-white capitalize bg-gray-900 text-center -mx-3">
                 <a href={pay}>
-                    <button className='py-3 w-full' onClick={()=>payNow()}>Buka Shopee</button>
+                    <button className='py-3 w-full'>Buka Shopee</button>
                 </a>
             </div>
             </>
