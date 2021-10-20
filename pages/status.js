@@ -2,20 +2,37 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Layout from '../components/Layout'
 import Image from 'next/image'
-import { doc, getDoc, updateDoc } from "@firebase/firestore"
+import { collection, doc, getDoc, getDocs, updateDoc } from "@firebase/firestore"
 import { db } from "../utils/firebaseClient"
 import { AuthUser } from "../components/User"
 
 export const getStaticProps = async () => {
-    const link = await getDoc(doc(db,'utils','site'))
-    return {
-        props: {
-            link: link.data()
+    const res = await getDoc(doc(db,'utils','site'))
+    const data = []
+    const product = await getDocs(collection(db,'product'))
+    product.forEach((doc)=>{
+        data.push(doc.data())
+    })
+    if(res.exists()){
+        return {
+            props: {
+                data: res.data(),
+                produk: data
+            },
+            revalidate: 1
+        }
+    } else {
+        return {
+            props: {
+                data: null,
+                produk: []
+            },
+            revalidate: 1
         }
     }
 }
 
-const Status = ({link}) => {
+const Status = ({data,produk}) => {
     const user = AuthUser()
     const router = useRouter()
     const [stat, setStat] = useState()
@@ -52,7 +69,7 @@ const Status = ({link}) => {
     },[router,user])
 
     return(
-        <Layout tag={link.link} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email}>
+        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
             {!stat?
             <div className='text-center mt-16 max-w-3xl mx-auto h-96'>
                 <h1 className='font-medium tracking-wider text-2xl animate-pulse'>... Loading ...</h1>
@@ -70,6 +87,8 @@ const Status = ({link}) => {
                     <Image src='/svg/pending.svg' layout='fill' objectFit='contain' alt='succes'/>
                 </div>
                 <h1 className='font-medium tracking-wider'>Terima kasih, pesanan anda telah kami terima, silahkan lanjutkan pembayaran sesuai instruksi, kemudian cek profil untuk melihat status pesanan.</h1>
+                <p className='font-medium tracking-wider'>*Untuk pembayaran melalui Gopay, silahkan lakukan pembayaran sebelum 15 menit</p>
+                <p className='font-medium tracking-wider'>**Untuk pembayaran melalui ShopeePay, silahkan lakukan pembayaran sebelum 5 menit</p>
             </div>
             :
             <div className='text-center mt-16 max-w-3xl mx-auto'>

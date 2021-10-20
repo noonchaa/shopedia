@@ -1,4 +1,4 @@
-import { doc, getDoc, updateDoc } from "@firebase/firestore"
+import { collection, doc, getDoc, getDocs, updateDoc } from "@firebase/firestore"
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
@@ -8,15 +8,32 @@ import { AuthUser } from "../../components/User"
 import { db, storage } from "../../utils/firebaseClient"
 
 export const getStaticProps = async () => {
-    const link = await getDoc(doc(db,'utils','site'))
-    return {
-        props: {
-            link: link.data()
+    const res = await getDoc(doc(db,'utils','site'))
+    const data = []
+    const product = await getDocs(collection(db,'product'))
+    product.forEach((doc)=>{
+        data.push(doc.data())
+    })
+    if(res.exists()){
+        return {
+            props: {
+                data: res.data(),
+                produk: data
+            },
+            revalidate: 1
+        }
+    } else {
+        return {
+            props: {
+                data: null,
+                produk: []
+            },
+            revalidate: 1
         }
     }
 }
 
-const Edit = ({link}) => {
+const Edit = ({data,produk}) => {
     const user = AuthUser()
     const router = useRouter()
     const [listCity, setListCity] = useState([])
@@ -65,7 +82,7 @@ const Edit = ({link}) => {
     }
 
     return(
-        <Layout tag={link.link} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email}>
+        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
             <Seo title='Edit Profil'/>
         <header className='bg-gray-100 dark:bg-gray-900 md:py-12 md:px-6'>
         <section className="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">

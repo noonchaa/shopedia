@@ -2,10 +2,10 @@ import Footer from "./Footer"
 import Navbar from "./Navbar"
 import Toggle from "./Toggle"
 
-const Layout = ({children,tag,title,tagline,phone,email}) => {
+const Layout = ({children,tag,title,tagline,phone,email,tipe}) => {
     return(
         <>
-        <Navbar tag={tag}/>
+        <Navbar tag={tag} tipe={tipe} title={title}/>
         <main>
             {children}
         </main>

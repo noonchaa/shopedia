@@ -33,7 +33,7 @@ const Dashboard = ({produk}) => {
                     </div>
                     <div className='flex justify-center items-center mr-6'>
                         <input type='radio' id='sepatu' name='tipe' value='sepatu' onChange={(e)=>setTipe(e.target.value)}/>
-                        <label htmlFor='tas' className='ml-2'>Sepatu</label>
+                        <label htmlFor='sepatu' className='ml-2'>Sepatu</label>
                     </div>
                     <div className='flex justify-center items-center mr-6'>
                         <input type='radio' id='baju' name='tipe' value='baju' onChange={(e)=>setTipe(e.target.value)}/>

@@ -19,7 +19,7 @@ const Order = ({order}) => {
         }
     },[order])
 
-    if(!detail) return <div></div>
+    if(!detail) return ''
     return(
         <div className={!detail?'hidden':'bg-white border-2 border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-6 relative'}>
             <h2 className="font-semibold tracking-tight text-indigo-600 uppercase overflow-hidden mb-4">

@@ -85,6 +85,7 @@ const Shopee = ({user,alamat,cart,ongkir}) => {
         })
         await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData.order_id),cart:[]})
         setPay(orderData.pay_code.code_bayar)
+        setTimeout(()=>{router.push('/status?id='+data.order_id)},2000)
     }
     return(
         <div className='px-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white'>

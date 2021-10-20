@@ -37,7 +37,7 @@ const Home = ({data,produk}) => {
 
     if(!data) return <Frame/>
     return(
-        <Layout tag={data.link} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
+        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
             <Seo title={data.siteTitle} desc={data.tagline}/>
             <Hero tagline={data.tagline} value={data.value} hero={data.hero} />
             <New produk={produk.slice(0,3)}/>

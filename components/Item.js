@@ -19,7 +19,7 @@ const Item = ({produk, tag}) => {
                         </div>
                         <Link href={'/produk/'+item.id}>
                         <a className="w-full h-48 relative transform hover:scale-105">
-                            <Image src={item.foto} layout='fill' objectFit='cover' alt='Produk' unoptimized/>
+                            <Image src={item.foto} layout='fill' objectFit='cover' alt='Produk'/>
                         </a>
                         </Link>
                         <div className="flex items-center justify-between px-4 py-2 bg-gray-900 dark:bg-gray-800">

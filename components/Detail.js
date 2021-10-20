@@ -11,7 +11,7 @@ const Detail = ({data}) => {
             <div className="items-center lg:flex"><div className='w-full md:w-1/2 mb-4'>
                     <div className="flex flex-col items-center justify-center">
                         <div className="w-full h-96 bg-gray-300 rounded-lg shadow-md relative">
-                            <Image src={foto} alt='produk' priority={true} layout='fill' objectFit='cover' className='rounded-lg shadow-md' unoptimized/>
+                            <Image src={foto} alt='produk' priority={true} layout='fill' objectFit='cover' className='rounded-lg shadow-md'/>
                         </div>
                         <div className="w-56 -mt-10 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 z-10 md:w-80">
                             <h3 className="py-2 font-bold tracking-wide text-center text-gray-800 uppercase dark:text-white">{id}</h3>

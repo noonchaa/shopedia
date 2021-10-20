@@ -52,7 +52,7 @@ const Product = ({link, data, produk}) => {
 
     if(router.isFallback) return <Fall/>
     return(
-        <Layout tag={link.link} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email} >
+        <Layout tag={link.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email} >
             <Seo title={data.nama} desc={data.desc}/>
             <Detail data={data} />
             <Item produk={produk.filter(item=>item.tag==data.tag).slice(0,4)} tag='Produk serupa'/>

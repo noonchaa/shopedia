@@ -1,21 +1,38 @@
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
-import { doc, getDoc } from "@firebase/firestore"
+import { collection, doc, getDoc, getDocs } from "@firebase/firestore"
 import { db } from "../utils/firebaseClient"
 
 export const getStaticProps = async () => {
-    const link = await getDoc(doc(db,'utils','site'))
-    return {
-        props: {
-            link: link.data()
+    const res = await getDoc(doc(db,'utils','site'))
+    const data = []
+    const product = await getDocs(collection(db,'product'))
+    product.forEach((doc)=>{
+        data.push(doc.data())
+    })
+    if(res.exists()){
+        return {
+            props: {
+                data: res.data(),
+                produk: data
+            },
+            revalidate: 1
+        }
+    } else {
+        return {
+            props: {
+                data: null,
+                produk: []
+            },
+            revalidate: 1
         }
     }
 }
 
-const Term = ({link}) => {
+const Term = ({data,produk}) => {
     return(
-        <Layout tag={link.link} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email}>
-            <Seo title='Term of Service'/>
+        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
+            <Seo title='Batasan Layanan'/>
             <div className='py-12 px-6 bg-white dark:bg-gray-800 dark:text-white'>
             <h1 className='text-2xl font-semibold mb-2'>Website Terms and Conditions of Use</h1>
 

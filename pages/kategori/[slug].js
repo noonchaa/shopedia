@@ -8,20 +8,24 @@ import Seo from "../../components/Seo"
 import { db } from "../../utils/firebaseClient"
 
 export const getStaticPaths = async () => {
-    const res = await getDoc(doc(db,'utils','site'))
+    const data = []
+    const res = await getDocs(collection(db,'product'))
+    res.forEach((doc)=>{
+        data.push(doc.data().tipe)
+    })
+    const isi = data.filter((item,index,self)=>self.indexOf(item)===index)
     return {
-        paths: res.data().link.map(item=>({
-            params: {slug:item}
+        paths: isi.map(item=>({
+            params: {slug: item}
         })),
         fallback: true
     }
 }
-
 export const getStaticProps = async ({params}) => {
     const {slug} = params
     const link = await getDoc(doc(db,'utils','site'))
     const data = []
-    const res = await getDocs(query(collection(db,'product'),where('tag','==',slug)))
+    const res = await getDocs(query(collection(db,'product'),where('tipe','==',slug)))
     res.forEach((doc)=>{
         data.push(doc.data())
     })
@@ -49,17 +53,17 @@ export const getStaticProps = async ({params}) => {
     }
 }
 
-const Tag = ({data,produk,tag,all}) => {
+const Kategori = ({data,produk,tag,all}) => {
     const router = useRouter()
 
     if(router.isFallback) return <Fall/>
     return(
         <Layout tag={data.link} tipe={all.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
-            <Seo title={tag.toUpperCase()+' IMPORT'}/>
+            <Seo title={tag}/>
             <Hero tagline={data.tagline} value={data.value} hero={produk[0].foto}/>
             <Item produk={produk.sort((a,b)=>b.add-a.add).slice(0,4)} tag='Koleksi terbaru'/>
             <Item produk={produk} tag='Semua Koleksi'/>
         </Layout>
     )
 }
-export default Tag
+export default Kategori

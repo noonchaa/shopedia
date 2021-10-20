@@ -1,4 +1,4 @@
-import { doc, getDoc } from "@firebase/firestore"
+import { collection, doc, getDoc, getDocs } from "@firebase/firestore"
 import Layout from "../../components/Layout"
 import { AuthUser } from "../../components/User"
 import { auth, db } from "../../utils/firebaseClient"
@@ -12,15 +12,32 @@ import { signOut } from "@firebase/auth"
 import Order from "../../components/Order"
 
 export const getStaticProps = async () => {
-    const link = await getDoc(doc(db,'utils','site'))
-    return {
-        props: {
-            link: link.data()
+    const res = await getDoc(doc(db,'utils','site'))
+    const data = []
+    const product = await getDocs(collection(db,'product'))
+    product.forEach((doc)=>{
+        data.push(doc.data())
+    })
+    if(res.exists()){
+        return {
+            props: {
+                data: res.data(),
+                produk: data
+            },
+            revalidate: 1
+        }
+    } else {
+        return {
+            props: {
+                data: null,
+                produk: []
+            },
+            revalidate: 1
         }
     }
 }
 
-const Profile = ({link}) => {
+const Profile = ({data,produk}) => {
     const router = useRouter()
     const user = AuthUser()
     const [userData, setUserData] = useState({nama:'',email:'',foto:'',alamat:{city_id:'',city_name:'',postal_code:'',province:'',province_id:'',type:'',full:''},phone:'',order:[],cart:[]})
@@ -50,12 +67,12 @@ const Profile = ({link}) => {
     }
 
     return(
-        <Layout tag={link.link} title={link.siteTitle} tagline={link.tagline} phone={link.phone} email={link.email}>
+        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
             <Seo title='Profil'/>
         <header className='bg-gray-100 dark:bg-gray-900 py-12 px-6'>
         <div className="max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800">
             <div className='relative w-full h-56'>
-            <Image src={userData.foto==''?'/logo/logo.png':userData.foto} layout='fill' objectFit='cover' priority={true} alt='Foto profile' unoptimized/>
+            <Image src={userData.foto==''?'/logo/logo.png':userData.foto} layout='fill' objectFit='cover' priority={true} alt='Foto profile'/>
             </div>
             
             <div className="flex items-center px-6 py-3 bg-gray-700 text-white">
