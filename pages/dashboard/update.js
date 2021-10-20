@@ -76,7 +76,7 @@ const Update = () => {
                 {produk.filter(item=>item.id==cari).map((item,index)=>(
                     <form key={index} onSubmit={updateData}>
                         <div className='mt-4'>
-                            <Image src={item.foto} width={160} height={160} alt='Foto'/>
+                            <Image src={item.foto} width={160} height={160} alt='Foto' unoptimized/>
                         </div>
                         <div className="grid grid-cols-1 gap-6 mt-4 sm:grid-cols-2">
                             <div>

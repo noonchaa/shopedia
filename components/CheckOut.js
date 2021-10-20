@@ -63,7 +63,7 @@ const CheckOut = () => {
                     <div key={index} className='p-3 text-sm text-gray-600 transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white'>
                     <div className="flex items-center">
                         <div className='relative w-16 h-16 flex-none'>
-                            <Image src={item.foto} layout='fill' objectFit='cover' alt='Item'/>
+                            <Image src={item.foto} layout='fill' objectFit='cover' alt='Item' unoptimized/>
                         </div>
                         <div className="mx-1">
                             <h1 className="text-sm font-semibold text-gray-700 dark:text-gray-200 capitalize">{item.nama}</h1>

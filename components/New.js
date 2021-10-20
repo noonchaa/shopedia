@@ -12,7 +12,7 @@ const New = ({produk}) => {
                         <div className="flex flex-col items-center justify-center" key={index}>
                             <Link href={'/produk/'+item.id}>
                                 <a className="w-full h-64 bg-gray-300 bg-center bg-cover rounded-lg shadow-md relative z-0 transform hover:scale-105">
-                                <Image src={item.foto} layout='fill' objectFit='cover' alt='New produk' className='rounded-lg'/>
+                                <Image src={item.foto} layout='fill' objectFit='cover' alt='New produk' className='rounded-lg' unoptimized/>
                                 </a>
                             </Link>
 

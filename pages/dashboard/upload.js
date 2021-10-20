@@ -102,7 +102,7 @@ const Upload = () => {
                 {!csvArray.length?'':
                 <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4'>
                     {csvArray.map((item,index)=>(
-                        <Image src={item.foto} width={120} height={120} alt='foto' className='rounded-lg' key={index}/>
+                        <Image src={item.foto} width={120} height={120} alt='foto' className='rounded-lg' key={index} unoptimized/>
                     ))}
                 </div>
                 }

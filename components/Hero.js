@@ -16,7 +16,7 @@ const Hero = ({tagline,value,hero}) => {
                 </div>
         
                 <div className="flex items-center justify-center w-full mt-6 lg:mt-0 lg:w-1/2 relative h-80">
-                    <Image src={hero} layout='fill' objectFit='cover' priority={true} alt='New fashion'/>
+                    <Image src={hero} layout='fill' objectFit='cover' priority={true} alt='New fashion' unoptimized/>
                 </div>
             </div>
         </div>
