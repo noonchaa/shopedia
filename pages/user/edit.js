@@ -6,6 +6,7 @@ import Layout from "../../components/Layout"
 import Seo from "../../components/Seo"
 import { AuthUser } from "../../components/User"
 import { db, storage } from "../../utils/firebaseClient"
+import Loader from "../../components/Loader"
 
 export const getStaticProps = async () => {
     const res = await getDoc(doc(db,'utils','site'))
@@ -20,7 +21,7 @@ export const getStaticProps = async () => {
                 data: res.data(),
                 produk: data
             },
-            revalidate: 1
+            revalidate: 60
         }
     } else {
         return {
@@ -28,7 +29,7 @@ export const getStaticProps = async () => {
                 data: null,
                 produk: []
             },
-            revalidate: 1
+            revalidate: 60
         }
     }
 }
@@ -81,6 +82,7 @@ const Edit = ({data,produk}) => {
         })
     }
 
+    if(!user) return <Loader/>
     return(
         <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
             <Seo title='Edit Profil'/>
@@ -98,7 +100,7 @@ const Edit = ({data,produk}) => {
     
                     <div>
                         <label className="text-gray-700 dark:text-gray-200" htmlFor="email">Alamat Email</label>
-                        <input id="email" type="email" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" required/>
+                        <input id="email" type="email" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" value={user.email} placeholder={user.email} disabled/>
                     </div>
     
                     <div>

@@ -13,7 +13,7 @@ const Utils = () => {
     const [loading, setLoading] = useState(false)
 
     useEffect(()=>{
-        onSnapshot(doc(db,'utils','site'),(doc)=>{
+        const unsub = onSnapshot(doc(db,'utils','site'),(doc)=>{
             setSite(doc.data())
         })
         if(auth.currentUser){
@@ -29,7 +29,7 @@ const Utils = () => {
         }
 
         return () => {
-            setSite('')
+            unsub()
             setAdmin('')
         }
     },[])

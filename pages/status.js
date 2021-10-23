@@ -19,7 +19,7 @@ export const getStaticProps = async () => {
                 data: res.data(),
                 produk: data
             },
-            revalidate: 1
+            revalidate: 60
         }
     } else {
         return {
@@ -27,7 +27,7 @@ export const getStaticProps = async () => {
                 data: null,
                 produk: []
             },
-            revalidate: 1
+            revalidate: 60
         }
     }
 }

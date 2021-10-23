@@ -10,21 +10,15 @@ const Update = () => {
     const [cari, setCari] = useState('')
     
     useEffect(()=>{
-        const getProduk = async () => {
-            onSnapshot(collection(db,'product'),(doc)=>{
-                const data = []
-                doc.forEach((isi)=>{
-                    data.push(isi.data())
-                })
-                setProduk(data)
+        const unsub = onSnapshot(collection(db,'product'),(doc)=>{
+            const data = []
+            doc.forEach((isi)=>{
+                data.push(isi.data())
             })
-        }
-        getProduk()
+            setProduk(data)
+        })
 
-        return () => {
-            getProduk()
-            setProduk([])
-        }
+        return () => unsub()
     },[])
 
     const updateData = async (e) => {

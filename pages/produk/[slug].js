@@ -43,7 +43,8 @@ export const getStaticProps = async ({params}) => {
             link: link.data(),
             data: data.data(),
             produk: allProduk
-        }
+        },
+        revalidate: 60
     }
 }
 

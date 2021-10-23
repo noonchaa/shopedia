@@ -1,26 +1,30 @@
 import { collection, getDocs } from "@firebase/firestore"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Admin from "../../components/admin/Admin"
 import Report from "../../components/admin/Report"
 import { db } from "../../utils/firebaseClient"
 
-export const getStaticProps = async () => {
-    const data = []
-    const res = await getDocs(collection(db,'product'))
-    res.forEach((doc)=>{
-        data.push(doc.data())
-    })
-    return {
-        props: {
-            produk: data
-        },
-        revalidate: 1
-    }
-}
-
-const Dashboard = ({produk}) => {
+const Dashboard = () => {
     const [tipe, setTipe] = useState('tas')
     const [cari, setCari] = useState('')
+    const [produk, setProduk] = useState([])
+
+    useEffect(()=>{
+        const getProduk = async () => {
+            const data = []
+            const res = await getDocs(collection(db,'product'))
+            res.forEach((doc)=>{
+                data.push(doc.data())
+            })
+            setProduk(data)
+        }
+        getProduk()
+
+        return () => {
+            setProduk([])
+        }
+    })
+
     return(
         <Admin>
         <div className='bg-white dark:bg-gray-900'>

@@ -49,7 +49,7 @@ export const getStaticProps = async ({params}) => {
             tag: slug,
             all: allProduk
         },
-        revalidate: 1
+        revalidate: 60
     }
 }
 

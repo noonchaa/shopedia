@@ -9,21 +9,15 @@ const Lunas = () => {
     const [order, setOrder] = useState([])
 
     useEffect(()=>{
-        const getOrder = async () => {
-            onSnapshot(collection(db,'order'),(doc)=>{
-                const fav = []
-                doc.forEach((isi)=>{
-                    fav.push(isi.data())
-                })
-                setOrder(fav.filter((item)=>item.status == 'Lunas'))
+        const unsub = onSnapshot(collection(db,'order'),(doc)=>{
+            const data = []
+            doc.forEach((isi)=>{
+                data.push(isi.data())
             })
-        }
-        getOrder()
+            setOrder(data.filter((item)=>item.status == 'Lunas'))
+        })
         
-        return () => {
-            getOrder()
-            setOrder([])
-        }
+        return () => unsub()
     },[])
 
     return(

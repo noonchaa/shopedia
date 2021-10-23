@@ -1,6 +1,5 @@
 import { signOut } from '@firebase/auth'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { auth } from '../../utils/firebaseClient'
 import Toggle from '../Toggle'
@@ -8,12 +7,9 @@ import { AuthUser } from '../User'
 
 const Admin = ({children}) => {
     const user = AuthUser()
-    const router = useRouter()
     const [open, setOpen] = useState(false)
 
-    if(!user || user && user.displayName!='admin'){
-        if(router.isReady){router.push('/')}
-    }    
+    if(!user || user && user.displayName !== 'admin') return <h1 className='text-center my-20 text-2xl text-red-600'>Anda tidak terauthentifikasi untuk mengakses halaman ini</h1>
     return(
         <div className='min-h-screen bg-white dark:bg-gray-900'>
         <nav className="bg-white shadow dark:bg-gray-800">
@@ -50,7 +46,8 @@ const Admin = ({children}) => {
                             </Link>
                         </div>
     
-                        <div className="flex items-center mt-4 md:mt-0">
+                        <div className="flex flex-col md:flex-row mt-4 md:mt-0">
+                            <p className="md:px-2 py-1 md:mx-2 text-sm font-medium text-gray-700 transition-colors duration-200 transform rounded-md md:mt-0 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700">{user?user.email:''}</p>
                             <button type="button" className="flex items-center focus:outline-none" onClick={()=>signOut(auth)}>
                                 <h3 className="text-sm font-medium text-gray-700 dark:text-gray-200">Log Out</h3>
                             </button>

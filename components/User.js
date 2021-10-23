@@ -1,27 +1,25 @@
-import React, { useContext, useEffect, useState } from "react"
+import { createContext, useContext, useEffect, useState } from 'react'
 import {auth} from '../utils/firebaseClient'
 import {onAuthStateChanged} from 'firebase/auth'
 
-export const UserContext = React.createContext(null)
+export const UserContext = createContext()
 
-export const User = ({children}) => {
-    const [signUser, setSignUser] = useState(null)
+export default function UserContextComp({children}){
+    const [user, setUser] = useState(null)
 
     useEffect(()=>{
-        onAuthStateChanged(auth,(user)=>{
-            if (user) {
-                setSignUser(user)
+        const unsub = onAuthStateChanged(auth,(user)=>{
+            if(user){
+                setUser(user)
             } else {
-                setSignUser(null)
+                setUser(null)
             }
         })
-        return () => {
-            setSignUser(null)
-        }
+        return () => unsub()
     },[])
 
     return(
-        <UserContext.Provider value={signUser}>
+        <UserContext.Provider value={user}>
             {children}
         </UserContext.Provider>
     )
