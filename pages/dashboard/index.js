@@ -23,7 +23,7 @@ const Dashboard = () => {
         return () => {
             setProduk([])
         }
-    })
+    },[])
 
     return(
         <Admin>
