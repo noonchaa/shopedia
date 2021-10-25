@@ -1,30 +1,33 @@
-import { doc, getDoc } from "@firebase/firestore"
-import { useEffect, useState } from "react"
-import { db } from "../utils/firebaseClient"
+import { get } from "@firebase/database"
+import { useState } from "react"
+import { RDB, refRDB } from "../utils/firebaseClient"
 
 const Order = ({order}) => {
     const [detail, setDetail] = useState()
+    const [open, setOpen] = useState(false)
 
-    useEffect(()=>{
-        const getOrder = async () => {
-            const res = await getDoc(doc(db,'order',order))
-            if(res.exists()){
-                setDetail(res.data())
-            }
+    const getOrder = async () => {
+        if(open==false){
+            await get(refRDB(RDB,'order/'+order)).then((snap)=>{
+                setDetail(snap.val())
+            })
+            setOpen(!open)
+        } else {
+            setOpen(!open)
         }
-        getOrder()
+    }
 
-        return () => {
-            setDetail()
-        }
-    },[order])
-
-    if(!detail) return ''
     return(
-        <div className={!detail?'hidden':'bg-white border-2 border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-6 relative'}>
-            <h2 className="font-semibold tracking-tight text-indigo-600 uppercase overflow-hidden mb-4">
-                {detail.order_id}
-            </h2>
+        <div className='bg-white border-2 border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-6 relative'>
+        <h2 className="font-semibold tracking-tight text-indigo-600 uppercase overflow-hidden mb-4">
+            {order}
+        </h2>
+        <button onClick={()=>getOrder()} className='px-3 py-1 text-sm font-bold text-white bg-gray-800 dark:bg-gray-200 dark:text-gray-900 rounded-lg tracking-wider'>
+            {open==false?'Detail':'Tutup'}
+        </button>
+        <div className={open==false?'hidden':'block mt-4'}>
+            {!detail?'':
+            <div>
             <p className="font-semibold tracking-tight overflow-hidden mb-4 dark:text-white capitalize">{new Date(detail.transaction_time).toLocaleString('ID',{'weekday':'long','day':'2-digit','month':'short','year':'numeric','hour':'2-digit','minute':'2-digit'})} WIB</p>
             {detail.status=='Lunas'?'':
             <>
@@ -73,6 +76,9 @@ const Order = ({order}) => {
                 ))}
             </ul>
                 <p className='dark:text-white font-bold text-lg absolute right-6 bottom-6 capitalize'>{detail.status}</p>
+            </div>
+            }
+        </div>
         </div>
     )
 }

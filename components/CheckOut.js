@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import Image from 'next/image'
 import { AuthUser } from "./User"
-import { collection, doc, getDocs, onSnapshot } from "@firebase/firestore"
-import { db } from "../utils/firebaseClient"
+import { doc, onSnapshot } from "@firebase/firestore"
+import { db, RDB, refRDB } from "../utils/firebaseClient"
 import CartOp from "./CartOp"
 import Kurir from "./Kurir"
+import { get } from "@firebase/database"
 
 const CheckOut = () => {
     const user = AuthUser()
@@ -18,14 +19,15 @@ const CheckOut = () => {
         const unsub = onSnapshot(doc(db,'users',user.uid),(doc)=>{
             setCart(doc.data().cart)
         })
-        return () => unsub()
+        return () => {
+            unsub()
+        }
     },[user])
 
     const bayarCek = async () => {
         const data = []
-        const stok = await getDocs(collection(db,'product'))
-        stok.forEach(doc=>{
-            data.push(doc.data())
+        await get(refRDB(RDB,'product')).then((snap)=>{
+            data.concat(snap.val())
         })
         const filtered = []
         cart.forEach((isi)=>{

@@ -29,7 +29,8 @@ const Term = ({data,tag,tipe}) => {
     return(
         <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
             <Seo title='Batasan Layanan'/>
-            <div className='py-12 px-6 bg-white dark:bg-gray-800 dark:text-white'>
+            <div className='bg-white dark:bg-gray-800 dark:text-white'>
+            <div className='py-12 px-6 container mx-auto'>
             <h1 className='text-2xl font-semibold mb-2'>Website Terms and Conditions of Use</h1>
 
             <h2 className='text-xl font-semibold my-2'>1. Terms</h2>
@@ -77,6 +78,7 @@ const Term = ({data,tag,tipe}) => {
             <h2 className='text-xl font-semibold my-2'>9. Governing Law</h2>
 
             <p>Any claim related to Shopedia Website shall be governed by the laws of id without regards to its conflict of law provisions.</p>
+            </div>
             </div>
         </Layout>
     )

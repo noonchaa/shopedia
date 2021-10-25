@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import Admin from "../../components/admin/Admin"
 import {FaFileCsv} from 'react-icons/fa'
 import Image from 'next/image'
-import { doc, getDoc, setDoc } from "@firebase/firestore"
-import { db } from "../../utils/firebaseClient"
+import { RDB, refRDB } from "../../utils/firebaseClient"
+import { off, onValue, set } from "@firebase/database"
 
 const Upload = () => {
     const [csvArray, setCsvArray] = useState([])
@@ -11,18 +11,12 @@ const Upload = () => {
     const [fileUrl, setFileUrl] = useState('')
 
     useEffect(()=>{
-        const getFile = async () => {
-            const res = await getDoc(doc(db,'utils','site'))
-            if(res.exists()){
-                setFileUrl(res.data().template)
-            } else {
-                setFileUrl('')
-            }
-        }
-        getFile()
+        onValue(refRDB(RDB,'util/site'),(snap)=>{
+            setFileUrl(snap.val().template)
+        })
 
         return () => {
-            setFileUrl('')
+            off(refRDB(RDB,'util/site'))
         }
     },[])
 
@@ -72,8 +66,8 @@ const Upload = () => {
                 add: new Date().getTime(),
                 tipe: doc.tipe
             }))
-            data.forEach( async (isi)=>{
-                await setDoc(doc(db,'product',isi.id),{...isi})
+            data.forEach((isi)=>{
+                set(refRDB(RDB,'product/'+isi.id),{...isi})
             })
             setTimeout(()=>{setLoading(false)},5000)
         }

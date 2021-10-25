@@ -1,10 +1,19 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AddCart from './AddCart'
 
 const Detail = ({data}) => {
     const {foto,nama,desc,harga,warna,berat,size,id} = data
-    const [uk, setUk] = useState(size[0])
+    const [uk, setUk] = useState()
+
+    useEffect(()=>{
+        if(size){
+            setUk(size[0])
+        } else {
+            setUk()
+        }
+    },[size])
+
     return(
         <header className='bg-white dark:bg-gray-800'>
         <div className="container px-6 py-16 mx-auto">
@@ -28,11 +37,12 @@ const Detail = ({data}) => {
                         <h2 className='text-xl font-semibold text-gray-600 dark:text-gray-400 capitalize'>Warna : {warna}</h2>
                         <h2 className='text-xl font-semibold text-gray-600 dark:text-gray-400'>Berat : {berat} gram</h2>
                         <div className='flex justify-start my-4'>
-                        {size.map((item,index)=>(
+                        {size?
+                        size.map((item,index)=>(
                             <div className={item==uk?'w-8 h-8 rounded-full bg-indigo-600 flex justify-center items-center mr-4 cursor-pointer hover:bg-indigo-500':'w-8 h-8 rounded-full bg-gray-800 dark:bg-white flex justify-center items-center mr-4 cursor-pointer hover:bg-indigo-600 dark:hover:bg-gray-100'} key={index} onClick={()=>setUk(item)}>
                                 <p className='font-semibold text-white uppercase dark:text-gray-800'>{item}</p>
                             </div>
-                        ))}
+                        )):''}
                         </div>
                         <AddCart dark id={id} nama={nama} harga={harga} size={!uk?'':uk} warna={warna} foto={foto} berat={berat}/>
                     </div>

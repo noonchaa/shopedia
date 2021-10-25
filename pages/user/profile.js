@@ -107,7 +107,7 @@ const Profile = ({data,tag,tipe}) => {
             </a>
             </Link>
         </div>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 py-8 container mx-auto'>
         {order.map((item,index)=>(
             <Order order={item} key={index}/>
         ))}

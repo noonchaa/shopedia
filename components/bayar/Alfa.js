@@ -1,7 +1,8 @@
-import { arrayUnion, doc, getDoc, setDoc, updateDoc } from "@firebase/firestore"
+import { get, set, update } from "@firebase/database"
+import { arrayUnion, doc, updateDoc } from "@firebase/firestore"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { db } from "../../utils/firebaseClient"
+import { db, RDB, refRDB } from "../../utils/firebaseClient"
 
 const Alfa = ({user,alamat,cart,ongkir}) => {
     const [loading, setLoading] = useState('Konfirmasi')
@@ -79,12 +80,11 @@ const Alfa = ({user,alamat,cart,ongkir}) => {
         orderData.transaction_time= await data.transaction_time
         orderData.pay_code.bank= data.store
         orderData.pay_code.code_bayar= data.payment_code
-        await setDoc(doc(db,'order',orderData.order_id),orderData)
+        await set(refRDB(RDB,'order/'+orderData.order_id),orderData)
         orderData.item_details.forEach( async (item)=>{
-          const getStocks = await getDoc(doc(db,'product',item.id))
-            if(getStocks.exists()){
-              await updateDoc(doc(db,'product',item.id),{stok:getStocks.data().stok - item.quantity})
-            }
+            await get(refRDB(RDB,'product/'+item.id)).then((snap)=>{
+                update(refRDB(RDB,'product/'+item.id),{stok: snap.val().stok - item.quantity})
+            })
         })
         await updateDoc(doc(db,'users',user.uid),{order:arrayUnion(orderData.order_id),cart:[]})
         setPay(orderData.pay_code.code_bayar)

@@ -1,8 +1,8 @@
-import { collection, doc, onSnapshot, updateDoc } from "@firebase/firestore"
 import { useEffect, useState } from "react"
 import Admin from "../../components/admin/Admin"
-import { db } from "../../utils/firebaseClient"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 import Image from 'next/image'
+import { off, onValue, update } from "@firebase/database"
 
 const Update = () => {
     const [produk, setProduk] = useState([])
@@ -10,23 +10,21 @@ const Update = () => {
     const [cari, setCari] = useState('')
     
     useEffect(()=>{
-        const unsub = onSnapshot(collection(db,'product'),(doc)=>{
-            const data = []
-            doc.forEach((isi)=>{
-                data.push(isi.data())
-            })
-            setProduk(data)
+        onValue(refRDB(RDB,'product'),(snap)=>{
+            setProduk(Object.values(snap.val()))
         })
 
-        return () => unsub()
+        return () => {
+            off(refRDB(RDB,'product'))
+        }
     },[])
 
     const updateData = async (e) => {
         e.preventDefault()
-        await updateDoc(doc(db,'product',e.target.id.value),{
+        await update(refRDB(RDB,'product/'+e.target.id.value),{
             nama: e.target.nama.value,
             warna: e.target.warna.value,
-            size: e.target.size.value.split(','),
+            size: e.target.size?e.target.size.value.split(','):'',
             desc: e.target.deskripsi.value,
             harga: Number(e.target.harga.value),
             berat: Number(e.target.berat.value),
@@ -97,11 +95,13 @@ const Update = () => {
                                 <label className="text-gray-700 dark:text-gray-200" htmlFor="warna">Warna</label>
                                 <input id="warna" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" placeholder={item.warna} required/>
                             </div>
+                            {item.size?
                             <div>
                                 <label className="text-gray-700 dark:text-gray-200" htmlFor="size">Size</label>
                                 <input id="size" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" placeholder={item.size.map(item=>item)} disabled={!item.size.length?true:false}/>
                                 <p className="text-gray-700 dark:text-gray-200">*Pisahkan dengan koma untuk setiap ukuran</p>
-                            </div>
+                            </div>:
+                            ''}
                             <div>
                                 <label className="text-gray-700 dark:text-gray-200" htmlFor="berat">Berat</label>
                                 <input id="berat" type="number" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-300 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-500 dark:focus:border-blue-500 focus:outline-none focus:ring" placeholder={item.berat+' gram'} required/>

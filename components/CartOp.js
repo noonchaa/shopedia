@@ -3,7 +3,8 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { FaPlusCircle, FaMinusCircle } from "react-icons/fa"
 import {BiRefresh} from 'react-icons/bi'
-import { db } from "../utils/firebaseClient"
+import { db, RDB, refRDB } from "../utils/firebaseClient"
+import { get } from "@firebase/database"
 
 const CartOp = ({user,item}) => {
     const [stat, setStat] = useState(false)
@@ -13,7 +14,10 @@ const CartOp = ({user,item}) => {
     
     const cartHandler = async (op) => {
         setFail('')
-        const stok = await getDoc(doc(db,'product',id))
+        let stok = 0
+        await get(refRDB(RDB,'product/'+id)).then((snap)=>{
+            stok = snap.val().stok
+        })
         const userData = await getDoc(doc(db,'users',user.uid))
         const cart = userData.data().cart
         const cekCart = cart.filter(item=>item.id==id)
@@ -39,7 +43,7 @@ const CartOp = ({user,item}) => {
             }
             return
         }
-        if(qty < stok.data().stok){
+        if(qty < stok){
             if(op=='min'){
                 size.shift()
                 cart.splice(indexItem,1,{
@@ -69,7 +73,7 @@ const CartOp = ({user,item}) => {
             }
             return
         }
-        if(qty == stok.data().stok){
+        if(qty == stok){
             if(op=='min'){
                 size.shift()
                 cart.splice(indexItem,1,{
@@ -89,7 +93,7 @@ const CartOp = ({user,item}) => {
             }
             return
         }
-        if(qty > stok.data().stok){
+        if(qty > stok){
             if(op=='min'){
                 size.shift()
                 cart.splice(indexItem,1,{

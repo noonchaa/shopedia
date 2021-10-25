@@ -1,6 +1,7 @@
+import { get } from "@firebase/database"
 import { arrayUnion, doc, getDoc, updateDoc } from "@firebase/firestore"
 import { useState } from "react"
-import { db } from "../utils/firebaseClient"
+import { db, RDB, refRDB } from "../utils/firebaseClient"
 import { AuthUser } from "./User"
 
 const AddCart = ({dark,id,harga,nama,size,warna,foto,berat}) => {
@@ -12,50 +13,56 @@ const AddCart = ({dark,id,harga,nama,size,warna,foto,berat}) => {
             setText('Silahkan Login')
             setTimeout(()=>{setText('Keranjang')},2000)
         } else {
-            const stock = await getDoc(doc(db,'product',id))
-            if(stock.data().stok==0){
-                setText('Stok Habis')
-                setTimeout(()=>{setText('Keranjang')},2000)
-            } else {
-                setText('Loading')
-                const userData = await getDoc(doc(db,'users',user.uid))
-                const cekCart = userData.data().cart.filter(item=>item.id==id)
-                if(!cekCart.length){
-                    updateDoc(doc(db,'users',user.uid),{
-                        cart: arrayUnion({
-                            nama: nama,
-                            id: id,
-                            harga: harga,
-                            qty: 1,
-                            size: [size],
-                            warna: warna,
-                            foto: foto,
-                            berat: berat
-                        })
-                    })
-                    setTimeout(()=>{setText('Keranjang')},500)
+            await get(refRDB(RDB,'product/'+id)).then( async (snap)=>{
+                if(snap.exists()){
+                    if(snap.val().stok == 0){
+                        setText('Stok Habis')
+                        setTimeout(()=>{setText('Keranjang')},2000)
+                    } else {
+                        setText('Loading')
+                        const userData = await getDoc(doc(db,'users',user.uid))
+                        const cekCart = userData.data().cart.filter(item=>item.id==id)
+                        if(!cekCart.length){
+                            updateDoc(doc(db,'users',user.uid),{
+                                cart: arrayUnion({
+                                    nama: nama,
+                                    id: id,
+                                    harga: harga,
+                                    qty: 1,
+                                    size: [size],
+                                    warna: warna,
+                                    foto: foto,
+                                    berat: berat
+                                })
+                            })
+                            setTimeout(()=>{setText('Keranjang')},500)
+                        } else {
+                            const cart = userData.data().cart
+                            const indexItem = cart.findIndex((item)=>item.id==id)
+                            const oldQty = cekCart[0].qty
+                            const oldSize = cekCart[0].size
+                            oldSize.splice(0,0,size)
+                            cart.splice(indexItem,1,{
+                                nama: nama,
+                                id: id,
+                                harga: harga,
+                                qty: oldQty+1,
+                                size: oldSize,
+                                warna: warna,
+                                foto: foto,
+                                berat: berat
+                            })
+                            updateDoc(doc(db,'users',user.uid),{
+                                cart: cart
+                            })
+                            setTimeout(()=>{setText('Keranjang')},500)
+                        }
+                    }
                 } else {
-                    const cart = userData.data().cart
-                    const indexItem = cart.findIndex((item)=>item.id==id)
-                    const oldQty = cekCart[0].qty
-                    const oldSize = cekCart[0].size
-                    oldSize.splice(0,0,size)
-                    cart.splice(indexItem,1,{
-                        nama: nama,
-                        id: id,
-                        harga: harga,
-                        qty: oldQty+1,
-                        size: oldSize,
-                        warna: warna,
-                        foto: foto,
-                        berat: berat
-                    })
-                    updateDoc(doc(db,'users',user.uid),{
-                        cart: cart
-                    })
-                    setTimeout(()=>{setText('Keranjang')},500)
+                    setText('Stok Habis')
+                    setTimeout(()=>{setText('Keranjang')},2000)
                 }
-            }
+            })
         }
         
     }

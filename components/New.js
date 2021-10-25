@@ -21,7 +21,7 @@ const New = ({produk}) => {
                                 
                                 <div className="flex items-center justify-between px-3 py-2 bg-gray-200 dark:bg-gray-700">
                                     <span className="font-bold text-gray-800 dark:text-gray-200">Rp. {Number(item.harga).toLocaleString('ID',{'currency':'IDR'})}</span>
-                                    {item.size.length?
+                                    {item.size?
                                     <Size size={item.size} id={item.id} harga={item.harga} nama={item.nama} warna={item.warna} foto={item.foto} berat={item.berat} />
                                     :
                                     <AddCart dark id={item.id} harga={item.harga} nama={item.nama} size={''} warna={item.warna} foto={item.foto} berat={item.berat} />

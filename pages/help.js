@@ -29,7 +29,8 @@ const Help = ({data,tag,tipe}) => {
     return(
         <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
             <Seo title='Bantuan'/>
-            <div className='py-12 px-6 bg-white dark:bg-gray-800 dark:text-white container'>
+            <div className='bg-white dark:bg-gray-800 dark:text-white'>
+            <div className='py-12 px-6 container mx-auto'>
                 <h1 className='text-2xl font-semibold'>
                     # Order
                 </h1>
@@ -81,6 +82,7 @@ const Help = ({data,tag,tipe}) => {
                     - AlfaMart<br/>
                     - OVO<br/>
                 </p>
+            </div>
             </div>
         </Layout>
     )

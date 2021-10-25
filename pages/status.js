@@ -2,10 +2,9 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Layout from '../components/Layout'
 import Image from 'next/image'
-import { doc, getDoc, updateDoc } from "@firebase/firestore"
-import { db, RDB, refRDB } from "../utils/firebaseClient"
+import { RDB, refRDB } from "../utils/firebaseClient"
 import { AuthUser } from "../components/User"
-import { get } from "@firebase/database"
+import { get, update } from "@firebase/database"
 
 export const getStaticProps = async () => {
     const props = {
@@ -41,25 +40,22 @@ const Status = ({data,tag,tipe}) => {
             const getStatus = async () => {
                 const res = await fetch('/api/cekPay?id='+router.query.id)
                 const data = await res.json()
-                const stats = await getDoc(doc(db,'order',router.query.id))
-                if(stats.exists){
-                    if(stats.data().status == ''){
+                await get(refRDB(RDB,'order/'+router.query.id)).then((snap)=>{
+                    if(snap.val().status == ''){
                         if(data.transaction_status=='capture'||data.transaction_status=='settlement'){
-                            await updateDoc(doc(db,'order',router.query.id),{status:'Lunas'})
+                            update(refRDB(RDB,'order/'+router.query.id),{status:'Lunas'})
                             setStat(data)
                         } else if(data.transaction_status=='pending'){
-                            await updateDoc(doc(db,'order',router.query.id),{status:'Menunggu pembayaran'})
+                            update(refRDB(RDB,'order/'+router.query.id),{status:'Menunggu pembayaran'})
                             setStat(data)
                         } else {
-                            await updateDoc(doc(db,'order',router.query.id),{status:'Pembayaran gagal'})
+                            update(refRDB(RDB,'order/'+router.query.id),{status:'Pembayaran gagal'})
                             setStat(data)
                         }
                     } else {
                         router.back()
                     }
-                } else {
-                    router.back()
-                }
+                })
             }
             getStatus()
         }
