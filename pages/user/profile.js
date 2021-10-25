@@ -1,7 +1,7 @@
-import { collection, doc, getDoc, getDocs } from "@firebase/firestore"
+import { doc, getDoc } from "@firebase/firestore"
 import Layout from "../../components/Layout"
 import { AuthUser } from "../../components/User"
-import { auth, db } from "../../utils/firebaseClient"
+import { auth, db, RDB, refRDB } from "../../utils/firebaseClient"
 import Image from 'next/image'
 import { HiUserCircle } from 'react-icons/hi'
 import Link from 'next/link'
@@ -10,34 +10,31 @@ import { useRouter } from "next/router"
 import Seo from "../../components/Seo"
 import { signOut } from "@firebase/auth"
 import Order from "../../components/Order"
+import { onValue } from "@firebase/database"
 
 export const getStaticProps = async () => {
-    const res = await getDoc(doc(db,'utils','site'))
-    const data = []
-    const product = await getDocs(collection(db,'product'))
-    product.forEach((doc)=>{
-        data.push(doc.data())
+    const props = {
+        produk:[],
+        tag:[],
+        tipe:[],
+        data: {}
+    }
+    onValue(refRDB(RDB,'product'),(snap)=>{
+        const res = Object.values(snap.val())
+        props.produk = res
+        props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
+        props.tipe = res.map(item=>({tag:item.tag,tipe:item.tipe}))
     })
-    if(res.exists()){
-        return {
-            props: {
-                data: res.data(),
-                produk: data
-            },
-            revalidate: 60
-        }
-    } else {
-        return {
-            props: {
-                data: null,
-                produk: []
-            },
-            revalidate: 60
-        }
+    onValue(refRDB(RDB,'util/site'),(snap)=>{
+        props.data = snap.val()
+    })
+    return {
+        props: {...props},
+        revalidate: 60
     }
 }
 
-const Profile = ({data,produk}) => {
+const Profile = ({data,tag,tipe}) => {
     const router = useRouter()
     const user = AuthUser()
     const [userData, setUserData] = useState({nama:'',email:'',foto:'',alamat:{city_id:'',city_name:'',postal_code:'',province:'',province_id:'',type:'',full:''},phone:'',order:[],cart:[]})
@@ -67,7 +64,7 @@ const Profile = ({data,produk}) => {
     }
 
     return(
-        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
+        <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
             <Seo title='Profil'/>
         <header className='bg-gray-100 dark:bg-gray-900 py-12 px-6'>
         <div className="max-w-sm mx-auto overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800">

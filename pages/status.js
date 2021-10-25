@@ -2,37 +2,34 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Layout from '../components/Layout'
 import Image from 'next/image'
-import { collection, doc, getDoc, getDocs, updateDoc } from "@firebase/firestore"
-import { db } from "../utils/firebaseClient"
+import { doc, getDoc, updateDoc } from "@firebase/firestore"
+import { db, RDB, refRDB } from "../utils/firebaseClient"
 import { AuthUser } from "../components/User"
+import { onValue } from "@firebase/database"
 
 export const getStaticProps = async () => {
-    const res = await getDoc(doc(db,'utils','site'))
-    const data = []
-    const product = await getDocs(collection(db,'product'))
-    product.forEach((doc)=>{
-        data.push(doc.data())
+    const props = {
+        produk:[],
+        tag:[],
+        tipe:[],
+        data: {}
+    }
+    onValue(refRDB(RDB,'product'),(snap)=>{
+        const res = Object.values(snap.val())
+        props.produk = res
+        props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
+        props.tipe = res.map(item=>({tag:item.tag,tipe:item.tipe}))
     })
-    if(res.exists()){
-        return {
-            props: {
-                data: res.data(),
-                produk: data
-            },
-            revalidate: 60
-        }
-    } else {
-        return {
-            props: {
-                data: null,
-                produk: []
-            },
-            revalidate: 60
-        }
+    onValue(refRDB(RDB,'util/site'),(snap)=>{
+        props.data = snap.val()
+    })
+    return {
+        props: {...props},
+        revalidate: 60
     }
 }
 
-const Status = ({data,produk}) => {
+const Status = ({data,tag,tipe}) => {
     const user = AuthUser()
     const router = useRouter()
     const [stat, setStat] = useState()
@@ -69,7 +66,7 @@ const Status = ({data,produk}) => {
     },[router,user])
 
     return(
-        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
+        <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
             {!stat?
             <div className='text-center mt-16 max-w-3xl mx-auto h-96'>
                 <h1 className='font-medium tracking-wider text-2xl animate-pulse'>... Loading ...</h1>

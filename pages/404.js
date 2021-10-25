@@ -1,36 +1,32 @@
-import { collection, doc, getDoc, getDocs } from "@firebase/firestore"
+import { onValue } from "@firebase/database"
 import Layout from "../components/Layout"
-import { db } from "../utils/firebaseClient"
+import { RDB, refRDB } from "../utils/firebaseClient"
 
 export const getStaticProps = async () => {
-    const res = await getDoc(doc(db,'utils','site'))
-    const data = []
-    const product = await getDocs(collection(db,'product'))
-    product.forEach((doc)=>{
-        data.push(doc.data())
+    const props = {
+        produk:[],
+        tag:[],
+        tipe:[],
+        data: {}
+    }
+    onValue(refRDB(RDB,'product'),(snap)=>{
+        const res = Object.values(snap.val())
+        props.produk = res
+        props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
+        props.tipe = res.map(item=>({tag:item.tag,tipe:item.tipe}))
     })
-    if(res.exists()){
-        return {
-            props: {
-                data: res.data(),
-                produk: data
-            },
-            revalidate: 60
-        }
-    } else {
-        return {
-            props: {
-                data: null,
-                produk: []
-            },
-            revalidate: 60
-        }
+    onValue(refRDB(RDB,'util/site'),(snap)=>{
+        props.data = snap.val()
+    })
+    return {
+        props: {...props},
+        revalidate: 60
     }
 }
 
-const NotFound = ({data,produk}) => {
+const NotFound = ({data,tag,tipe}) => {
     return(
-        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
+        <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
             <div className='flex flex-col justify-center items-center h-screen -my-4'>
                 <h1 className='font-bold text-5xl text-red-600'>404</h1>
                 <h1 className='font-semibold tracking-wide'>Page not found</h1>

@@ -1,40 +1,37 @@
-import { collection, doc, getDoc, getDocs, updateDoc } from "@firebase/firestore"
+import { doc, updateDoc } from "@firebase/firestore"
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage"
 import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Layout from "../../components/Layout"
 import Seo from "../../components/Seo"
 import { AuthUser } from "../../components/User"
-import { db, storage } from "../../utils/firebaseClient"
+import { db, RDB, refRDB, storage } from "../../utils/firebaseClient"
 import Loader from "../../components/Loader"
+import { onValue } from "@firebase/database"
 
 export const getStaticProps = async () => {
-    const res = await getDoc(doc(db,'utils','site'))
-    const data = []
-    const product = await getDocs(collection(db,'product'))
-    product.forEach((doc)=>{
-        data.push(doc.data())
+    const props = {
+        produk:[],
+        tag:[],
+        tipe:[],
+        data: {}
+    }
+    onValue(refRDB(RDB,'product'),(snap)=>{
+        const res = Object.values(snap.val())
+        props.produk = res
+        props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
+        props.tipe = res.map(item=>({tag:item.tag,tipe:item.tipe}))
     })
-    if(res.exists()){
-        return {
-            props: {
-                data: res.data(),
-                produk: data
-            },
-            revalidate: 60
-        }
-    } else {
-        return {
-            props: {
-                data: null,
-                produk: []
-            },
-            revalidate: 60
-        }
+    onValue(refRDB(RDB,'util/site'),(snap)=>{
+        props.data = snap.val()
+    })
+    return {
+        props: {...props},
+        revalidate: 60
     }
 }
 
-const Edit = ({data,produk}) => {
+const Edit = ({data,tag,tipe}) => {
     const user = AuthUser()
     const router = useRouter()
     const [listCity, setListCity] = useState([])
@@ -84,7 +81,7 @@ const Edit = ({data,produk}) => {
 
     if(!user) return <Loader/>
     return(
-        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
+        <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
             <Seo title='Edit Profil'/>
         <header className='bg-gray-100 dark:bg-gray-900 md:py-12 md:px-6'>
         <section className="max-w-4xl p-6 mx-auto bg-white rounded-md shadow-md dark:bg-gray-800">

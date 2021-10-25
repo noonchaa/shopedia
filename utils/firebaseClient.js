@@ -3,6 +3,7 @@ import {getFirestore} from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
 import {getStorage} from 'firebase/storage'
 import {getAnalytics} from 'firebase/analytics'
+import {getDatabase, ref} from 'firebase/database'
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_APIKEY,
@@ -27,3 +28,5 @@ if(typeof window !== 'undefined'){
 export const db = getFirestore(firebaseApp)
 export const auth = getAuth(firebaseApp)
 export const storage = getStorage(firebaseApp)
+export const RDB = getDatabase(firebaseApp)
+export const refRDB = ref

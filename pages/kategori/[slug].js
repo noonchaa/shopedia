@@ -1,3 +1,4 @@
+import { onValue } from "@firebase/database"
 import { collection, doc, getDoc, getDocs, query, where } from "@firebase/firestore"
 import { useRouter } from "next/router"
 import Fall from "../../components/Fall"
@@ -5,61 +6,50 @@ import Hero from "../../components/Hero"
 import Item from "../../components/Item"
 import Layout from "../../components/Layout"
 import Seo from "../../components/Seo"
-import { db } from "../../utils/firebaseClient"
+import { db, RDB, refRDB } from "../../utils/firebaseClient"
 
 export const getStaticPaths = async () => {
-    const data = []
-    const res = await getDocs(collection(db,'product'))
-    res.forEach((doc)=>{
-        data.push(doc.data().tipe)
+    let path = []
+    onValue(refRDB(RDB,'product'),(snap)=>{
+        const res = Object.values(snap.val()).map(item=>item.tipe).filter((item,index,self)=>self.indexOf(item)===index)
+        path = res.map(item=>({params:item}))
     })
-    const isi = data.filter((item,index,self)=>self.indexOf(item)===index)
     return {
-        paths: isi.map(item=>({
-            params: {slug: item}
-        })),
+        paths: path,
         fallback: true
     }
 }
 export const getStaticProps = async ({params}) => {
     const {slug} = params
-    const link = await getDoc(doc(db,'utils','site'))
-    const data = []
-    const res = await getDocs(query(collection(db,'product'),where('tipe','==',slug)))
-    res.forEach((doc)=>{
-        data.push(doc.data())
-    })
-    const allProduk = []
-    const getAllProduk = await getDocs(collection(db,'product'))
-    getAllProduk.forEach((doc)=>{
-        allProduk.push(doc.data())
-    })
-    if(!data.length){
-        return {
-            redirect: {
-                destination: '/404',
-                permanent: false
-            }
-        }
+    const props = {
+        produk:[],
+        tag:[],
+        tipe:[],
+        data: {},
+        title: slug
     }
+    onValue(refRDB(RDB,'util/site'),(snap)=>{
+        props.data = snap.val()
+    })
+    onValue(refRDB(RDB,'product'),(snap)=>{
+        const res = Object.values(snap.val())
+        props.produk = res.filter(item => item.tipe == slug)
+        props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
+        props.tipe = res.map(item=>({tag:item.tag,tipe:item.tipe}))
+    })
     return {
-        props: {
-            data: link.data(),
-            produk: data,
-            tag: slug,
-            all: allProduk
-        },
+        props: {...props},
         revalidate: 60
     }
 }
 
-const Kategori = ({data,produk,tag,all}) => {
+const Kategori = ({produk,tag,tipe,title,data}) => {
     const router = useRouter()
 
     if(router.isFallback) return <Fall/>
     return(
-        <Layout tag={data.link} tipe={all.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
-            <Seo title={tag}/>
+        <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
+            <Seo title={title.toUpperCase()}/>
             <Hero tagline={data.tagline} value={data.value} hero={produk[0].foto}/>
             <Item produk={produk.sort((a,b)=>b.add-a.add).slice(0,4)} tag='Koleksi terbaru'/>
             <Item produk={produk} tag='Semua Koleksi'/>

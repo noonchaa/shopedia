@@ -1,37 +1,33 @@
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
-import { collection, doc, getDoc, getDocs } from "@firebase/firestore"
-import { db } from "../utils/firebaseClient"
+import { onValue } from "@firebase/database"
+import { RDB, refRDB } from "../utils/firebaseClient"
 
 export const getStaticProps = async () => {
-    const res = await getDoc(doc(db,'utils','site'))
-    const data = []
-    const product = await getDocs(collection(db,'product'))
-    product.forEach((doc)=>{
-        data.push(doc.data())
+    const props = {
+        produk:[],
+        tag:[],
+        tipe:[],
+        data: {}
+    }
+    onValue(refRDB(RDB,'product'),(snap)=>{
+        const res = Object.values(snap.val())
+        props.produk = res
+        props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
+        props.tipe = res.map(item=>({tag:item.tag,tipe:item.tipe}))
     })
-    if(res.exists()){
-        return {
-            props: {
-                data: res.data(),
-                produk: data
-            },
-            revalidate: 60
-        }
-    } else {
-        return {
-            props: {
-                data: null,
-                produk: []
-            },
-            revalidate: 60
-        }
+    onValue(refRDB(RDB,'util/site'),(snap)=>{
+        props.data = snap.val()
+    })
+    return {
+        props: {...props},
+        revalidate: 60
     }
 }
 
-const Help = ({data,produk}) => {
+const Help = ({data,tag,tipe}) => {
     return(
-        <Layout tag={data.link} tipe={produk.map(item=>({tag:item.tag,tipe:item.tipe}))} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email}>
+        <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
             <Seo title='Bantuan'/>
             <div className='py-12 px-6 bg-white dark:bg-gray-800 dark:text-white container'>
                 <h1 className='text-2xl font-semibold'>
