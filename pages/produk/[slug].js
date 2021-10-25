@@ -5,11 +5,11 @@ import Detail from "../../components/Detail"
 import Item from "../../components/Item"
 import Fall from "../../components/Fall"
 import Seo from "../../components/Seo"
-import { onValue } from "@firebase/database"
+import { get } from "@firebase/database"
 
 export const getStaticPaths = async () => {
     let path = []
-    onValue(refRDB(RDB,'product'),(snap)=>{
+    await get(refRDB(RDB,'product'),(snap)=>{
         const res = Object.values(snap.val())
         path = res.map(item=>({params:item.id}))
     })
@@ -28,10 +28,10 @@ export const getStaticProps = async ({params}) => {
         data: {},
         title: slug
     }
-    onValue(refRDB(RDB,'util/site'),(snap)=>{
+    await get(refRDB(RDB,'util/site'),(snap)=>{
         props.data = snap.val()
     })
-    onValue(refRDB(RDB,'product'),(snap)=>{
+    await get(refRDB(RDB,'product'),(snap)=>{
         const res = Object.values(snap.val())
         props.produk = res
         props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)

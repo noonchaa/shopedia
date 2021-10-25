@@ -1,7 +1,7 @@
+import { get } from "@firebase/database"
 import Layout from "../components/Layout"
 import Seo from "../components/Seo"
 import { RDB, refRDB } from "../utils/firebaseClient"
-import { onValue } from "@firebase/database"
 
 export const getStaticProps = async () => {
     const props = {
@@ -10,13 +10,13 @@ export const getStaticProps = async () => {
         tipe:[],
         data: {}
     }
-    onValue(refRDB(RDB,'product'),(snap)=>{
+    await get(refRDB(RDB,'product')).then((snap)=>{
         const res = Object.values(snap.val())
         props.produk = res
         props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
         props.tipe = res.map(item=>({tag:item.tag,tipe:item.tipe}))
     })
-    onValue(refRDB(RDB,'util/site'),(snap)=>{
+    await get(refRDB(RDB,'util/site')).then((snap)=>{
         props.data = snap.val()
     })
     return {
