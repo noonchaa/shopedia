@@ -8,10 +8,11 @@ import Seo from "../../components/Seo"
 import { RDB, refRDB } from "../../utils/firebaseClient"
 
 export const getStaticPaths = async () => {
-    let path = []
+    const path = []
     await get(refRDB(RDB,'product')).then((snap)=>{
         const res = Object.values(snap.val()).map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
-        path = res.map(item=>({params:item}))
+        const slug = res.map(item=>({params:item.toString()}))
+        path.concat(slug)
     })
     return {
         paths: path,
@@ -28,10 +29,10 @@ export const getStaticProps = async ({params}) => {
         data: {},
         title: slug
     }
-    await get(refRDB(RDB,'util/site'),(snap)=>{
+    await get(refRDB(RDB,'util/site')).then((snap)=>{
         props.data = snap.val()
     })
-    await get(refRDB(RDB,'product'),(snap)=>{
+    await get(refRDB(RDB,'product')).then((snap)=>{
         const res = Object.values(snap.val())
         props.produk = res.filter(item => item.tag == slug)
         props.tag = res.map(item=>item.tag).filter((item,index,self)=>self.indexOf(item)===index)
