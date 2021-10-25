@@ -1,11 +1,11 @@
-import { doc, updateDoc } from "@firebase/firestore"
-import { db } from "../../utils/firebaseClient"
+import { update } from "@firebase/database"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 
 const DeliveryData = ({data}) => {
     const {order_id,transaction_time,shipping_address,ongkir,item_details,resi} = data
 
     const tracking = async () => {
-        await updateDoc(doc(db,'order',order_id),{status:'Sampai'})
+        await update(refRDB(RDB,'order/'+order_id),{status:'Sampai'})
     }
 
     return(

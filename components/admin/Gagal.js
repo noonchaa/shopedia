@@ -1,15 +1,15 @@
-import { doc, getDoc, updateDoc } from "@firebase/firestore"
-import { db } from "../../utils/firebaseClient"
+import { get, update } from "@firebase/database"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 
 const GagalOrder = ({data}) => {
     const {order_id,item_details,status} = data
 
     const reStock = () => {
         item_details.forEach( async (isi)=>{
-            const getstock = await getDoc(doc(db,'product',isi.id))
-            const old = getstock.data().stok
-            await updateDoc(doc(db,'product',isi.id),{stok:old+isi.quantity})
-            await updateDoc(doc(db,'order',order_id),{status:'Cancel'})
+            await get(refRDB(RDB,'product/'+isi.id)).then( async (snap)=>{
+                await update(refRDB(RDB,'product/'+isi.id),{stok:snap.val().stok + isi.quantity})
+            })
+            await update(refRDB(RDB,'order/'+order_id),{status:'Cancel'})
         })
     }
 

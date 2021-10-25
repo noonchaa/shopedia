@@ -22,7 +22,7 @@ const Dashboard = () => {
     return(
         <Admin>
         <div className='bg-white dark:bg-gray-900'>
-            <div className="container px-6 py-4">
+            <div className="container px-6 py-4 mx-auto">
             <Report/>
                 <div className='flex justify-start py-2 mt-6 dark:text-white'>
                     <div className='flex justify-center items-center mr-6'>

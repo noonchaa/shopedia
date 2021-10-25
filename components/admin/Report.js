@@ -1,21 +1,19 @@
-import { collection, getDocs } from "@firebase/firestore"
 import { useEffect, useState } from "react"
-import { db } from "../../utils/firebaseClient"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 import Link from 'next/link'
+import { off, onValue } from "@firebase/database"
 
 const Report = () => {
     const [order, setOrder] = useState([])
 
     useEffect(()=>{
-        const getOrder = async () => {
-            const data = []
-            const res = await getDocs(collection(db,'order'))
-            res.forEach(doc => {
-                data.push(doc.data())
-            })
-            setOrder(data)
+        onValue(refRDB(RDB,'order'),(snap)=>{
+            setOrder(Object.values(snap.val()))
+        })
+
+        return () => {
+            off(refRDB(RDB,'order'))
         }
-        getOrder()
     },[])
     const Card = ({numb,big,small,reff}) => {
         return(

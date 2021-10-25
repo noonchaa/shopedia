@@ -1,16 +1,16 @@
-import { doc, updateDoc } from "@firebase/firestore"
+import { update } from "@firebase/database"
 import { useState } from "react"
-import { db } from "../../utils/firebaseClient"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 
 const Order = ({data}) => {
     const {order_id,transaction_time,shipping_address,ongkir,item_details} = data
     const [stat, setStat] = useState('')
 
-    const update = async () => {
+    const updateOrder = async () => {
         if(stat==''){
             alert('Silahkan pilih status')
         } else {
-            await updateDoc(doc(db,'order',order_id),{status:stat})
+            await update(refRDB(RDB,'order/'+order_id),{status:stat})
         }
     }
     
@@ -45,7 +45,7 @@ const Order = ({data}) => {
                     <option value='Packing'>Packing</option>
                     <option value='Pembayaran gagal'>Out Stock</option>
                 </select>
-                <button className='bg-gray-900 text-white w-1/2 flex-none dark:text-gray-900 dark:bg-white' onClick={()=>update()}>Update</button>
+                <button className='bg-gray-900 text-white w-1/2 flex-none dark:text-gray-900 dark:bg-white' onClick={()=>updateOrder()}>Update</button>
             </div>
         </div>
     )

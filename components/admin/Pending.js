@@ -1,5 +1,5 @@
-import { doc, updateDoc } from "@firebase/firestore"
-import { db } from "../../utils/firebaseClient"
+import { update } from "@firebase/database"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 
 const PendingData = ({data}) => {
     const {order_id,transaction_time,shipping_address,ongkir,item_details,status} = data
@@ -8,11 +8,11 @@ const PendingData = ({data}) => {
         const res = await fetch('/api/cekPay?id='+order_id)
         const data = await res.json()
         if(data.transaction_status=='capture'||data.transaction_status=='settlement'){
-            await updateDoc(doc(db,'order',order_id),{status:'Lunas'})
+            await update(refRDB(RDB,'order/'+order_id),{status:'Lunas'})
         } else if(data.transaction_status=='pending'){
-            await updateDoc(doc(db,'order',order_id),{status:'Menunggu pembayaran'})
+            await update(refRDB(RDB,'order/'+order_id),{status:'Menunggu pembayaran'})
         } else {
-            await updateDoc(doc(db,'order',order_id),{status:'Pembayaran gagal'})
+            await update(refRDB(RDB,'order/'+order_id),{status:'Pembayaran gagal'})
         }
     }
 

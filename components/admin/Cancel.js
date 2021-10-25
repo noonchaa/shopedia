@@ -1,10 +1,10 @@
-import { deleteDoc, doc } from "@firebase/firestore"
-import { db } from "../../utils/firebaseClient"
+import { remove } from "@firebase/database"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 
 const CancelOrder = ({data}) => {
     const {order_id,item_details,status} = data
     const hapusOrder = async () => {
-        await deleteDoc(doc(db,'order',order_id))
+        await remove(refRDB(RDB,'order/'+order_id))
     }
     return(
         <div className='bg-white border-2 border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-6 relative'>

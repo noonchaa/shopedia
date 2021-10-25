@@ -1,36 +1,34 @@
-import { deleteDoc, doc, getDoc, onSnapshot, setDoc, updateDoc } from "@firebase/firestore"
 import { useEffect, useState } from "react"
 import Admin from "../../components/admin/Admin"
-import { auth, db, storage } from "../../utils/firebaseClient"
+import { auth, RDB, refRDB, storage } from "../../utils/firebaseClient"
 import Image from 'next/image'
 import {FaEdit, FaFileCsv} from 'react-icons/fa'
 import { getDownloadURL, ref, uploadBytes } from "@firebase/storage"
 import { createUserWithEmailAndPassword, deleteUser, EmailAuthProvider, reauthenticateWithCredential, updateProfile } from "@firebase/auth"
+import { off, onValue, remove, set, update } from "@firebase/database"
+import { useRouter } from "next/router"
 
 const Utils = () => {
     const [site, setSite] = useState('')
     const [admin, setAdmin] = useState('')
     const [loading, setLoading] = useState(false)
+    const router = useRouter()
 
     useEffect(()=>{
-        const unsub = onSnapshot(doc(db,'utils','site'),(doc)=>{
-            setSite(doc.data())
+        onValue(refRDB(RDB,'util/site'),(snap)=>{
+            setSite(snap.val())
         })
         if(auth.currentUser){
-            const getAdmin = async () => {
-                const res = await getDoc(doc(db,'admin',auth.currentUser.uid))
-                if(res.exists()){
-                    setAdmin(res.data())
-                } else {
-                    setAdmin('')
-                }
-            }
-            getAdmin()
+            onValue(refRDB(RDB,'admin/'+auth.currentUser.uid),(snap)=>{
+                setAdmin(snap.val())
+            })
         }
 
         return () => {
-            unsub()
-            setAdmin('')
+            off(refRDB(RDB,'util/site'))
+            if(auth.currentUser){
+                off(refRDB(RDB,'admin/'+auth.currentUser.uid))
+            }
         }
     },[])
 
@@ -39,7 +37,7 @@ const Utils = () => {
         setLoading(true)
         uploadBytes(ref(storage,'/hero/'+e.target.hero.files[0].name),e.target.hero.files[0]).then(()=>{
             getDownloadURL(ref(storage,'/hero/'+e.target.hero.files[0].name)).then((url)=>{
-                updateDoc(doc(db,'utils','site'),{
+                update(refRDB(RDB,'util/site'),{
                     hero: url,
                     siteTitle: e.target.nama.value,
                     tagline: e.target.tagline.value,
@@ -59,9 +57,7 @@ const Utils = () => {
         setLoading(true)
         uploadBytes(ref(storage,'/template/'+e.target.csv.files[0].name),e.target.csv.files[0]).then(()=>{
             getDownloadURL(ref(storage,'/template/'+e.target.csv.files[0].name)).then((url)=>{
-                updateDoc(doc(db,'utils','site'),{
-                    template: url
-                })
+                update(refRDB(RDB,'util/site'),{template: url})
                 e.target.reset()
             })
         }).catch(()=>{
@@ -78,7 +74,7 @@ const Utils = () => {
             await updateProfile(auth.currentUser,{
                 displayName: 'admin'
             })
-            await setDoc(doc(db,'admin',user.uid),{
+            set(refRDB(RDB,'admin/'+user.uid),{
                 name: e.target.namaAdmin.value,
                 email: e.target.emailAdmin.value,
                 phone: e.target.telepon.value.toString(),
@@ -89,20 +85,21 @@ const Utils = () => {
             alert('Server Error, mohon coba beberapa saat lagi')
         })
         setLoading(false)
+        router.reload()
     }
 
     const delAdmin = (e) => {
         e.preventDefault()
         setLoading(true)
         reauthenticateWithCredential(auth.currentUser,EmailAuthProvider.credential(e.target.delEmail.value,e.target.delPassword.value)).then(()=>{
-            deleteDoc(doc(db,'admin',auth.currentUser.uid)).then(()=>{
-                deleteUser(auth.currentUser)
-            })
+            remove(refRDB(RDB,'admin/'+auth.currentUser.uid))
+            deleteUser(auth.currentUser)
             e.target.reset()
         }).catch(()=>{
             alert('Server Error, mohon coba beberapa saat lagi')
         })
         setLoading(false)
+        router.reload()
     }
     return (
         <Admin>
@@ -177,7 +174,7 @@ const Utils = () => {
                     </div>
                 </div>
                 <div className="flex justify-end mt-6">
-                    <button type='submit' className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">{loading==false?'Simpan':'Loading'}</button>
+                    <button type='submit' className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">{loading==false?'Tambah':'Loading'}</button>
                 </div>
             </form>
         </section>
@@ -196,7 +193,7 @@ const Utils = () => {
                     </div>
                 </div>
                 <div className="flex justify-end mt-6">
-                    <button type='submit' className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">{loading==false?'Simpan':'Loading'}</button>
+                    <button type='submit' className="px-6 py-2 leading-5 text-white transition-colors duration-200 transform bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:bg-gray-600">{loading==false?'Hapus':'Loading'}</button>
                 </div>
             </form>
         </section>

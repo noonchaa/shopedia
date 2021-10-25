@@ -1,6 +1,6 @@
-import { doc, updateDoc } from "@firebase/firestore"
+import { update } from "@firebase/database"
 import { useState } from "react"
-import { db } from "../../utils/firebaseClient"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 
 const SampaiData = ({data}) => {
     const {order_id,transaction_time,shipping_address,ongkir,item_details,resi} = data
@@ -9,7 +9,7 @@ const SampaiData = ({data}) => {
         if(stat==''){
             alert('Silahkan pilih status')
         } else {
-            await updateDoc(doc(db,'order',order_id),{status:stat})
+            await update(refRDB(RDB,'order/'+order_id),{status:stat})
         }
     }
     return(

@@ -1,11 +1,11 @@
-import { doc, updateDoc } from "@firebase/firestore"
-import { db } from "../../utils/firebaseClient"
+import { update } from "@firebase/database"
+import { RDB, refRDB } from "../../utils/firebaseClient"
 
 const PackingData = ({data}) => {
     const {order_id,transaction_time,shipping_address,ongkir,item_details} = data
     const resi = async (e) => {
         e.preventDefault()
-        await updateDoc(doc(db,'order',order_id),{status:'Delivery',resi:e.target.resi.value})
+        await update(refRDB(RDB,'order/'+order_id),{status:'Delivery',resi:e.target.resi.value})
         e.target.reset()
     }
     return(
