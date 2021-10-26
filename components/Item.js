@@ -24,7 +24,7 @@ const Item = ({produk, tag}) => {
                         </Link>
                         <div className="flex items-center justify-between px-4 py-2 bg-gray-900 dark:bg-gray-800">
                             <h1 className="text-lg font-bold text-white">Rp. {Number(item.harga).toLocaleString('ID',{'currency':'IDR'})}</h1>
-                            {item.size.length?
+                            {item.size?
                             <Size size={item.size} id={item.id} harga={item.harga} nama={item.nama} warna={item.warna} foto={item.foto} berat={item.berat} />
                             :
                             <AddCart id={item.id} harga={item.harga} nama={item.nama} size={''} warna={item.warna} foto={item.foto} berat={item.berat} />
