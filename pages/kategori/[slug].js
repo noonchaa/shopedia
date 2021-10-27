@@ -1,9 +1,9 @@
 import { get } from "@firebase/database"
 import { useRouter } from "next/router"
-import Fall from "../../components/Fall"
 import Hero from "../../components/Hero"
 import Item from "../../components/Item"
 import Layout from "../../components/Layout"
+import Loader from "../../components/Loader"
 import Seo from "../../components/Seo"
 import { RDB, refRDB } from "../../utils/firebaseClient"
 
@@ -46,13 +46,13 @@ export const getStaticProps = async ({params}) => {
 const Kategori = ({produk,tag,tipe,title,data}) => {
     const router = useRouter()
 
-    if(router.isFallback) return <Fall/>
+    if(router.isFallback) return <Loader/>
     return(
         <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
             <Seo title={title.toUpperCase()}/>
-            <Hero tagline={data.tagline} value={data.value} hero={produk[0].foto}/>
+            <Hero tagline={data.tagline} value={data.value} hero={produk[0].foto} produk={produk}/>
             <Item produk={produk.sort((a,b)=>b.add-a.add).slice(0,4)} tag='Koleksi terbaru'/>
-            <Item produk={produk} tag='Semua Koleksi'/>
+            <Item produk={produk.slice(4)} tag='Semua Koleksi'/>
         </Layout>
     )
 }

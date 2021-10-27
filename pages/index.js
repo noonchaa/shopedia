@@ -23,6 +23,14 @@ export const getStaticProps = async () => {
     await get(refRDB(RDB,'util/site')).then((snap)=>{
         props.data = snap.val()
     })
+    if(!props.produk.length || !props.tag.length || !props.tipe.length || !props.data){
+        return {
+            redirect: {
+                destination: '/maintenance',
+                permanent: false
+            }
+        }
+    }
     return {
         props: {...props},
         revalidate: 60
@@ -31,11 +39,11 @@ export const getStaticProps = async () => {
 
 const Home = ({data,produk,tag,tipe}) => {
 
-    if(!data) return <Frame/>
+    if(!data && !produk && !tag && !tipe) return <Frame/>
     return(
         <Layout tag={tag} tipe={tipe} title={data.siteTitle} tagline={data.tagline} phone={data.phone} email={data.email} >
             <Seo title={data.siteTitle} desc={data.tagline}/>
-            <Hero tagline={data.tagline} value={data.value} hero={data.hero} />
+            <Hero tagline={data.tagline} value={data.value} hero={data.hero} produk={produk} />
             <New produk={produk.slice(0,3)}/>
             <Item produk={produk.filter(item=>item.tag=='tas').sort((a,b)=>b.add-a.add).slice(0,4)} tag='tas terbaru'/>
             <Item produk={produk.filter(item=>item.tag=='sepatu').sort((a,b)=>b.add-a.add).slice(0,4)} tag='sepatu terbaru'/>

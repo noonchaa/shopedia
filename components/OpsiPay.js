@@ -31,7 +31,7 @@ const OpsiPay = ({user,alamat,cart,ongkir}) => {
     return(
         <>
         {!cart.length?'':
-        <div className='grid grid-cols-2 gap-3 p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white'>
+        <div className='grid grid-cols-2 gap-3 px-3 py-6 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white'>
             {payLink.map((item,index)=>(
                 <div key={index} className='cursor-pointer bg-gray-300 p-2 rounded-lg relative dark:bg-gray-900' onClick={()=>setPick(item)}>
                     <h1>{item}</h1>

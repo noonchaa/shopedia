@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import {FaCheck} from 'react-icons/fa'
 import OpsiPay from "./OpsiPay"
 
-const Kurir = ({total,berat,user,cart}) => {
+const Kurir = ({total,berat,user,cart,open}) => {
     const [krr, setKrr] = useState('jne')
     const [prov, setProv] = useState('')
     const [city, setCity] = useState([])
@@ -71,7 +71,11 @@ const Kurir = ({total,berat,user,cart}) => {
 
     return(
         <div>
-            {pay==true?'':
+            <button className='py-3 text-sm text-white capitalize bg-gray-900 text-center cursor-pointer fixed top-0 w-full md:w-80 z-50' onClick={open}>
+                Batal
+            </button>
+            {pay==true?<OpsiPay user={user} alamat={alamat} cart={cart} ongkir={ongkir}/>
+            :
             <div className="p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 dark:hover:text-white">
                 <h1 className='mb-2'>pilih kurir</h1>
                 <div className='flex justify-around'>
@@ -85,26 +89,26 @@ const Kurir = ({total,berat,user,cart}) => {
                     </div>
                 </div>
                 <form onSubmit={getOngkir}>
-                <select className='px-4 py-2 mt-2 w-full appearance-none text-center rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white cursor-pointer'
-                    onChange={(e)=>setProvinsi(e)} required>
-                    <option value=''>Pilih Provinsi</option>
-                    {city.map(item=>item.province).filter((item,index,self)=>self.indexOf(item)===index).map((item,index)=>(
-                        <option key={index} value={item}>{item}</option>
-                    ))}
-                </select>
-                <select className='px-4 py-2 mt-2 w-full appearance-none text-center rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white cursor-pointer'
-                    onChange={(e)=>setKota(e)} required>
-                    <option value=''>Pilih Kota</option>
-                    {city.filter(item=>item.province===prov).map((item,index)=>(
-                        <option key={index} value={JSON.stringify(item)}>{item.type} {item.city_name}</option>
-                    ))}
-                </select>
-                <textarea className='px-4 py-2 mt-2 w-full appearance-none rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white' placeholder='Alamat Lengkap' rows={3} value={alamat.lengkap} onChange={(e)=>setAlamat({...alamat,lengkap:e.target.value})} required/>
-                <input type='text' value={alamat.nama} placeholder='Nama penerima' required onChange={(e)=>setAlamat({...alamat,nama:e.target.value})} className='px-4 py-2 mt-2 w-full appearance-none rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white'/>
-                <input type='tel' value={alamat.phone} placeholder='Nomor telepon' required onChange={(e)=>setAlamat({...alamat,phone:e.target.value})} className='px-4 py-2 mt-2 w-full appearance-none rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white'/>
-                <div className='text-right mt-2'>
-                    <button className='px-4 py-2 bg-white dark:bg-gray-900 dark:text-white rounded-lg'>{text}</button>
-                </div>
+                    <select className='px-4 py-2 mt-2 w-full appearance-none text-center rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white cursor-pointer'
+                        onChange={(e)=>setProvinsi(e)} required>
+                        <option value=''>Pilih Provinsi</option>
+                        {city.map(item=>item.province).filter((item,index,self)=>self.indexOf(item)===index).map((item,index)=>(
+                            <option key={index} value={item}>{item}</option>
+                        ))}
+                    </select>
+                    <select className='px-4 py-2 mt-2 w-full appearance-none text-center rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white cursor-pointer'
+                        onChange={(e)=>setKota(e)} required>
+                        <option value=''>Pilih Kota</option>
+                        {city.filter(item=>item.province===prov).map((item,index)=>(
+                            <option key={index} value={JSON.stringify(item)}>{item.type} {item.city_name}</option>
+                        ))}
+                    </select>
+                    <textarea className='px-4 py-2 mt-2 w-full appearance-none rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white' placeholder='Alamat Lengkap' rows={3} value={alamat.lengkap} onChange={(e)=>setAlamat({...alamat,lengkap:e.target.value})} required/>
+                    <input type='text' value={alamat.nama} placeholder='Nama penerima' required onChange={(e)=>setAlamat({...alamat,nama:e.target.value})} className='px-4 py-2 mt-2 w-full appearance-none rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white'/>
+                    <input type='tel' value={alamat.phone} placeholder='Nomor telepon' required onChange={(e)=>setAlamat({...alamat,phone:e.target.value})} className='px-4 py-2 mt-2 w-full appearance-none rounded-lg focus:outline-none bg-white dark:bg-gray-900 dark:text-white'/>
+                    <div className='text-right mt-2'>
+                        <button className='px-4 py-2 bg-white dark:bg-gray-900 dark:text-white rounded-lg'>{text}</button>
+                    </div>
                 </form>
                 <div>
                     {service.map((item,index)=>(
@@ -139,12 +143,9 @@ const Kurir = ({total,berat,user,cart}) => {
                 <p className='font-medium mt-3 italic'>{errPay}</p>
                 </div>
             }
-            {!cart.length?'':
-            <div className={pay==false?"py-3 text-sm text-white capitalize bg-gray-900 text-center cursor-pointer -mx-3":"py-3 text-sm text-white capitalize bg-gray-900 text-center cursor-pointer -mx-3 -mt-11"} onClick={()=>showPay()}>
-                {pay==false?'Pilih Pembayaran':'Batal'}
-            </div>}
-            {pay==false?'':
-            <OpsiPay user={user} alamat={alamat} cart={cart} ongkir={ongkir}/>}
+            <button className='py-3 text-sm text-white capitalize bg-gray-900 text-center cursor-pointer w-full md:w-80 fixed bottom-0 z-50' onClick={()=>showPay()}>
+            {pay==false?'Pilih Pembayaran':'Ganti alamat'}
+            </button>
         </div>
     )
 }
