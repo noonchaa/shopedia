@@ -42,7 +42,7 @@ const KomplainData = ({data}) => {
                 <select className='dark:text-white dark:bg-gray-900 px-2 py-1 w-1/2' onChange={(e)=>setStat(e.target.value)}>
                     <option value=''>Status</option>
                     <option value='Lunas'>Ganti barang</option>
-                    <option value='Pembayaran gagal'>Refund</option>
+                    <option value='Refund'>Refund</option>
                 </select>
                 <button className='bg-gray-900 text-white w-1/2 flex-none dark:text-gray-900 dark:bg-white' onClick={()=>komplain()} >Update</button>
             </div>

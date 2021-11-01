@@ -1,8 +1,13 @@
 import { get } from "@firebase/database"
+import { doc, getDoc, updateDoc } from "@firebase/firestore"
+import { useRouter } from "next/router"
 import { useState } from "react"
-import { RDB, refRDB } from "../utils/firebaseClient"
+import { db, RDB, refRDB } from "../utils/firebaseClient"
+import { AuthUser } from "./User"
 
 const Order = ({order}) => {
+    const user = AuthUser()
+    const router = useRouter()
     const [detail, setDetail] = useState()
     const [open, setOpen] = useState(false)
 
@@ -17,6 +22,21 @@ const Order = ({order}) => {
         }
     }
 
+    const hapusOrder = async () => {
+        if(user){
+            const userData = await getDoc(doc(db,'users',user.uid))
+            if(userData.exists){
+                const orderarr = userData.data().order
+                const orderIndex = orderarr.findIndex((el)=>el===order)
+                orderarr.splice(orderIndex,1)
+                await updateDoc(doc(db,'users',user.uid),{order:orderarr})
+                router.reload()
+            } else {
+                alert('Server error, silahkan coba beberapa saat lagi')
+            }
+        }
+    }
+
     return(
         <div className='bg-white border-2 border-gray-200 rounded-lg dark:bg-gray-800 dark:border-gray-700 p-6 relative'>
         <h2 className="font-semibold tracking-tight text-indigo-600 uppercase overflow-hidden mb-4">
@@ -26,7 +46,12 @@ const Order = ({order}) => {
             {open==false?'Detail':'Tutup'}
         </button>
         <div className={open==false?'hidden':'block mt-4'}>
-            {!detail?'':
+            {!detail?
+            <div>
+                <p>Order tidak ditemukan, hapus data?</p>
+                <button onClick={()=>hapusOrder()} className='px-3 py-1 mt-2 text-sm font-bold text-white bg-gray-800 dark:bg-gray-200 dark:text-gray-900 rounded-lg tracking-wider'>Hapus</button>
+            </div>
+            :
             <div>
             <p className="font-semibold tracking-tight overflow-hidden mb-4 dark:text-white capitalize">{new Date(detail.transaction_time).toLocaleString('ID',{'weekday':'long','day':'2-digit','month':'short','year':'numeric','hour':'2-digit','minute':'2-digit'})} WIB</p>
             {detail.status=='Lunas'?'':

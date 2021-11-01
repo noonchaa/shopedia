@@ -47,6 +47,7 @@ const Report = () => {
             <Card numb={order.filter(item=>item.status=='Sampai').length} big='Sampai Tujuan' small='Update komplain atau finish' reff='sampai'/>
             <Card numb={order.filter(item=>item.status=='Komplain').length} big='Komplain' small='Proses pesanan komplain' reff='komplain'/>
             <Card numb={order.filter(item=>item.status=='Finish').length} big='Finish' small='Total order selesai' reff='finish'/>
+            <Card numb={order.filter(item=>item.status=='Refund').length} big='Refund' small='Permintaan Refund' reff='refund'/>
             <Card numb={order.filter(item=>item.status=='Cancel').length} big='Cancel' small='Total order cancel' reff='cancel'/>
         </div>
     )

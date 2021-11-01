@@ -43,7 +43,7 @@ const Order = ({data}) => {
                 <select className='dark:text-white dark:bg-gray-900 px-2 py-1 w-1/2' onChange={(e)=>setStat(e.target.value)}>
                     <option value=''>Status</option>
                     <option value='Packing'>Packing</option>
-                    <option value='Pembayaran gagal'>Out Stock</option>
+                    <option value='Refund'>Out Stock</option>
                 </select>
                 <button className='bg-gray-900 text-white w-1/2 flex-none dark:text-gray-900 dark:bg-white' onClick={()=>updateOrder()}>Update</button>
             </div>
